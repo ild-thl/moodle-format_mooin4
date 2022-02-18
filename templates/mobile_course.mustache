@@ -1,0 +1,56 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_buttons/mobile_course
+
+}}
+<core-dynamic-component [component]="allSectionsComponent" [data]="data" class="format-buttons"> 
+    {{!
+        class="format-buttons"
+    }}
+    <ng-container *ngFor="let section of sections">
+        <ion-item-divider color="light">
+            <core-format-text [text]="section.name"></core-format-text>
+             <!-- Section download. -->
+             <div *ngIf="section && downloadEnabled" class="core-button-spinner" float-end>
+                <!-- Download button. -->
+                <button *ngIf="section.showDownload && !section.isDownloading && !section.isCalculating" (click)="prefetch($event, section)" ion-button icon-only clear color="dark" [attr.aria-label]="'core.download' | translate">
+                    <ion-icon name="cloud-download"></ion-icon>
+                </button>
+                <!-- Refresh button. -->
+                <button *ngIf="section.showRefresh && !section.isDownloading && !section.isCalculating" (click)="prefetch($event, section)" ion-button icon-only clear color="dark" [attr.aria-label]="'core.refresh' | translate">
+                    <ion-icon name="refresh"></ion-icon>
+                </button>
+                <!-- Download progress. -->
+                <ion-badge class="core-course-download-section-progress" *ngIf="section.isDownloading && section.total > 0 && section.count < section.total">{{section.count}} / {{section.total}}</ion-badge>
+                <!-- Spinner (downloading or calculating status). -->
+                <ion-spinner *ngIf="(section.isDownloading && section.total > 0) || section.isCalculating"></ion-spinner>
+            </div>
+        </ion-item-divider>
+
+        <ion-item text-wrap *ngIf="section.summary">
+            <core-format-text [text]="section.summary"></core-format-text>
+        </ion-item>
+
+        <ng-container *ngFor="let module of section.modules">
+            <ng-container *ngIf="module.visibleoncoursepage !== 0">
+                <core-course-module text-wrap [module]="module" [courseId]="course.id" [downloadEnabled]="downloadEnabled" (completionChanged)="onCompletionChange($event)">
+                </core-course-module>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</core-dynamic-component>

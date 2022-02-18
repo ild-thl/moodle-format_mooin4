@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="course/format/buttons/db" VERSION="20220124" COMMENT="XMLDB file for Moodle course/format/buttons"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="format_buttons" COMMENT="Default comment for format_buttons, please edit me">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="course_buttons_nav_card" COMMENT="DB for the course buttons fomat, for the card navigation.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="news_forum" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="news_forum_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="News Forum Description." SEQUENCE="false"/>
+        <FIELD NAME="teilnehmenden" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="teilnehmenden_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Teilnehmenden Description." SEQUENCE="false"/>
+        <FIELD NAME="diskussionsforen" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="diskussionsforen_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Diskussion Forum Description." SEQUENCE="false"/>
+        <FIELD NAME="social_media" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="social_media_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Social Media Description." SEQUENCE="false"/>
+        <FIELD NAME="inhaltsverzeichnis" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="inhaltsverzeichnis_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Inhaltsverzeichnis Description." SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="buttons_online_users_map" COMMENT="New table for handle the online users map Lat/Lng coordinates for users in the course format buttons">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="lat" TYPE="number" LENGTH="15" NOTNULL="true" DEFAULT="0.0000000000" SEQUENCE="false" DECIMALS="12"/>
+        <FIELD NAME="lng" TYPE="number" LENGTH="15" NOTNULL="true" DEFAULT="0.0000000000" SEQUENCE="false" DECIMALS="12"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="country" TYPE="char" LENGTH="2" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

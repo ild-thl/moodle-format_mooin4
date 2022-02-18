@@ -1,0 +1,602 @@
+/*
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * format_buttons_renderer
+ *
+ * @package    format_buttons
+ * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
+ * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+ /*@import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+ @import url('"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"');
+
+ format-buttons #region-main-box{
+    max-width: 80% !important;
+    border: 0px !important;
+    padding: 0px !important;
+    margin: 0 auto;
+}
+#region-main-box section#region-main {
+    border: none !important;
+    padding: 0px !important;
+}
+/* @media (min-width: 576px) {
+
+} */
+ .course-content div.buttons_nav {
+    margin: 0 Auto;
+    max-width: 80%;
+    background-color: #115898;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    padding: 0;
+}
+ .course-content ul.buttons {
+    margin: 0;
+    list-style: none;
+    padding-inline-start:  0em;
+}
+
+
+.course-content ul.buttons li.section .content {
+    margin: 0 40px;
+}
+
+.course-content ul.buttons li.section .left,
+.course-content ul.buttons li.section .right {
+    width: 40px;
+    padding: 0 6px;
+}
+
+.course-content ul.buttons li.section .left {
+    padding-top: 22px;
+    text-align: right;
+}
+
+.jsenabled .course-content ul.buttons li.section .left,
+.jsenabled .course-content ul.buttons li.section .right {
+    width: auto;
+}
+
+.course-content ul.buttons li.section .left .section-handle img.icon {
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.course-content ul.buttons li.section .section_action_menu .textmenu,
+.course-content ul.buttons li.section .section_action_menu .menu-action-text {
+    white-space: nowrap;
+}
+
+.course-content ul.buttons li.section.main:not(#section-0) {
+    background: none;
+    list-style: none;
+    display: none;
+    border: 0 !important;
+}
+
+/* #buttonsectioncontainer {
+    margin: 20px auto;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    max-width: 1087px;
+    position: relative;
+    
+} */
+#bottom_buttonsectioncontainer {
+    margin: 20px auto;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    max-width: 30%;/*1280px;*/
+    position: relative;
+    text-align: center;
+    
+}
+.inner_card{
+    cursor: pointer;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .course-content ul.buttons li.section .content {
+        margin: 0em !important;
+    }
+    #page.container-fluid.d-print-block {
+        max-width: 100% !important;
+        padding-left: .2em;
+        padding-right: .2em;
+    }
+    #buttonsectioncontainer {
+        margin: 10px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        /*max-width: 14em !important;*/
+        position: relative;
+        text-align: center;
+
+    }
+    #bottom_buttonsectioncontainer {
+        margin: 10px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        max-width: 60% !important;
+        position: relative;
+        text-align: center;
+    }
+    .bottom_carousel-container {
+        padding-bottom: .4em;
+        padding-top: .8em;
+    }
+    .outer_card {
+        column-count: 1 !important;
+        margin-left: .5em;
+        margin-right: .5em;
+    }
+    .card-body {
+        padding: 8px !important;
+    }
+     .title_card {
+        font-size: 1.4em;
+    }
+    .text_card {
+        font-size: 1.1em !important;
+    }
+    .svg_size{
+        width:32px;
+        height:32px
+    }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    
+    .outer_card {
+        column-count: 1 ;
+    }
+    .title_card {
+        font-size: large;
+    }
+    .svg_size{
+        width:32px;
+        height:32px
+    }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .outer_card {
+        column-count: 2;
+    }
+    .course-content ul.buttons li.section .content {
+        margin: 0em !important;
+    }
+    #buttonsectioncontainer {
+        margin: 10px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        max-width: 44em;
+        position: relative;
+        text-align: center;
+
+    }
+    #bottom_buttonsectioncontainer {
+        margin: 10px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        max-width: 28%;
+        position: relative;
+        text-align: center;
+    }
+    .bottom_carousel-container {
+        padding-bottom: .4em;
+        padding-top: .8em;
+    }
+    .svg_size{
+        width:32px;
+        height:32px
+    }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    #buttonsectioncontainer {
+        width: 50em;
+    }
+    #bottom_buttonsectioncontainer {
+        margin: 10px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        max-width: 25%;
+        position: relative;
+        text-align: center;
+    }
+    .bottom_carousel-container {
+        padding-bottom: .4em;
+        padding-top: .8em;
+    }
+    .outer_card {
+        column-count: 2;
+    }
+    .title_card {
+        font-size: x-large;
+    }
+    .svg_size{
+        width:32px;
+        height:32px
+    }
+    
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .course-content ul.buttons li.section .content {
+        margin: 0em !important;
+    }
+    #page.container-fluid.d-print-block {
+        max-width: 80% !important;
+        padding-left: .8em;
+        padding-right: .8em;
+    }
+    div#region-main-box.col-12 section#region-main {
+        max-width: 100% !important;
+        border: none;
+        padding: 0px;
+        margin: 0 auto;
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+    #buttonsectioncontainer {
+        width: 80em;
+    }
+    #bottom_buttonsectioncontainer {
+        
+        margin: 20px auto;
+        box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+        max-width: 15em;
+        position: initial;
+        text-align: center;
+
+    }
+    .outer_card {
+        column-count: 3;
+    }
+    .svg_size{
+        width:42px;
+        height:42px
+    }
+}
+
+/*>>> New_style carousel */
+.carousel {
+    display: block;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+.carousel-inner {
+    display: flex;
+    box-sizing: content-box;
+    position: relative;
+    z-index: 1;
+    transition: transform .3s ease-in-out;
+    overflow: initial !important;
+}
+.carousel__viewport {
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+.buttonsection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    font-size: 15px;
+    background: transparent;
+    height: 60px;
+    cursor: pointer;
+    font-weight: 400;
+    overflow: hidden;
+}
+.carousel__button--prev,
+.carousel__button--next {
+    display: inline-block;
+    height: 54px;
+    width: 54px;
+    border-radius: 50%;
+    line-height: 50px;
+    padding: 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6c757d;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px;
+    transition: box-shadow .3s;
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 50; 
+}
+.carousel__button--prev {
+    left: -18px;
+}
+.carousel__button--next {
+    right: -18px;
+}
+.carousel__button--prev svg {
+    display: inline-block;
+    width: inherit;
+    color: rgb(255, 255, 255);
+    line-height: 32px;
+    text-align: center;
+}
+.carousel__button--next svg {
+    display: inline-block;
+    width: inherit;
+    color: rgba(255, 255, 255);
+    line-height: 32px;
+    text-align: center;
+}
+.carousel__button--next:hover , .carousel__button--prev:hover {
+    box-shadow: 0 25px 55px 0 rgba(0, 0, 0, 0.21), 0 16px 28px 0 rgba(0, 0, 0, 0.22);
+}
+
+.carousel__nav {
+    width: 100%;
+    position: absolute;
+    bottom: -30px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    z-index: 50;
+}
+.carousel__nav li {
+    display: inline-block;
+    margin: 0 6px;
+    zoom: 1;
+}
+.carousel__nav li a {
+    display: block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #666;
+    background: rgba(230, 126, 33, .6);
+    cursor: pointer;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.carousel__nav li a.active {
+    pointer-events: none;
+    background: #000;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: default;
+}
+.carousel .carousel__nav .active {
+    background: rgba(62, 39, 35, .6);
+}
+#buttonsectioncontainer {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    background: rgb(255, 255, 255);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-user-select: none;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgb(0 0 0 / .2);
+}
+.carousel__gradient--right ,
+.carousel__gradient--left {
+  height: 100%;
+  width: 50%;
+  /* position: absolute; */
+  top: 0;
+  z-index: 40;
+}
+
+.carousel__gradient--left {
+  left: 0;
+  /* background: linear-gradient(to right, #e5e5e5, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.1)) !important; */
+}
+
+.carousel__gradient--right {
+  right: 0;
+  /* background: linear-gradient(to left, #e5e5e5, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.1)) !important; */
+}
+
+.hidden {
+  display: none;
+}
+.remove_pointer {
+    cursor: none;
+    color: #ececec;
+}
+/* <<< End carousel new_style */
+#bottom_buttonsectioncontainer .bottom_carousel-container {
+    overflow: hidden;
+    /* max-width: 50%; */
+}
+#bottom_buttonsectioncontainer .bottom_carousel-inner {
+    display: inline-flex;
+    transition: transform 0.5s;
+    position: initial;
+    overflow: visible;
+    max-width: 100%;
+}
+.bottom_carousel-inner .bottom_previous ,.bottom_carousel-inner .bottom_home,.bottom_carousel-inner .bottom_next{
+    
+    position: relative;
+    line-height: 1px !important;
+    cursor: pointer;
+    margin-left: .8em;
+    color: gray;
+    display: flex;
+}
+.bottom_carousel-inner .bottom_next {
+    margin-right: .8em;
+}
+.bottom_previous:after , .bottom_home:after{
+    content: " ";
+    /* position: absolute; */
+    border-right: 1px #6c757d solid;
+    /* top: 20%; */
+    right: 0;
+    height: 100%;
+    padding-right: .8em;
+    /* padding-left: 12px */
+}
+
+#botttom_buttonsectioncontainer svg {
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px; 
+    cursor: pointer;
+    margin: 0px; 
+    position: absolute;
+    color: rgb(133, 10, 10);
+}
+
+#buttonsectioncontainer .buttonsection.sectionvisible:nth-child(1) {
+    border-left: none !important;
+}
+
+#buttonsectioncontainer .prev {
+    display:none;
+    left: -35px;
+}
+#buttonsectioncontainer .next {
+    right: -35px;/*-40px*/
+}
+#buttonsectioncontainer .next.hide {
+    display: none;
+}
+
+#buttonsectioncontainer .prev.show {
+    display: block;
+}
+
+
+.buttonsection:after {
+    content: " ";
+    position: absolute;
+    border-right: 1px #6c757d solid;
+    top: 20%;
+    right: 0;
+    height: 65%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.buttonsection:last-child::after {
+    border-right: none;
+}
+#buttonsectioncontainer.circle .buttonsection {
+    border-radius: 100%;
+}
+
+#buttonsectioncontainer .buttonsection:hover {
+    background: #bac1c5;
+    color: #fff;
+}
+
+#buttonsectioncontainer .buttonsection.sectionhidden {
+    width: 53px;
+    height: 53px;
+    line-height: 50px;
+    border: 2px solid;
+    background: none;
+    cursor: default;
+    color: #b7bdc3;
+    border-color: #d3d9df;
+}
+
+/* #buttonsectioncontainer .divisorsection {
+    display: inline-block;
+    padding: 0;
+    overflow-y: hidden;
+    height: 52px;
+    margin: 0 4px 10px 25px;
+} */
+
+#buttonsectioncontainer .divisortext {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    overflow-y: hidden;
+    height: 52px;
+    text-align: right;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* colors */
+#buttonsectioncontainer .buttonsection.current {
+    background: #115898;
+    color: #fff;
+}
+
+#buttonsectioncontainer .buttonsection.sectionvisible {
+    background: #ececec; /*#1177d1*/
+    color: grey;
+    border-color: #c0c0c0;
+    text-decoration: underline grey;
+}
+
+#buttonsectioncontainer .divisorsection.inlinebuttonsections {
+    display: inline;
+}
+
+#buttonsectioncontainer .divisorsection.inlinebuttonsections::before {
+    content: "\A";
+    white-space: pre;
+}
+/* >>>online users map style */
+
+/* for OpenLayers to get zoompanel to appear in top right */
+.olControlZoomPanel {
+    left: 6px;
+    top: 6px;
+}
+
+
+.olControlAttribution {
+    bottom: 0em;
+}
+
+#buttons_online_users_osmmap {
+	height:300px;
+	width:100% !important;
+	overflow:hidden; 
+	margin-bottom:10px;
+}
+
+#buttons_online_users_googlemap {
+	height:300px;
+	width:100% !important;
+	overflow:hidden; 
+	margin-bottom:10px;
+}
+#map_id {
+	height:480px;
+	width:100% !important;
+	overflow:hidden; 
+}
+/* <<< End online users map
+
+/* editing */
+.editing .course-content ul.buttons li.section.main:not(#section-0) {
+    display: block;
+    border-bottom: 1px dotted #dee2e6 !important;
+}
