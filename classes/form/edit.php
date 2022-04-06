@@ -43,7 +43,7 @@ require_once('../mooin4/lib.php'); */
             $sectionmenu,
         );
     
-        $this->add_action_mooin4($cancel = true, "Save Chapter");
+        $this->add_action_buttons($cancel = true, "Save Chapter");
     }
 
     //Custom validation should be added here
