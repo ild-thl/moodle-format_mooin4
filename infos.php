@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Displays external information about a course using the course format buttons
- * @package    core_course implement in course format buttons
+ * Displays external information about a course using the course format mooin4
+ * @package    core_course implement in course format mooin4
  * @copyright  1999 onwards Martin Dougiamas  http://dougiamas.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -69,22 +69,22 @@
         print_error('cannotviewcategory', '', $CFG->wwwroot .'/');
     }
 
-    $pageurl = new moodle_url('/course/format/buttons/infos.php'.'?id='.$courseid);
+    $pageurl = new moodle_url('/course/format/mooin4/infos.php'.'?id='.$courseid);
 
     $PAGE->set_url($pageurl);
     $PAGE->set_course($course);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title(get_string("summaryof",'format_buttons', $course->fullname));
-    $PAGE->set_heading(get_string('courseinfo','format_buttons', $course->fullname ));
-    // $PAGE->navbar->add(get_string('summary','format_buttons',));
+    $PAGE->set_title(get_string("summaryof",'format_mooin4', $course->fullname));
+    $PAGE->set_heading($course->fullname );
+    $PAGE->navbar->add(get_string('startseite','format_mooin4',));
 
     //set_user_preference('card_display', 1, $USER->id);
-    //set_user_preference('buttons_display', 0, $USER->id);
+    //set_user_preference('mooin4_display', 0, $USER->id);
     // set_user_preference('card_display','yes');
-    // set_user_preference('buttons_display', 'no');
+    // set_user_preference('mooin4_display', 'no');
 
     // Set user preferences for the user
-    $listOfPreferences = array('card_display' => 'yes', 'buttons_display' => null);
+    $listOfPreferences = array('card_display' => 'yes', 'mooin4_display' => null);
     set_user_preferences($listOfPreferences);
 
     echo $OUTPUT->header();
@@ -113,33 +113,33 @@
         "title_url" => new moodle_url('/course/view.php', array('id'=>$course->id))
     );
     $infos_data[] = array(
-        "title"   => get_string('inhaltsverzeichnis', 'format_buttons'), 
-        "desc" => get_string('inhaltsverzeichnis_desc', 'format_buttons'),
-        "title_url" => new moodle_url('/course/view.php', array('id'=>$course->id))
+        "title"   => get_string('inhaltsverzeichnis', 'format_mooin4'), 
+        "desc" => get_string('inhaltsverzeichnis_desc', 'format_mooin4'),
+        "title_url" => new moodle_url('/course/format/mooin4/inhalt.php', array('id'=>$course->id))
     );
     
     $infos_data[] = array(
-        "title"   => get_string('newsforen', 'format_buttons'), 
-        "desc" => get_string('newsforen_desc', 'format_buttons'), 
+        "title"   => get_string('newsforen', 'format_mooin4'), 
+        "desc" => get_string('newsforen_desc', 'format_mooin4'), 
         "title_url" => new moodle_url('/mod/forum/view.php', array('f'=>$course->id - 1))
     );
         
     $infos_data[] = array(
-        "title"   => get_string('diskussionsforen', 'format_buttons'), 
-        "desc" => get_string('diskussionsforen_desc', 'format_buttons'),
-        "title_url" => new moodle_url('/course/format/buttons/forum_view.php', array('id'=>$course->id))
+        "title"   => get_string('diskussionsforen', 'format_mooin4'), 
+        "desc" => get_string('diskussionsforen_desc', 'format_mooin4'),
+        "title_url" => new moodle_url('/course/format/mooin4/forum_view.php', array('id'=>$course->id))
     );
     
     $infos_data[] = array(
-        "title"   => get_string('teilnehmenden', 'format_buttons'), 
-        "desc" => get_string('teilnehmenden_desc', 'format_buttons'),
-        "title_url" => new moodle_url('/course/format/buttons/users.php', array('id'=>$course->id))
+        "title"   => get_string('teilnehmenden', 'format_mooin4'), 
+        "desc" => get_string('teilnehmenden_desc', 'format_mooin4'),
+        "title_url" => new moodle_url('/course/format/mooin4/users.php', array('id'=>$course->id))
     );
     
     $infos_data[] = array(
-        "title"   => get_string('social_media', 'format_buttons'), 
-        "desc" => get_string('social_media_desc', 'format_buttons'), 
-        "title_url" => new moodle_url('/course/format/buttons/view_social.php', array('id'=>$course->id))
+        "title"   => get_string('social_media', 'format_mooin4'), 
+        "desc" => get_string('social_media_desc', 'format_mooin4'), 
+        "title_url" => new moodle_url('/course/format/mooin4/view_social.php', array('id'=>$course->id))
     );
         
 
@@ -150,7 +150,7 @@
         'title_url'  => new moodle_url('/course/view.php', array('id'=>$course->id)) */
     ];
     
-    echo $OUTPUT -> render_from_template('format_buttons/manage', $templatecontext);
+    echo $OUTPUT -> render_from_template('format_mooin4/manage', $templatecontext);
     echo "<br />";
     
     // Trigger event, course information viewed.
@@ -161,7 +161,7 @@
 
     // Remove the User preference for the card page each time the user come throught this page
     // unset_user_preference('card_display');
-    $listOfPreferences = array('buttons_display' => 'yes', 'card_display' => null);
+    $listOfPreferences = array('mooin4_display' => 'yes', 'card_display' => null);
 
     set_user_preferences($listOfPreferences);
 

@@ -1,14 +1,19 @@
-Moodle Course Format "Buttons"
+Moodle Course Format "mooin4"
 ===============================
 
-Buttons is a course format that creates a menu with buttons to access the sections, one by one.
+mooin4 is a course format that creates a menu with buttons to access the sections, one by one.
+It's base on the moodle course format buttons plugin.
 
 Features
 ---------
 * Create groups of sections, to separate topics in modules or periods;
 * Create names to the groups to identify them. (Example: First Semester, Topics about a specific theme);
-* Change the colors of the buttons (when active, inactive, on over and hidden), to fit it your Moodle theme;
-* Select the list-style in numbers, alphabet or roman numeral.
+* Change the colors of the mooin4 (when active, inactive, on over and hidden), to fit it your Moodle theme;
+* Select the list-style in numbers, alphabet or roman numeral;
+* A participant map to show where student a taking part to the course;
+* A Table of content page, to make the navigation in the course easier as possible;
+* A page to display all the social network news ( twitter, facebook, linkedin);
+* A page to show and create discussion directly in course.
 
 Installation
 -------------
@@ -16,18 +21,18 @@ Installation
 
 Manual Installation
 --------------------
-1. You can manually download the zip file from the [Moodle Plugins Database](https://moodle.org/plugins/format_buttons).
+1. You can manually download the zip file from the [Moodle Plugins Database](https://moodle.org/plugins/format_mooin4).
 2. After downloading the zip file, expand it and put it's contents in your .../moodle/course/format/ directory.
-3. The folder name must be 'buttons'.
+3. The folder name must be 'mooin4'.
 4. Go to 'Admin ► Site administration ► Notifications' page.
 5. Follow the instructions inside the page to finish the installation.
 
 Usage
 ------
-1. When creating a new course, select 'Buttons format' in the 'Course format' dropdown menu.
+1. When creating a new course, select 'mooin4 format' in the 'Course format' dropdown menu.
 2. To select the format, simply choose it from the list of course formats in the course settings.
 3. Choose the number of sections, or leave the default of 10 sections.
-4. Choose where you want the first (zero) section (which has the default 'Announcements' forum) positioned: Either 'Above the list buttons' or 'Below the visible section'.
+4. Choose where you want the first (zero) section (which has the default 'Announcements' forum) positioned: Either 'Above the list mooin4' or 'Below the visible section'.
 5. Select the sequential rule. You can uses the count original of the topics, or chose to reset the count to each new grouping.
 6. Select the list-style in numbers, alphabet or roman numeral.
 7. Write the titles for all the groupings you will use and the number of sections that each one will have. If a group has only one section, the icon will be (...).
@@ -35,10 +40,12 @@ Usage
 
 Documentation
 --------------
-You can read the [Documentation page](https://docs.moodle.org/31/en/Buttons_course_format) at Moodle.org
+You can read the [Documentation page](https://docs.moodle.org/31/en/buttons_course_format) at Moodle.org
 
 About
 ------
 * [Rodrigo Brandão](https://github.com/brandaorodrigo) (author)
 * [Moodle plugin page](https://moodle.org/plugins/format_buttons) at Moodle.org
-* [Plugin project](https://github.com/brandaorodrigo/moodle-format_buttons) at GitHub.com
+* [Old Plugin project](https://github.com/brandaorodrigo/moodle-format_buttons) at GitHub.com
+* [New plugin project](https://github.com/dperial/moodle-format_mooin4) at GitHub.com
+* [Nguefack Perial](https://github.com/dperial/) (contributor)

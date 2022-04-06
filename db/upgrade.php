@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Buttons Format - A topics based format that uses a Buttons of user selectable section to show content.
+ * mooin4 Format - A topics based format that uses a mooin4 of user selectable section to show content.
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @version    See the value of '$plugin->version' in version.php.
- * @copyright  &copy; 2012 G J Barnard in respect to modifications of standard topics and Buttons format.
+ * @copyright  &copy; 2012 G J Barnard in respect to modifications of standard topics and mooin4 format.
  * @author     Perial Dupont -
  *                           {@link http://moodle.org/user/profile.php?id=442195}
  * @author     Based on code originally written by Paul Krix and Julian Ridden and J Barnad.
@@ -28,17 +28,15 @@
 
 // defined('MOODLE_INTERNAL') || die();
 
-function xmldb_format_buttons_upgrade($oldversion) {
+/* function xmldb_format_mooin4_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
 
 
     if ($oldversion < 2020072801) {
-        // Define table course_buttons_nav_card table to be created.
-        $table = new xmldb_table('course_buttons_nav_card');
+        $table = new xmldb_table('course_mooin4_nav_card');
 
-        // Adding fields to table course_buttons_nav_card.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
         $table->add_field('news_forum', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('news_dorum_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
@@ -51,18 +49,16 @@ function xmldb_format_buttons_upgrade($oldversion) {
         $table->add_field('inhaltsverzeichnis', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('inhaltsverzeichnis_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
 
-        // Adding keys to table course_buttons_nav_card.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Launch create table for course_buttons_nav_card.
-        // if (!$dbman->table_exists($table)) {
+        if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         // }
 
-        upgrade_plugin_savepoint(true, 2020072801, 'format', 'buttons');
+        upgrade_plugin_savepoint(true, 2020072801, 'format', 'mooin4');
     }
-    // Automatic 'Purge all caches'....
-    // purge_all_caches();
+    
+    purge_all_caches();
     
     return true;
-}
+} */

@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A scheduled task for buttons_online_users_map to update the user locations, previously it was a block_online_users_map package.
+ * A scheduled task for mooin4_online_users_map to update the user locations, previously it was a block_online_users_map package.
  *
  * 
  * @author		Jan Rieger <jan.rieger@fh-luebeck.de>
  * @license		http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace buttons_online_users_map\task;
+namespace mooin4_online_users_map\task;
 
 class update_locations_task extends \core\task\scheduled_task {
 
@@ -40,7 +40,7 @@ class update_locations_task extends \core\task\scheduled_task {
 	public function execute() {
 		global $CFG;
 		//set_time_limit ( 120 );
-		require_once($CFG->dirroot.'../buttons/lib.php');
+		require_once($CFG->dirroot.'../mooin4/lib.php');
         update_users_locations();
 	}
 

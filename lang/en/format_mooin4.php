@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Buttons format';
+$string['pluginname'] = 'Mooin4 format';
 $string['currentsection'] = 'This topic';
 $string['editsection'] = 'Edit topic';
 $string['deletesection'] = 'Delete topic';
@@ -40,15 +40,15 @@ $string['yes'] = 'Yes';
 $string['no'] = 'No';
 $string['sectionposition'] = 'Section zero position';
 $string['sectionposition_help'] = 'The section 0 will appear together the visible section.<br><br>
-<strong>Above the list buttons</strong><br>Use this option if you want to add some text or resource before the buttons list.
+<strong>Above the list mooin4</strong><br>Use this option if you want to add some text or resource before the mooin4 list.
 <i>Example: Define a picture to illustrate the course.</i><br><br><strong>Below the visible section</strong><br>
 Use this option if you want to add some text or resource after the visible section.
 <i>Example: Resources or links to be displayed regardless of the visible section.</i><br><br>';
-$string['above'] = 'Above the list buttons';
+$string['above'] = 'Above the list mooin4';
 $string['below'] = 'Below the visible section';
-$string['divisor'] = 'Number of sections to group - {$a}';
-$string['divisortext'] = 'Title of the grouping - {$a}';
-$string['divisortext_help'] = 'The grouping sections is used to separate section by type or modules.
+$string['divisor'] = 'Number of sections to category - {$a}';
+$string['divisortext'] = 'Title of the Category - {$a}';
+$string['divisortext_help'] = 'The category sections is used to separate section by type or modules.
 <i>Example: The course has 10 sections divided into two modules: Theoretical (with 5 sections) and Practical (with 5 sections).<br>
 Define the title like "Teorical" and set the number of sections to 5.</i><br><br>
 Tip: if you want to use the tag <strong>&lt;br&gt;</strong>, type [br].';
@@ -58,65 +58,66 @@ $string['colorcurrent_help'] = 'The current section is the section marked with h
 $string['colorvisible'] = 'Color of the visible section button';
 $string['colorvisible_help'] = 'The visible section is the selected section.<br>Define a color in hexadecimal.
 <i>Example: #747fab</i><br>If you want to use the default color, leave empty.';
-$string['editing'] = 'The buttons are disabled while the edit mode is active.';
+$string['editing'] = 'The mooin4 are disabled while the edit mode is active.';
 $string['sequential'] = 'Sequential';
-$string['notsequentialdesc'] = 'Each new group begins counting sections from one.';
-$string['sequentialdesc'] = 'Count the section numbers ignoring the grouping.';
+$string['notsequentialdesc'] = 'Each new categorie begins counting sections from one.';
+$string['sequentialdesc'] = 'Count the section numbers ignoring the category.';
 $string['sectiontype'] = 'List style';
 $string['numeric'] = 'Numeric';
 $string['roman'] = 'Roman numerals';
 $string['alphabet'] = 'Alphabet';
-$string['buttonstyle'] = 'Button style';
-$string['buttonstyle_help'] = 'Define the shape style of the buttons.';
+$string['mooin4tyle'] = 'Button style';
+$string['mooin4tyle_help'] = 'Define the shape style of the mooin4.';
 $string['circle'] = 'Circle';
 $string['square'] = 'Square';
 $string['inlinesections'] = 'Inline sections';
 $string['inlinesections_help'] = 'Give each section a new line.';
 $string['summaryof'] = 'Infos';
-$string['courseinfo'] = 'Schritt für Schritt zum.';
-$string['summary'] = 'Schritt für Schritt zum.';
+$string['courseinfo'] = 'Test Course.';
+$string['summary'] = 'Test Course.';
+$string['startseite'] = ' Kursstartseite';
 $string['navsections'] = 'Navigation in der Kurse.';
 $string['navsections_help'] = 'Choose which Navigation should use in der Kurse.';
 $string['navsectionscards'] = 'Cards navigation display.';
 $string['navsectionstabs'] = 'Tabs navigation display.';
 $string['sectionnameinfos'] = 'Title Info Course Page.';
-$string['buttons_nav_header'] = 'Course Navigation.';
-$string['buttons_nav_header_help'] = 'Configure your Course format buttons Navigation Card here.';
-$string['buttons_nav_course_news_desc'] = 'Newsforum card description.';
-$string['buttons_nav_course_news_desc_help'] = 'Give a small description for the card newsforum.';
-$string['buttons_nav_course_news'] = 'News forum';
-$string['buttons_nav_course_news_help'] = 'Set the title for the newsforum';
-$string['buttons_nav_course_teilnehmer_desc'] = 'Participant card description.';
-$string['buttons_nav_course_teilnehmer_desc_help'] = 'Give a small description for the card participant.';
-$string['buttons_nav_course_teilnehmer'] = 'Course Participant';
-$string['buttons_nav_course_teilnehmer_help'] = 'Set the title for the participant card.';
-$string['buttons_nav_course_diskussion_desc'] = 'Discussion card description.';
-$string['buttons_nav_course_diskussion_desc_help'] = 'Give a small description for the card discussion.';
-$string['buttons_nav_course_diskussion'] = 'Discussion';
-$string['buttons_nav_course_diskussion_help'] = 'Set the title for the discussion.';
-$string['buttons_nav_course_social_media_desc'] = 'Social Media card description.';
-$string['buttons_nav_course_social_media_desc_help'] = 'Give a small description for the card social media.';
-$string['buttons_nav_course_social_media'] = 'Social Media';
-$string['buttons_nav_course_social_media_help'] = 'Set the title for the social media';
-$string['buttons_nav_course_inhalt_desc'] = 'Table of contents card description.';
-$string['buttons_nav_course_inhalt_desc_help'] = 'Give a small description for the card table of contents.';
-$string['buttons_nav_course_inhalt'] = 'Table of contents';
-$string['buttons_nav_course_inhalt_help'] = 'Set the title for the table of content.';
+$string['mooin4_inhalt_header'] = 'Course Table of content';
+$string['mooin4_inhalt_header_help'] = 'Configure your Course format mooin4 table of content Card here.';
+$string['mooin4_nav_course_news_desc'] = 'Newsforum card description.';
+$string['mooin4_nav_course_news_desc_help'] = 'Give a small description for the card newsforum.';
+$string['mooin4_nav_course_news'] = 'News forum';
+$string['mooin4_nav_course_news_help'] = 'Set the title for the newsforum';
+$string['mooin4_nav_course_teilnehmer_desc'] = 'Participant card description.';
+$string['mooin4_nav_course_teilnehmer_desc_help'] = 'Give a small description for the card participant.';
+$string['mooin4_nav_course_teilnehmer'] = 'Course Participant';
+$string['mooin4_nav_course_teilnehmer_help'] = 'Set the title for the participant card.';
+$string['mooin4_nav_course_diskussion_desc'] = 'Discussion card description.';
+$string['mooin4_nav_course_diskussion_desc_help'] = 'Give a small description for the card discussion.';
+$string['mooin4_nav_course_diskussion'] = 'Discussion';
+$string['mooin4_nav_course_diskussion_help'] = 'Set the title for the discussion.';
+$string['mooin4_nav_course_social_media_desc'] = 'Social Media card description.';
+$string['mooin4_nav_course_social_media_desc_help'] = 'Give a small description for the card social media.';
+$string['mooin4_nav_course_social_media'] = 'Social Media';
+$string['mooin4_nav_course_social_media_help'] = 'Set the title for the social media';
+$string['mooin4_nav_course_inhalt_desc'] = 'Table of contents card description.';
+$string['mooin4_nav_course_inhalt_desc_help'] = 'Give a small description for the card table of contents.';
+$string['mooin4_nav_course_inhalt'] = 'Table of contents';
+$string['mooin4_nav_course_inhalt_help'] = 'Set the title for the table of content.';
 $string['newsforen'] = ' Newsforen';
-$string['teilnehmenden'] = 'Teilnehmenden';
+$string['teilnehmenden'] = 'Teilnehmende';
 $string['diskussionsforen'] = 'Diskussionsforen';
 $string['inhaltsverzeichnis'] = 'Inhaltsverzeichnis';
 $string['social_media'] = 'Social Media';
 $string['newsforen_desc'] = ' Hier finden Sie alle Neuigkeiten zu diesem Kurs.';
-$string['teilnehmenden_desc'] = ' Hier finden Sie die Liste alle Teilnehmern zu diesem Kurs.';
-$string['diskussionsforen_desc'] = ' Hier finden Sie alle Diskussion Foren zu diesem Kurs.';
+$string['teilnehmenden_desc'] = ' Hier finden Sie die Liste aller Teilnehmenden zu diesem Kurs.';
+$string['diskussionsforen_desc'] = ' Hier finden Sie alle Diskussionsforen zu diesem Kurs.';
 $string['inhaltsverzeichnis_desc'] = ' Inhaltsverzeichnis zu diesem Kurs.';
 $string['social_media_desc'] = ' Bleiben Sie mit unseren verschiedenen sozialen Netzwerken auf dem Laufenden.';
-$string['buttons:aluhatsoff'] = 'Sensible Nutzerdaten sehen';
+$string['mooin4:aluhatsoff'] = 'Sensible Nutzerdaten sehen';
 $string['unenrol'] = 'Unsubscribe from this course';
 
 
-// Anfang Buttons Online users map config
+// Anfang mooin4 Online users map config
 $string['titleonlineusersmap'] = 'Karte der Teilnehmenden';
 
 // config setting titles
@@ -149,6 +150,19 @@ $string['blocktitleonlineusermap'] = 'Block Überschrift';
 $string['height'] = 'Height';
 $string['profile_city_descr'] = 'Bitte tragen Sie Ihren Wohnort in Ihr Profil ein, damit die Teilnehmendenkarte möglichst vollständig angezeigt werden kann.';
 
-// End Buttons Online users map config
+// End mooin4 Online users map config
 $string['map_title'] = 'Karte der Teilnehmenden';
 $string['map_descr'] = 'Bitte tragen Sie Ihren Wohnort in Ihr Profil ein, damit die Teilnehmendenkarte möglichst vollständig angezeigt werden kann.';
+
+// Inhaltsverzeichnis 
+$string['inhalt'] = 'Inhaltsverzeichnis';
+$string['courseinhalt'] = 'Inhalt';
+$string['notapplicable'] = "Not applicable";
+$string['hide'] = "Hide";
+$string['icon'] = 'Icon';
+$string['show'] = "Show";
+$string['chaptering'] = 'Activate Chapter Grouping';
+$string['numberofchapter'] = 'Number of chapters';
+$string['change'] = 'Change';
+$string['defaultgrouping'] = 'Default grouping';
+$string['structure'] = 'Structure';

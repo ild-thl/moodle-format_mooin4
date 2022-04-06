@@ -53,7 +53,7 @@ if ($search) {
 }
 
 echo(($params["id"]));
-$url_page = new moodle_url('/course/fotmat/buttons/forum_view.php'.'?id='.$params["id"]);
+$url_page = new moodle_url('/course/fotmat/mooin4/forum_view.php'.'?id='.$params["id"]);
 $PAGE->set_url($url_page);
 // removed by oncampus $PAGE->set_url('/mod/forum/view.php', $params);
 
@@ -148,10 +148,10 @@ $oc_showall = optional_param('showall', '', PARAM_RAW);
 $oc_counter = 0;
 ob_start();
 if (count($oc_foren) > 1 and $oc_showall == '') {
-    echo '<h2>' . get_string('all_forums', 'format_buttons') . '</h2>';
+    echo '<h2>' . get_string('all_forums', 'format_mooin4') . '</h2>';
     foreach ($oc_foren as $oc_forum) {
         $oc_cm = $DB->get_record('course_modules', array('instance' => $oc_forum->id, 'course' => $course->id, 'module' => $oc_m->id));
-        $oc_link = html_writer::link(new moodle_url('/course/fotmat/buttons/forum_view.php?showall=false&id=' . $oc_cm->id), $oc_forum->name);
+        $oc_link = html_writer::link(new moodle_url('/course/fotmat/mooin4/forum_view.php?showall=false&id=' . $oc_cm->id), $oc_forum->name);
         ///blocks/oc_mooc_nav/forum_view.php?showall=false&id=
         if ($oc_cm->visible == 1) {
             echo html_writer::tag('div', $oc_link);
@@ -265,7 +265,7 @@ if ($forum->type == 'qanda' && !has_capability('moodle/course:manageactivities',
 }
 
 // oncampus ////////////////
-require_once($CFG->dirroot . '/course/format/buttons/forum_lib.php');
+require_once($CFG->dirroot . '/course/format/mooin4/forum_lib.php');
 //blocks/oc_mooc_nav
 switch ($forum->type) {
     case 'single':

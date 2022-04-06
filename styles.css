@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +25,7 @@
  /*@import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
  @import url('"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"');
 
- format-buttons #region-main-box{
+ format-mooin4 #region-main-box{
     max-width: 80% !important;
     border: 0px !important;
     padding: 0px !important;
@@ -38,7 +38,7 @@
 /* @media (min-width: 576px) {
 
 } */
- .course-content div.buttons_nav {
+ .course-content div.mooin4_nav {
     margin: 0 Auto;
     max-width: 80%;
     background-color: #115898;
@@ -47,58 +47,58 @@
     justify-content: start;
     padding: 0;
 }
- .course-content ul.buttons {
+ .course-content ul.mooin4 {
     margin: 0;
     list-style: none;
     padding-inline-start:  0em;
 }
 
 
-.course-content ul.buttons li.section .content {
+.course-content ul.mooin4 li.section .content {
     margin: 0 40px;
 }
 
-.course-content ul.buttons li.section .left,
-.course-content ul.buttons li.section .right {
+.course-content ul.mooin4 li.section .left,
+.course-content ul.mooin4 li.section .right {
     width: 40px;
     padding: 0 6px;
 }
 
-.course-content ul.buttons li.section .left {
+.course-content ul.mooin4 li.section .left {
     padding-top: 22px;
     text-align: right;
 }
 
-.jsenabled .course-content ul.buttons li.section .left,
-.jsenabled .course-content ul.buttons li.section .right {
+.jsenabled .course-content ul.mooin4 li.section .left,
+.jsenabled .course-content ul.mooin4 li.section .right {
     width: auto;
 }
 
-.course-content ul.buttons li.section .left .section-handle img.icon {
+.course-content ul.mooin4 li.section .left .section-handle img.icon {
     padding: 0;
     vertical-align: baseline;
 }
 
-.course-content ul.buttons li.section .section_action_menu .textmenu,
-.course-content ul.buttons li.section .section_action_menu .menu-action-text {
+.course-content ul.mooin4 li.section .section_action_menu .textmenu,
+.course-content ul.mooin4 li.section .section_action_menu .menu-action-text {
     white-space: nowrap;
 }
 
-.course-content ul.buttons li.section.main:not(#section-0) {
+.course-content ul.mooin4 li.section.main:not(#section-0) {
     background: none;
     list-style: none;
     display: none;
     border: 0 !important;
 }
 
-/* #buttonsectioncontainer {
+/* #mooin4ectioncontainer {
     margin: 20px auto;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     max-width: 1087px;
     position: relative;
     
 } */
-#bottom_buttonsectioncontainer {
+#bottom_mooin4ectioncontainer {
     margin: 20px auto;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     max-width: 30%;/*1280px;*/
@@ -112,7 +112,7 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .course-content ul.buttons li.section .content {
+    .course-content ul.mooin4 li.section .content {
         margin: 0em !important;
     }
     #page.container-fluid.d-print-block {
@@ -120,7 +120,7 @@
         padding-left: .2em;
         padding-right: .2em;
     }
-    #buttonsectioncontainer {
+    #mooin4ectioncontainer {
         margin: 10px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
         /*max-width: 14em !important;*/
@@ -128,7 +128,7 @@
         text-align: center;
 
     }
-    #bottom_buttonsectioncontainer {
+    #bottom_mooin4ectioncontainer {
         margin: 10px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
         max-width: 60% !important;
@@ -157,6 +157,18 @@
         width:32px;
         height:32px
     }
+    
+    section#region-main .section-id {
+        font-size: 1.2em !important;
+        padding: .375rem .2rem !important;
+        line-height: 1.5 !important;
+    }
+    input#staticSectionTitle {
+        font-size: 1.2em !important;
+        color: grey;
+        margin-left: -14px !important;
+        line-height: 1.5;
+    }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
@@ -177,10 +189,10 @@
     .outer_card {
         column-count: 2;
     }
-    .course-content ul.buttons li.section .content {
+    .course-content ul.mooin4 li.section .content {
         margin: 0em !important;
     }
-    #buttonsectioncontainer {
+    #mooin4ectioncontainer {
         margin: 10px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
         max-width: 44em;
@@ -188,7 +200,7 @@
         text-align: center;
 
     }
-    #bottom_buttonsectioncontainer {
+    #bottom_mooin4ectioncontainer {
         margin: 10px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
         max-width: 28%;
@@ -203,13 +215,24 @@
         width:32px;
         height:32px
     }
+    section#region-main .section-id {
+        float: right;
+        font-size: 1.5em;
+        padding: .375rem 1.2rem;
+        line-height: 1.8;
+    }
+    input#staticSectionTitle {
+        font-size: 1.6em;
+        color: grey;
+        margin-left: -2.4em;
+    }
 }
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    #buttonsectioncontainer {
+    #mooin4ectioncontainer {
         width: 50em;
     }
-    #bottom_buttonsectioncontainer {
+    #bottom_mooin4ectioncontainer {
         margin: 10px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
         max-width: 25%;
@@ -230,11 +253,21 @@
         width:32px;
         height:32px
     }
-    
+    section#region-main .section-id {
+        float: right;
+        font-size: 1.5em;
+        padding: .375rem 1.2rem;
+        line-height: 1.8;
+    }
+    input#staticSectionTitle {
+        font-size: 1.6em;
+        color: grey;
+        margin-left: -4em !important;
+    }
 }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-    .course-content ul.buttons li.section .content {
+    .course-content ul.mooin4 li.section .content {
         margin: 0em !important;
     }
     #page.container-fluid.d-print-block {
@@ -250,10 +283,10 @@
         padding-right: 0px !important;
         padding-left: 0px !important;
     }
-    #buttonsectioncontainer {
+    #mooin4ectioncontainer {
         width: 80em;
     }
-    #bottom_buttonsectioncontainer {
+    #bottom_mooin4ectioncontainer {
         
         margin: 20px auto;
         box-shadow: 0 3px 10px rgb(0 0 0 / .2);
@@ -269,6 +302,20 @@
         width:42px;
         height:42px
     }
+    
+/*>>> Begin Table of content style */
+section#region-main .section-id {
+    float: right;
+    font-size: 1.5em;
+    padding: .375rem 1.2rem;
+    line-height: 1.8;
+}
+input#staticSectionTitle {
+    font-size: 1.6em;
+    color: grey;
+    margin-left: -6.4em !important;
+}
+/*<<< End table of content style*/
 }
 
 /*>>> New_style carousel */
@@ -291,7 +338,7 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
-.buttonsection {
+.mooin4ection {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -384,7 +431,7 @@
 .carousel .carousel__nav .active {
     background: rgba(62, 39, 35, .6);
 }
-#buttonsectioncontainer {
+#mooin4ectioncontainer {
     width: 100%;
     box-sizing: border-box;
     display: block;
@@ -421,11 +468,11 @@
     color: #ececec;
 }
 /* <<< End carousel new_style */
-#bottom_buttonsectioncontainer .bottom_carousel-container {
+#bottom_mooin4ectioncontainer .bottom_carousel-container {
     overflow: hidden;
     /* max-width: 50%; */
 }
-#bottom_buttonsectioncontainer .bottom_carousel-inner {
+#bottom_mooin4ectioncontainer .bottom_carousel-inner {
     display: inline-flex;
     transition: transform 0.5s;
     position: initial;
@@ -455,7 +502,7 @@
     /* padding-left: 12px */
 }
 
-#botttom_buttonsectioncontainer svg {
+#botttom_mooin4ectioncontainer svg {
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     border-radius: 50%;
     top: 50%;
@@ -467,27 +514,27 @@
     color: rgb(133, 10, 10);
 }
 
-#buttonsectioncontainer .buttonsection.sectionvisible:nth-child(1) {
+#mooin4ectioncontainer .mooin4ection.sectionvisible:nth-child(1) {
     border-left: none !important;
 }
 
-#buttonsectioncontainer .prev {
+#mooin4ectioncontainer .prev {
     display:none;
     left: -35px;
 }
-#buttonsectioncontainer .next {
+#mooin4ectioncontainer .next {
     right: -35px;/*-40px*/
 }
-#buttonsectioncontainer .next.hide {
+#mooin4ectioncontainer .next.hide {
     display: none;
 }
 
-#buttonsectioncontainer .prev.show {
+#mooin4ectioncontainer .prev.show {
     display: block;
 }
 
 
-.buttonsection:after {
+.mooin4ection:after {
     content: " ";
     position: absolute;
     border-right: 1px #6c757d solid;
@@ -497,19 +544,19 @@
     margin-top: auto;
     margin-bottom: auto;
 }
-.buttonsection:last-child::after {
+.mooin4ection:last-child::after {
     border-right: none;
 }
-#buttonsectioncontainer.circle .buttonsection {
+#mooin4ectioncontainer.circle .mooin4ection {
     border-radius: 100%;
 }
 
-#buttonsectioncontainer .buttonsection:hover {
+#mooin4ectioncontainer .mooin4ection:hover {
     background: #bac1c5;
     color: #fff;
 }
 
-#buttonsectioncontainer .buttonsection.sectionhidden {
+#mooin4ectioncontainer .mooin4ection.sectionhidden {
     width: 53px;
     height: 53px;
     line-height: 50px;
@@ -520,7 +567,7 @@
     border-color: #d3d9df;
 }
 
-/* #buttonsectioncontainer .divisorsection {
+/* #mooin4ectioncontainer .divisorsection {
     display: inline-block;
     padding: 0;
     overflow-y: hidden;
@@ -528,7 +575,7 @@
     margin: 0 4px 10px 25px;
 } */
 
-#buttonsectioncontainer .divisortext {
+#mooin4ectioncontainer .divisortext {
     display: table-cell;
     vertical-align: middle;
     padding: 0;
@@ -542,23 +589,23 @@
 }
 
 /* colors */
-#buttonsectioncontainer .buttonsection.current {
+#mooin4ectioncontainer .mooin4ection.current {
     background: #115898;
     color: #fff;
 }
 
-#buttonsectioncontainer .buttonsection.sectionvisible {
+#mooin4ectioncontainer .mooin4ection.sectionvisible {
     background: #ececec; /*#1177d1*/
     color: grey;
     border-color: #c0c0c0;
     text-decoration: underline grey;
 }
 
-#buttonsectioncontainer .divisorsection.inlinebuttonsections {
+#mooin4ectioncontainer .divisorsection.inlinemooin4ections {
     display: inline;
 }
 
-#buttonsectioncontainer .divisorsection.inlinebuttonsections::before {
+#mooin4ectioncontainer .divisorsection.inlinemooin4ections::before {
     content: "\A";
     white-space: pre;
 }
@@ -575,14 +622,14 @@
     bottom: 0em;
 }
 
-#buttons_online_users_osmmap {
+#mooin4_online_users_osmmap {
 	height:300px;
 	width:100% !important;
 	overflow:hidden; 
 	margin-bottom:10px;
 }
 
-#buttons_online_users_googlemap {
+#mooin4_online_users_googlemap {
 	height:300px;
 	width:100% !important;
 	overflow:hidden; 
@@ -596,7 +643,7 @@
 /* <<< End online users map
 
 /* editing */
-.editing .course-content ul.buttons li.section.main:not(#section-0) {
+.editing .course-content ul.mooin4 li.section.main:not(#section-0) {
     display: block;
     border-bottom: 1px dotted #dee2e6 !important;
 }

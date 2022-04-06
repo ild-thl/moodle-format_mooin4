@@ -88,7 +88,7 @@ function oc_forum_print_latest_discussions($course, $forum, $maxdiscussions = -1
 
     if ($canstart) {
         echo '<div class="singlebutton forumaddnew">';
-        echo "<form id=\"newdiscussionform\" method=\"get\" action=\"$CFG->wwwroot/course/format/buttons/forum_post.php\">"; // /blocks/oc_mooc_nav/
+        echo "<form id=\"newdiscussionform\" method=\"get\" action=\"$CFG->wwwroot/course/format/mooin4/forum_post.php\">"; // /blocks/oc_mooc_nav/
         echo '<div>';
         echo "<input type=\"hidden\" name=\"forum\" value=\"$forum->id\" />";
         switch ($forum->type) {
@@ -196,7 +196,7 @@ function oc_forum_print_latest_discussions($course, $forum, $maxdiscussions = -1
                     echo '<a title="'.get_string('markallread', 'forum').
                          '" href="'.$CFG->wwwroot.'/mod/forum/markposts.php?f='.
                          $forum->id.'&amp;mark=read&amp;returnpage=view.php&sesskey='.sesskey().'">'.
-                         '<img src="'.$OUTPUT->pix_url('t/markasread') . '" class="iconsmall" alt="'.get_string('markallread', 'forum').'" /></a>';
+                         '<img src="'.$OUTPUT->image_url('t/markasread') . '" class="iconsmall" alt="'.get_string('markallread', 'forum').'" /></a>';
                 }
                 echo '</th>';
             }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /* $capabilities = array(
-    'moodle/buttons:aluhatsoff' => array(
+    'moodle/mooin4:aluhatsoff' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
@@ -25,7 +25,7 @@
     )
 ); */
 $capabilities = array(
-    'format/buttons:myaddinstance' => array(
+    'format/mooin4:myaddinstance' => array(
     'captype' => 'write',
     'contextlevel' => CONTEXT_SYSTEM,
     'archetypes' => array(
@@ -36,7 +36,7 @@ $capabilities = array(
         'user' => CAP_ALLOW
     )
     ),
-    'format/buttons:addinstance' => array(
+    'format/mooin4:addinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
@@ -48,7 +48,7 @@ $capabilities = array(
         )
     )
     ,
-    'format/buttons:readuserpage' => array(
+    'format/mooin4:readuserpage' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
@@ -56,7 +56,7 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
-    'format/buttons:aluhatsoff' => array(
+    'format/mooin4:aluhatsoff' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(

@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course section manager class for format buttons.
- * @package    format_buttons
+ * Course section manager class for format mooin4.
+ * @package    format_mooin4
  * @copyright  2020 David Watson {@link http://evolutioncode.uk}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace format_buttons;
+namespace format_mooin4;
 
 defined('MOODLE_INTERNAL') || die();
 

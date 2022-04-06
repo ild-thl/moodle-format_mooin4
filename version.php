@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->requires = 2015111600; /* moodle 3.0 */
-$plugin->component = 'format_buttons';
+$plugin->component = 'format_mooin4';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '3.x';
 $plugin->version = 2022021118; // 2020072801 | 2021121317 | 2022012517

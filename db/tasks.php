@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Definition of scheduled tasks for buttons_online_users_map, before it was a Online_users_map #package.
+ * Definition of scheduled tasks for mooin4_online_users_map, before it was a Online_users_map #package.
  *
  * @category	task
  * @author		Jan Rieger <jan.rieger@fh-luebeck.de>
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
 			array(
-				'classname' => 'buttons_online_users_map\task\update_locations_task',
+				'classname' => 'mooin4_online_users_map\task\update_locations_task',
 				'blocking' => 0,
 				'minute' => '*',
 				'hour' => '*',

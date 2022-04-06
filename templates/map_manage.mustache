@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_buttons/map_manage
+    @template format_mooin4/map_manage
 
     class="card-columns" 
     class="card shadow-sm p-3 mb-5 bg-white rounded"
@@ -29,10 +29,14 @@
 </canvas> -->
 <html>
 <head>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+
 </head>
 <body>
   <div class="card">
@@ -66,6 +70,12 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       subdomains: ['a','b','c']
   }).addTo(mymap);
+  /*
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+	  maxZoom: 20,
+  	attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+  */
 
  // L.Control.geocoder().addTo(mymap);
   
@@ -159,24 +169,25 @@ L.MarkerPin = L.CircleMarker.extend({
     iconAnchor: [9, 21],
     popupAnchor: [0, -14]
   });
+  var markerLists = [];
   {{#user_data}}
   L.Control.geocoder().options.geocoder.geocode(
     '{{.}}',(results)=> {
+      var res = '{{.}}';
+      // var result = res.split("|", 1);
       console.log(results);
-      //for ( var i=0; i < results.length; ++i ) {
+      console.log('{{.}}');
+        markerLists.push( L.marker( [results[0].center.lat, results[0].center.lng],{icon:myIcon})
+            .bindPopup( '{{.}}' )
+            .addTo( mymap ));
         L.marker( [results[0].center.lat, results[0].center.lng],{icon:myIcon})
             .bindPopup( '{{.}}' )
             .addTo( mymap );
-      //  }
       }
   );
   {{/user_data}}
  
-  // Marker
- /*  L.marker( [53.865467, 10.686559],{icon: myIcon})
-      .bindPopup( 'Here' )
-      .addTo(mymap); */
-  </script>
+ </script>
   
 </body>
 </html>

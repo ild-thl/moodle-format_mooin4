@@ -662,7 +662,7 @@ if ($mform_post->is_cancelled()) {
     if (!isset($discussion->id) || $forum->type === 'qanda') {
         // Q and A forums don't have a discussion page, so treat them like a new thread..
         // redirect(new moodle_url('/blocks/oc_mooc_nav/forum_view.php', array('f' => $forum->id)));
-        redirect(new moodle_url('/course/format/buttons/forum_view.php', array('f' => $forum->id)));
+        redirect(new moodle_url('/course/format/mooin4/forum_view.php', array('f' => $forum->id)));
     } else {
         redirect(new moodle_url('/mod/forum/discuss.php', array('d' => $discussion->id)));
     }
@@ -670,7 +670,7 @@ if ($mform_post->is_cancelled()) {
 
     if (empty($SESSION->fromurl)) {
         // $errordestination = "$CFG->wwwroot/blocks/oc_mooc_nav/forum_view.php?f=$forum->id";
-        $errordestination = "$CFG->wwwroot/course/format/buttons/forum_view.php?f=$forum->id";
+        $errordestination = "$CFG->wwwroot/course/format/mooin4/forum_view.php?f=$forum->id";
     } else {
         $errordestination = $SESSION->fromurl;
     }

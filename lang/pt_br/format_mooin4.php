@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -66,8 +66,8 @@ $string['sectiontype'] = 'Estilo da listagem';
 $string['numeric'] = 'Numérico';
 $string['roman'] = 'Algarismos romanos';
 $string['alphabet'] = 'Alfabético';
-$string['buttonstyle'] = 'Estilo do botão';
-$string['buttonstyle_help'] = 'Define qual a forma geométrica dos botões.';
+$string['mooin4tyle'] = 'Estilo do botão';
+$string['mooin4tyle_help'] = 'Define qual a forma geométrica dos botões.';
 $string['circle'] = 'Círculo';
 $string['square'] = 'Quadrado';
 $string['inlinesections'] = 'Seções separadas em linhas';

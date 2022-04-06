@@ -1,9 +1,9 @@
 <?php
 
 include_once("../../../config.php");
-// change include_once($CFG->dirroot.'/blocks/online_users_map/lib.php'); to --, because all the implementation for the old file is now in the ../buttons/lib.php
+// change include_once($CFG->dirroot.'/blocks/online_users_map/lib.php'); to --, because all the implementation for the old file is now in the ../mooin4/lib.php
 
-include_once($CFG->dirroot.'../buttons/lib.php');
+include_once($CFG->dirroot.'../mooin4/lib.php');
 
 $callback = optional_param('callback', '', PARAM_ALPHA);
 $courseid = optional_param('courseid', 1, PARAM_INT);
@@ -29,7 +29,7 @@ $counter = 0;
  
 $select = "SELECT u.id, u.username, u.firstname, u.lastname, u.city, boumc.lat, boumc.lng ";
 $from = "FROM {user} u,
-			  {buttons_online_users_map} boumc,
+			  {mooin4_online_users_map} boumc,
 			  {enrol} e,
 			  {user_enrolments} ue ";
 $where =  "WHERE boumc.userid = u.id 
@@ -46,7 +46,7 @@ $SQLwithLL = $select . $from . $where . $groupby . $order;
 if ($pusers = $DB->get_records_sql($SQLwithLL, array(),0, 9000)) {   // We'll just take the most recent 9000 maximum
     foreach ($pusers as $puser) {
 
-		if($CFG -> buttons_online_users_map_has_names) {
+		if($CFG -> mooin4_online_users_map_has_names) {
             $puser->fullname = fullname($puser);
         } else {
             $puser->fullname = $puser->city;
@@ -64,7 +64,7 @@ if ($pusers = $DB->get_records_sql($SQLwithLL, array(),0, 9000)) {   // We'll ju
 
 // added by oncampus
 // Nutzer aus der selben Stadt zu einem Nutzer zusammenfassen und Anzahl mit �bergeben
-if(!$CFG -> buttons_online_users_map_has_names) {
+if(!$CFG -> mooin4_online_users_map_has_names) {
 	$sorted_users = array();
 	foreach ($users as $user) {
 		$latlng = $user->lat.','.$user->lng;

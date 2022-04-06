@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Displays media social information about the course using the course format buttons
- * @package    core_course implement in course format buttons
+ * Displays media social information about the course using the course format mooin4
+ * @package    core_course implement in course format mooin4
  * @copyright  perial dupont
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +34,7 @@
 $courseid = optional_param('id', 1, PARAM_INT);
 $socialmediaid = optional_param('socialmediaid', 0, PARAM_INT);
 
-$PAGE->set_url('/course/format/buttons/view_social.php', array('courseid' => $courseid));
+$PAGE->set_url('/course/format/mooin4/view_social.php', array('courseid' => $courseid));
 
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);

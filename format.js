@@ -14,9 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,7 +30,7 @@ M.course.format = M.course.format || {};
  * Get sections config for this format
  *
  * The section structure is:
- * <ul class="buttons">
+ * <ul class="mooin4">
  *  <li class="section">...</li>
  *  <li class="section">...</li>
  *   ...
@@ -41,7 +41,7 @@ M.course.format = M.course.format || {};
 M.course.format.get_config = function() {
     return {
         container_node: 'ul',
-        container_class: 'buttons',
+        container_class: 'mooin4',
         section_node: 'li',
         section_class: 'section',
     };

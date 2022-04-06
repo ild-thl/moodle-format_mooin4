@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,14 +30,14 @@ require_once($CFG->dirroot. '/course/format/topics/lib.php');
 include_once($CFG->dirroot.'/lib/datalib.php');
 
 /**
- * format_buttons
+ * format_mooin4
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão (rodrigobrandao.com.br)
  * @copyright  2017 Rodrigo Brandão
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_buttons extends format_topics {
+class format_mooin4 extends format_topics {
 
     /**
      * Returns true if this course format uses sections
@@ -67,11 +67,11 @@ class format_buttons extends format_topics {
                 'type' => PARAM_INT,
             );
             // Try adding course navigation card here
-            /* $courseformatoptions['buttonsnewsforumtitle'] = array(
+            /* $courseformatoptions['mooin4newsforumtitle'] = array(
                 'default' => $courseconfig->newsforumtitle,
                 'type' =>PARAM_TEXT,
             );
-            $courseformatoptions['buttonsnewsforumdesc'] = array(
+            $courseformatoptions['mooin4newsforumdesc'] = array(
                 'default' => $courseconfig->newsforumdesc,
                 'type' =>PARAM_TEXT,
             ); */
@@ -79,7 +79,7 @@ class format_buttons extends format_topics {
                 'default' => $courseconfig->hiddensections,
                 'type' => PARAM_INT,
             );
-            // New adding coursedisplay in buttons/lib.php to handle each section in the course format
+            // New adding coursedisplay in mooin4/lib.php to handle each section in the course format
             $courseformatoptions['coursedisplay'] = array(
                 'default' => $courseconfig->coursedisplay,
                 'type' => PARAM_INT,
@@ -89,39 +89,39 @@ class format_buttons extends format_topics {
                 'type' => PARAM_INT,
             ); */
             $courseformatoptions['showdefaultsectionname'] = array(
-                'default' => get_config('format_buttons', 'showdefaultsectionname'),
+                'default' => get_config('format_mooin4', 'showdefaultsectionname'),
                 'type' => PARAM_INT,
             );
 
             $courseformatoptions['sectionposition'] = array(
-                'default' => get_config('format_buttons', 'sectionposition'),
+                'default' => get_config('format_mooin4', 'sectionposition'),
                 'type' => PARAM_INT,
             );
 
             $courseformatoptions['inlinesections'] = array(
-                'default' => get_config('format_buttons', 'inlinesections'),
+                'default' => get_config('format_mooin4', 'inlinesections'),
                 'type' => PARAM_INT,
             );
 
             $courseformatoptions['sequential'] = array(
-                'default' => get_config('format_buttons', 'sequential'),
+                'default' => get_config('format_mooin4', 'sequential'),
                 'type' => PARAM_INT,
             );
 
             $courseformatoptions['sectiontype'] = array(
-                'default' => get_config('format_buttons', 'sectiontype'),
+                'default' => get_config('format_mooin4', 'sectiontype'),
                 'type' => PARAM_TEXT,
             );
 
-            $courseformatoptions['buttonstyle'] = array(
-                'default' => get_config('format_buttons', 'buttonstyle'),
+            $courseformatoptions['mooin4tyle'] = array(
+                'default' => get_config('format_mooin4', 'mooin4tyle'),
                 'type' => PARAM_TEXT,
             );
 
             for ($i = 1; $i <= 20; $i++) {
                 // TODO Check if we can set up the Number of courses Kategorie
                 // it was 12 Modules or Kategories
-                $divisortext = get_config('format_buttons', 'divisortext'.$i);
+                $divisortext = get_config('format_mooin4', 'divisortext'.$i);
                 if (!$divisortext) {
                     $divisortext = '';
                 }
@@ -130,12 +130,12 @@ class format_buttons extends format_topics {
                     'type' => PARAM_TEXT,
                 );
                 $courseformatoptions['divisor'.$i] = array(
-                    'default' => get_config('format_buttons', 'divisor'.$i),
+                    'default' => get_config('format_mooin4', 'divisor'.$i),
                     'type' => PARAM_INT,
                 );
             }
 
-            $colorcurrent = get_config('format_buttons', 'colorcurrent');
+            $colorcurrent = get_config('format_mooin4', 'colorcurrent');
             if (!$colorcurrent) {
                 $colorcurrent = '';
             }
@@ -145,7 +145,7 @@ class format_buttons extends format_topics {
                 'type' => PARAM_TEXT,
             );
 
-            $colorvisible = get_config('format_buttons', 'colorvisible');
+            $colorvisible = get_config('format_mooin4', 'colorvisible');
             if (!$colorvisible) {
                 $colorvisible = '';
             }
@@ -159,9 +159,9 @@ class format_buttons extends format_topics {
         if ($foreditform && !isset($courseformatoptions['coursedisplay']['label'])) {
             $courseconfig = get_config('moodlecourse');
 
-            $max = 100;// $courseconfig->maxsections
+            $max = $courseconfig->maxsections ; //100
             if (!isset($max) || !is_numeric($max)) {
-                $max = 100;// 52
+                $max = 52;
             }
             
             $sectionmenu = array();
@@ -187,18 +187,7 @@ class format_buttons extends format_topics {
                 'help' => 'coursedisplay',
                 'help_component' => 'moodle',
             );
-            /* $courseformatoptionsedit['buttonsnewsforumtitle'] = array(
-                'label' => get_string('buttons_nav_course_news', 'format_buttons'),
-                'help' => 'buttons_nav_course_news',
-                'help_component' => 'format_buttons',
-                'element_type' => 'text',
-            );
-            $courseformatoptionsedit['buttonsnewsforumdesc'] = array(
-                'label' => get_string('buttons_nav_course_news_desc', 'format_buttons'),
-                'help' => 'buttons_nav_course_news_desc',
-                'help_component' => 'format_buttons',
-                'element_type' => 'editor',
-            ); */
+            
             $courseformatoptionsedit['hiddensections'] = array(
                 'label' => new lang_string('hiddensections'),
                 'help' => 'hiddensections',
@@ -213,89 +202,89 @@ class format_buttons extends format_topics {
             );
 
             /* $courseformatoptionsedit['navsections'] = array(
-                'label' => get_string('navsections', 'format_buttons'),
+                'label' => get_string('navsections', 'format_mooin4'),
                 'help' => 'navsections',
                 'help_component' => 'moodle',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        0 => get_string('navsectionscards', 'format_buttons'),
-                        1 => get_string('navsectionstabs', 'format_buttons')
+                        0 => get_string('navsectionscards', 'format_mooin4'),
+                        1 => get_string('navsectionstabs', 'format_mooin4')
                     )
                 ),
             ); */
             $courseformatoptionsedit['showdefaultsectionname'] = array(
-                'label' => get_string('showdefaultsectionname', 'format_buttons'),
+                'label' => get_string('showdefaultsectionname', 'format_mooin4'),
                 'help' => 'showdefaultsectionname',
-                'help_component' => 'format_buttons',
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        1 => get_string('yes', 'format_buttons'),
-                        0 => get_string('no', 'format_buttons'),
+                        1 => get_string('yes', 'format_mooin4'),
+                        0 => get_string('no', 'format_mooin4'),
                     ),
                 ),
             );
 
             $courseformatoptionsedit['sectionposition'] = array(
-                'label' => get_string('sectionposition', 'format_buttons'),
+                'label' => get_string('sectionposition', 'format_mooin4'),
                 'help' => 'sectionposition',
-                'help_component' => 'format_buttons',
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        0 => get_string('above', 'format_buttons'),
-                        1 => get_string('below', 'format_buttons'),
+                        0 => get_string('above', 'format_mooin4'),
+                        1 => get_string('below', 'format_mooin4'),
                     ),
                 ),
             );
 
             $courseformatoptionsedit['inlinesections'] = array(
-                'label' => get_string('inlinesections', 'format_buttons'),
+                'label' => get_string('inlinesections', 'format_mooin4'),
                 'help' => 'inlinesections',
-                'help_component' => 'format_buttons',
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        1 => get_string('yes', 'format_buttons'),
-                        0 => get_string('no', 'format_buttons'),
+                        1 => get_string('yes', 'format_mooin4'),
+                        0 => get_string('no', 'format_mooin4'),
                     ),
                 ),
             );
 
             $courseformatoptionsedit['sequential'] = array(
-                'label' => get_string('sequential', 'format_buttons'),
-                'help_component' => 'format_buttons',
+                'label' => get_string('sequential', 'format_mooin4'),
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        0 => get_string('notsequentialdesc', 'format_buttons'),
-                        1 => get_string('sequentialdesc', 'format_buttons'),
+                        0 => get_string('notsequentialdesc', 'format_mooin4'),
+                        1 => get_string('sequentialdesc', 'format_mooin4'),
                     ),
                 ),
             );
 
             $courseformatoptionsedit['sectiontype'] = array(
-                'label' => get_string('sectiontype', 'format_buttons'),
-                'help_component' => 'format_buttons',
+                'label' => get_string('sectiontype', 'format_mooin4'),
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        'numeric' => get_string('numeric', 'format_buttons'),
-                        'roman' => get_string('roman', 'format_buttons'),
-                        'alphabet' => get_string('alphabet', 'format_buttons'),
+                        'numeric' => get_string('numeric', 'format_mooin4'),
+                        'roman' => get_string('roman', 'format_mooin4'),
+                        'alphabet' => get_string('alphabet', 'format_mooin4'),
                     ),
                 ),
             );
 
-            $courseformatoptionsedit['buttonstyle'] = array(
-                'label' => get_string('buttonstyle', 'format_buttons'),
-                'help_component' => 'format_buttons',
+            $courseformatoptionsedit['mooin4tyle'] = array(
+                'label' => get_string('mooin4tyle', 'format_mooin4'),
+                'help_component' => 'format_mooin4',
                 'element_type' => 'select',
                 'element_attributes' => array(
                     array(
-                        'circle' => get_string('circle', 'format_buttons'),
-                        'square' => get_string('square', 'format_buttons'),
+                        'circle' => get_string('circle', 'format_mooin4'),
+                        'square' => get_string('square', 'format_mooin4'),
                     ),
                 ),
             );
@@ -303,15 +292,15 @@ class format_buttons extends format_topics {
             for ($i = 1; $i <= $max; $i++) {
                 // it was 12 Modules or Kategories
                 $courseformatoptionsedit['divisortext'.$i] = array(
-                    'label' => get_string('divisortext', 'format_buttons', $i),
+                    'label' => get_string('divisortext', 'format_mooin4', $i),
                     'help' => 'divisortext',
-                    'help_component' => 'format_buttons',
+                    'help_component' => 'format_mooin4',
                     'element_type' => 'text',
                 );
                 $courseformatoptionsedit['divisor'.$i] = array(
-                    'label' => get_string('divisor', 'format_buttons', $i),
+                    'label' => get_string('divisor', 'format_mooin4', $i),
                     'help' => 'divisortext',
-                    'help_component' => 'format_buttons',
+                    'help_component' => 'format_mooin4',
                     'element_type' => 'select',
                     'element_attributes' => array($sectionmenu),
                 );
@@ -322,16 +311,16 @@ class format_buttons extends format_topics {
             }
 
             $courseformatoptionsedit['colorcurrent'] = array(
-                'label' => get_string('colorcurrent', 'format_buttons'),
+                'label' => get_string('colorcurrent', 'format_mooin4'),
                 'help' => 'colorcurrent',
-                'help_component' => 'format_buttons',
+                'help_component' => 'format_mooin4',
                 'element_type' => 'text',
             );
 
             $courseformatoptionsedit['colorvisible'] = array(
-                'label' => get_string('colorvisible', 'format_buttons'),
+                'label' => get_string('colorvisible', 'format_mooin4'),
                 'help' => 'colorvisible',
-                'help_component' => 'format_buttons',
+                'help_component' => 'format_mooin4',
                 'element_type' => 'text',
             );
             
@@ -359,7 +348,7 @@ class format_buttons extends format_topics {
                     if ((($settingvtype == 'string') && ($settingvalue === '-')) ||
                         (($settingvtype == 'integer') && ($settingvalue === 0))) {
                         // Default value indicator is a hyphen or a number equal to 0.
-                        $this->settings[$settingname] = get_config('format_buttons', 'default'.$settingname);
+                        $this->settings[$settingname] = get_config('format_mooin4', 'default'.$settingname);
                     }
                 }
             }
@@ -383,9 +372,7 @@ class format_buttons extends format_topics {
 
         $data = (array)$data; //(array)
         echo("data \n");
-        var_dump($data);
-        // var_dump($oldcourse);
-
+        
         if ($oldcourse !== null) {
             $oldcourse = (array)$oldcourse;
 
@@ -393,12 +380,9 @@ class format_buttons extends format_topics {
 
             foreach ($options as $key => $unused) {
                 echo("Key \n");
-                var_dump($key);
                 if (!array_key_exists($key, $data)) {
                     if (array_key_exists($key, $oldcourse)) {
                         $data[$key] = $oldcourse[$key];
-                    } else if ($key === 'buttons_nav_course_news'){
-                        var_dump($data[$key]);
                     } else if ($key === 'numsections') {
                         $maxsection = $DB->get_field_sql('SELECT max(section) from
                         {course_sections} WHERE course = ?', array($this->courseid));
@@ -412,7 +396,7 @@ class format_buttons extends format_topics {
 
         $changed = $this->update_format_options($data);
         echo("update course format");
-        var_dump($changed);
+        
         if ($changed && array_key_exists('numsections', $data)) {
             $numsections = (int)$data['numsections'];
             $sql = 'SELECT max(section) from {course_sections} WHERE course = ?';
@@ -442,7 +426,7 @@ class format_buttons extends format_topics {
         $card_id = 0;
         // $course_name = $course->shortname;
 
-        //$url = new moodle_url('/course/format/buttons/infos.php', array('id' => $course->id)); 
+        //$url = new moodle_url('/course/format/mooin4/infos.php', array('id' => $course->id)); 
         $url = new moodle_url('/course/view.php', array('id' => $course->id)); // anchor: 'card_id_' . $card_id
         
         $sr = null;
@@ -580,108 +564,21 @@ class format_buttons extends format_topics {
         // $context = $this->get_context();
         $this->content = new stdClass();
 
-                
-
         static $courseformatoptions = false;
         $courseconfig = get_config('moodlecourse');
 
         $options = $this->course_format_options();
-        // var_dump($courseconfig -> showgrades);
         
-        // echo("options after courseconfig");
-        //var_dump($this-> config);
-
-        // Add new Settings in course Format buttons Lib for the Navigation card and table of contents (Kurs, News, Teilnehmenden, Diskussionsforen, Social Media, Inhaltsverzeichnis)
+        // Add new Settings in course Format mooin4 Lib for the inhaltsverzeichnis card.
         $attributes=array('size'=>'20');
         
-        $elements[] = $mform->addElement('header', 'buttons_nav_header', get_string('buttons_nav_header', 'format_buttons'));
-        $mform->addHelpButton('buttons_nav_header', 'buttons_nav_header', 'format_buttons', true);
-
-        // $elements[] = $mform->addElement('textarea', 'buttons_nav_course_desc', get_string('buttons_nav_course_desc', 'format_buttons'), 'wrap= "virtual" rows= "20" cols="50"');
+        $elements[] = $mform->addElement('header', 'mooin4_inhalt_header', get_string('mooin4_inhalt_header', 'format_mooin4'));
+        $mform->addHelpButton('mooin4_inhalt_header', 'mooin4_inhalt_header', 'format_mooin4', true);
+        $elements[] = $mform->addElement('hidden', 'config_chapEnable', '', array('id' => 'id_config_chapEnable') ); // get_string('mooin4_inhalt_header', 'format_mooin4')
+        //$elements[] = $mform->setDefault('config_chapEnable', 0);
+        //$elements[] = $mform->setType('config_chapEnable', PARAM_INT);
         
-        // News Card description
-        $elements[] = $mform->addElement('text', 'buttons_nav_course_news', get_string('buttons_nav_course_news', 'format_buttons'), $attributes);
-        $mform->addHelpButton('buttons_nav_course_news', 'buttons_nav_course_news', 'format_buttons', true);
-        $elements[] = $mform->addElement('editor', 'buttons_nav_course_news_desc', get_string('buttons_nav_course_news_desc', 'format_buttons'), null,
-                    array('maxfiles' => EDITOR_UNLIMITED_FILES));
-        $mform->addHelpButton('buttons_nav_course_news_desc', 'buttons_nav_course_news_desc', 'format_buttons', true);
-        
-        $course_news = $mform->getElementValue('buttons_nav_course_news');
-        $course_news_desc = $mform->getElementValue('buttons_nav_course_news_desc');
-
-        $check = false;
-
-        if (empty($mform->getElementValue('buttons_nav_course_news')) || empty($mform->getElementValue('buttons_nav_course_news_desc'))) {
-            // echo("buttons_nav_course_news_desc");
-
-            $mform->setDefault('buttons_nav_course_news', get_string('buttons_nav_course_news', 'format_buttons'));
-            $mform->setDefault('buttons_nav_course_news_desc', array('text'=> get_string('buttons_nav_course_news_desc', 'format_buttons'), 'format'=>FORMAT_HTML));
-
-        }else if(
-            $mform->getElementValue('buttons_nav_course_news') != get_string('buttons_nav_course_news', 'format_buttons')  
-            || $mform->getElementValue('buttons_nav_course_news_desc') != get_string('buttons_nav_course_news_desc', 'format_buttons')) {
-            echo('inside the other if');
-            
-           //$elements[] = &$mform->getElementValue('buttons_nav_course_news');
-           // $elements[] = &$mform->getElementValue('buttons_nav_course_news_desc');
-
-           $courseconfig = (array)$courseconfig;
-
-           array_push($courseconfig, $mform->buttons_nav_course_news);
-            
-           var_dump($courseconfig);
-           // var_dump($courseconfig);
-           // $courseconfig['buttons_nav_course_news'] = &$mform->getElementValue('buttons_nav_course_news');
-           // $courseconfig['buttons_nav_course_news_desc'] = &$mform->getElementValue('buttons_nav_course_news_desc');
-
-        }
-        // var_dump($this->content->text = format_text($this->page->course->buttons_nav_course_news, $this->page->course->buttons_nav_course_newsformat, $options));
-        // echo( $mform->getElementValue('buttons_nav_course_news_desc')['text']);
-        
-        // echo($elements['213'].['tetx']);
-        foreach ($elements as $element => $el) {
-            # code...
-            // var_dump($elements);
-            if (($element == '212')){
-                # code...
-                // var_dump($el);
-            }
-        }
-        // array_unshift($elements, $element);
-        
-        // Teilnehmer Card description
-        /* $elements[] = $mform->addElement('text', 'buttons_nav_course_teilnehmer', get_string('buttons_nav_course_teilnehmer', 'format_buttons'), $attributes);
-        $mform->addHelpButton('buttons_nav_course_teilnehmer', 'buttons_nav_course_teilnehmer', 'format_buttons', true);
-        $elements[] = $mform->addElement('editor', 'buttons_nav_course_teilnehmer_desc', get_string('buttons_nav_course_teilnehmer_desc', 'format_buttons'), null,
-                    array('maxfiles' => EDITOR_UNLIMITED_FILES));
-        $mform->addHelpButton('buttons_nav_course_teilnehmer_desc', 'buttons_nav_course_teilnehmer_desc', 'format_buttons', true); */
-
-        // Diskussionforen Card description
-        /* $elements[] = $mform->addElement('text', 'buttons_nav_course_diskussion', get_string('buttons_nav_course_diskussion', 'format_buttons'), $attributes);
-        $mform->addHelpButton('buttons_nav_course_diskussion', 'buttons_nav_course_diskussion', 'format_buttons', true);
-        $elements[] = $mform->addElement('editor', 'buttons_nav_course_diskussion_desc', get_string('buttons_nav_course_diskussion_desc', 'format_buttons'), null,
-                    array('maxfiles' => EDITOR_UNLIMITED_FILES));
-        $mform->addHelpButton('buttons_nav_course_diskussion_desc', 'buttons_nav_course_diskussion_desc', 'format_buttons', true); */
-
-        // Social Media Card description
-       /*  $elements[] = $mform->addElement('text', 'buttons_nav_course_social_media', get_string('buttons_nav_course_social_media', 'format_buttons'), $attributes);
-        $mform->addHelpButton('buttons_nav_course_social_media', 'buttons_nav_course_social_media', 'format_buttons', true);
-        $elements[] = $mform->addElement('editor', 'buttons_nav_course_social_media_desc', get_string('buttons_nav_course_social_media_desc', 'format_buttons'), null,
-                    array('maxfiles' => EDITOR_UNLIMITED_FILES));
-        $mform->addHelpButton('buttons_nav_course_social_media_desc', 'buttons_nav_course_social_media_desc', 'format_buttons', true); */
-
-        // Inhaltsverzeichnis Card description
-        /* $elements[] = $mform->addElement('text', 'buttons_nav_course_inhalt', get_string('buttons_nav_course_inhalt', 'format_buttons'), $attributes);
-        $mform->addHelpButton('buttons_nav_course_inhalt', 'buttons_nav_course_inhalt', 'format_buttons', true);
-        $elements[] = $mform->addElement('editor', 'buttons_nav_course_inhalt_desc', get_string('buttons_nav_course_inhalt_desc', 'format_buttons'), null,
-                    array('maxfiles' => EDITOR_UNLIMITED_FILES));
-        $mform->addHelpButton('buttons_nav_course_inhalt_desc', 'buttons_nav_course_inhalt_desc', 'format_buttons', true); */
-
-        // echo("Echo in Lib after addelement");
-        // var_dump($elements);
-        
-        // $courseconfig = (object) array_merge((array)$courseconfig, $elements[]);
-        
+       
         return $elements;
     }
 
@@ -706,8 +603,8 @@ class format_buttons extends format_topics {
         $retStr = "<script src='https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyB9aGvzBI_6uFkLuFsg6EVEmFPLw2_6yPI' type='text/javascript'></script>";
         $retStr = "<script src='https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCtJMjs-3xW1VK_lwUm9UORpeI4zA1qVuM' type='text/javascript'></script>";
         $retStr .= "<link rel='stylesheet' type='text/css' href='".$CFG->wwwroot."/blocks/online_users_map/style.css' />";
-        $retStr .= "<div id='buttons_online_users_googlemap'></div>";
-        $retStr .= "<script type='text/javascript' src='".$CFG->wwwroot."/buttons/online_users_map/online_users_map.php?courseid=".$the_real_course_id."&local_lat=".$local_lat."&local_lng=".$local_lng."&local_zoom=".$local_zoom."' defer='defer'></script>";
+        $retStr .= "<div id='mooin4_online_users_googlemap'></div>";
+        $retStr .= "<script type='text/javascript' src='".$CFG->wwwroot."/mooin4/online_users_map/online_users_map.php?courseid=".$the_real_course_id."&local_lat=".$local_lat."&local_lng=".$local_lng."&local_zoom=".$local_zoom."' defer='defer'></script>";
         return $retStr;
     }
 
@@ -722,7 +619,7 @@ class format_buttons extends format_topics {
         $retStr .= "<script src='http://www.openlayers.org/api/OpenLayers.js'></script>";
         $retStr .= "<link rel='stylesheet' type='text/css' href='".$CFG->wwwroot."/blocks/online_users_map/style.css' />";
         $retStr .= "<script src='http://www.openstreetmap.org/openlayers/OpenStreetMap.js'></script>";
-        $retStr .= "<div id='buttons_online_users_osmmap'></div>"; 
+        $retStr .= "<div id='mooin4_online_users_osmmap'></div>"; 
         return $retStr;
     }
 
@@ -735,21 +632,21 @@ class format_buttons extends format_topics {
         //get all the users without a lat/lng
         $sql = "SELECT u.id, u.city, u.country, boumc.id AS b_id, u.firstname, u.lastname 
                     FROM {user} u
-                    LEFT OUTER JOIN {buttons_online_users_map} boumc
+                    LEFT OUTER JOIN {mooin4_online_users_map} boumc
                     ON  u.id = boumc.userid
                     WHERE (boumc.id IS NULL
                     OR u.city != boumc.city     
                     OR u.country != boumc.country)
                     AND u.city != ''";
 
-        if($CFG->buttons_online_users_map_update_limit == 0){
+        if($CFG->mooin4_online_users_map_update_limit == 0){
             $results = $DB->get_records_sql($sql,array());
         } else {
-            $results = $DB->get_records_sql($sql,array(),0,$CFG->buttons_online_users_map_update_limit);
+            $results = $DB->get_records_sql($sql,array(),0,$CFG->mooin4_online_users_map_update_limit);
         }
         
         if (!$results){
-            if ($CFG->buttons_online_users_map_debug){
+            if ($CFG->mooin4_online_users_map_debug){
                 //echo "\nThere are no locations to update." ; 
                 mtrace("There are no locations to update."); 
             }
@@ -763,12 +660,12 @@ class format_buttons extends format_topics {
             //  if (!in_array($user->city, $cities)) {
             //      continue;
             //  }
-            if ($CFG->buttons_online_users_map_debug){
+            if ($CFG->mooin4_online_users_map_debug){
                 //echo "\nUpdating location for ".$user->firstname." ".$user->lastname." (looking up: ".$user->city.",".$user->country." )...";  
                 mtrace("Updating location for ".$user->firstname." ".$user->lastname." (looking up: ".$user->city.", ".$user->country." )...");  
             }
             //get the coordinates:
-            $response = getURLContent($CFG->buttons_online_users_map_geonamesurl,"/search?username=".$CFG->buttons_online_users_map_geonamesusername."&maxRows=1&q=".urlencode($user->city)."&country=".urlencode($user->country));
+            $response = getURLContent($CFG->mooin4_online_users_map_geonamesurl,"/search?username=".$CFG->mooin4_online_users_map_geonamesusername."&maxRows=1&q=".urlencode($user->city)."&country=".urlencode($user->country));
             
             if($response != "" && $xml = simplexml_load_string($response)){
                 $boumc = new StdClass;
@@ -780,28 +677,28 @@ class format_buttons extends format_topics {
                     $boumc->country = $user->country;
                     //echo "\nuserid: $boumc->userid lat: $boumc->lat lng: $boumc->lng city: $boumc->city country: $boumc->country";
                     
-                    //if existing record from buttons_online_users_map then update
+                    //if existing record from mooin4_online_users_map then update
                     if (isset($user->b_id)){    
                         //echo "\nupdating record";
                         $boumc->id = $user->b_id;
-                        $DB->update_record("buttons_online_users_map",$boumc);
+                        $DB->update_record("mooin4_online_users_map",$boumc);
                     } else {            
                         //else create a new record
                         //echo "\ninserting record";
-                        $DB->insert_record("buttons_online_users_map",$boumc);
+                        $DB->insert_record("mooin4_online_users_map",$boumc);
                     }
-                    if ($CFG->buttons_online_users_map_debug){
+                    if ($CFG->mooin4_online_users_map_debug){
                         //echo "\n\tlocation updated" ;  
                         mtrace("location updated");
                     }
                 } else {
-                if ($CFG->buttons_online_users_map_debug){
+                if ($CFG->mooin4_online_users_map_debug){
                     //echo "\n\tlocation not found in Geonames database" ;  
                     mtrace("location not found in Geonames database");
                 } 
                 }
             } else {
-                if ($CFG->buttons_online_users_map_debug){
+                if ($CFG->mooin4_online_users_map_debug){
                     //echo "\n\tlocation not found due to no or invalid response" ;  
                     mtrace("location not found due to no or invalid response");
                 }
@@ -886,8 +783,8 @@ class format_buttons extends format_topics {
     function getTimeToShowUsers(){
         global $CFG;
         $timetoshowusers = 300; //Seconds default
-        if (isset($CFG->buttons_online_users_map_timetosee)) {
-            $timetoshowusers = $CFG->buttons_online_users_map_timetosee * 60;
+        if (isset($CFG->mooin4_online_users_map_timetosee)) {
+            $timetoshowusers = $CFG->mooin4_online_users_map_timetosee * 60;
         }
         return $timetoshowusers;
     }
@@ -903,7 +800,7 @@ class format_buttons extends format_topics {
         $coords = array();
         
         $sql = "SELECT boumc.userid, boumc.lat, boumc.lng 
-                FROM {buttons_online_users_map} boumc 
+                FROM {mooin4_online_users_map} boumc 
                 WHERE userid=?";
         $c = $DB->get_record_sql($sql,array($USER->id));
         if($c){
@@ -922,7 +819,7 @@ class format_buttons extends format_topics {
  * @param mixed $newvalue
  * @return \core\output\inplace_editable
  */
-function format_buttons_inplace_editable($itemtype, $itemid, $newvalue) {
+function format_mooin4_inplace_editable($itemtype, $itemid, $newvalue) {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/course/lib.php');
@@ -930,7 +827,7 @@ function format_buttons_inplace_editable($itemtype, $itemid, $newvalue) {
         if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
             $section = $DB->get_record_sql(
                 'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
-                array($itemid, 'buttons'),
+                array($itemid, 'mooin4'),
                 MUST_EXIST
             );
             

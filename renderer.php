@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,14 +30,14 @@ require_once($CFG->dirroot.'/course/format/topics/renderer.php');
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Format_buttons_renderer
+ * format_mooin4_renderer
  *
- * @package    format_buttons
+ * @package    format_mooin4
  * @author     Rodrigo Brandão <https://www.linkedin.com/in/brandaorodrigo>
  * @copyright  2020 Rodrigo Brandão <rodrigo.brandao.contato@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_buttons_renderer extends format_topics_renderer
+class format_mooin4_renderer extends format_topics_renderer
 {
     protected $courseformat; // Our course format object as defined in lib.php
     
@@ -144,18 +144,18 @@ class format_buttons_renderer extends format_topics_renderer
 
         $html.=html_writer::start_tag('div', array('class'=>'carousel-container'));
         $html.=html_writer::start_tag('div', array('class'=>'carousel', 'id' =>'slider'));
-        $html.=html_writer::start_tag('div', array('class'=>'carousel-inner'));
+        $html.=html_writer::start_tag('div', array('class'=>'carousel-inner', 'id' => 'slider_inner'));
 
         if ($colorcurrent = $this->get_color_config($course, 'colorcurrent')) {
             $css .=
-            '#buttonsectioncontainer .buttonsection.current {
+            '#mooin4ectioncontainer .mooin4ection.current {
                 background: ' . $colorcurrent . ';
             }
             ';
         }
         if ($colorvisible = $this->get_color_config($course, 'colorvisible')) {
             $css .=
-            '#buttonsectioncontainer .buttonsection.sectionvisible {
+            '#mooin4ectioncontainer .mooin4ection.sectionvisible {
                 background: ' . $colorvisible . ';
             }
             ';
@@ -201,12 +201,12 @@ class format_buttons_renderer extends format_topics_renderer
                 $currentdivisorhtml = str_replace('[br]', '<br>', $currentdivisorhtml);
                 $currentdivisorhtml = html_writer::tag('div', $currentdivisorhtml, ['class' => 'divisortext']);
                 if ($course->inlinesections) {
-                    $inline = 'inlinebuttonsections';
+                    $inline = 'inlinemooin4ections';
                 }
                 // $html .= html_writer::tag('div', $currentdivisorhtml, ['class' => "divisorsection $inline"]);
                 $divisorshow[$currentdivisor] = true;
             }
-            $id = 'buttonsection-' . $section;
+            $id = 'mooin4ection-' . $section;
             if ($course->sequential) {
                 $name = $lektion . $section;  
             } else {
@@ -223,8 +223,8 @@ class format_buttons_renderer extends format_topics_renderer
             if ($course->sectiontype == 'roman' && is_numeric($name)) {
                 $name = $this->number_to_roman($name);
             }
-            $class = 'buttonsection';
-            $onclick = 'M.format_buttons.show(' . $section . ',' . $course->id . ')';
+            $class = 'mooin4ection';
+            $onclick = 'M.format_mooin4.show(' . $section . ',' . $course->id . ')';
             if (!$thissection->available &&
                 !empty($thissection->availableinfo)) {
                 $class .= ' sectionhidden';
@@ -249,7 +249,7 @@ class format_buttons_renderer extends format_topics_renderer
         $html.=html_writer::end_tag('div');
 
         // svg icon start
-        $html.=html_writer::start_tag('div', array('class'=>'carousel__buttons'));
+        $html.=html_writer::start_tag('div', array('class'=>'carousel__mooin4'));
         $html.=html_writer::start_tag('div', array('class'=>'carousel__gradient--left'));
         $html.=html_writer::end_tag('div');
         $html.=html_writer::start_tag('div', array('class'=>'carousel__gradient--right'));
@@ -270,9 +270,9 @@ class format_buttons_renderer extends format_topics_renderer
         $html.=html_writer::end_tag('div');
         $html.=html_writer::end_tag('div');
         $html.=html_writer::end_tag('div');
-        $html = html_writer::tag('div', $html, ['id' => 'buttonsectioncontainer', 'class' => $course->buttonstyle]);
+        $html = html_writer::tag('div', $html, ['id' => 'mooin4ectioncontainer', 'class' => $course->mooin4tyle]);
         if ($PAGE->user_is_editing()) {
-            $html .= html_writer::tag('div', get_string('editing', 'format_buttons'), ['class' => 'alert alert-warning alert-block fade in']);
+            $html .= html_writer::tag('div', get_string('editing', 'format_mooin4'), ['class' => 'alert alert-warning alert-block fade in']);
         }
         
         
@@ -296,14 +296,14 @@ class format_buttons_renderer extends format_topics_renderer
         $html.=html_writer::start_tag('div', array('class'=>'bottom_carousel-inner'));
         if ($colorcurrent = $this->get_color_config($course, 'colorcurrent')) {
             $css .=
-            '#bottom_buttonsectioncontainer .bottom_buttonsection.current {
+            '#bottom_mooin4ectioncontainer .bottom_mooin4ection.current {
                 background: ' . $colorcurrent . ';
             }
             ';
         }
         if ($colorvisible = $this->get_color_config($course, 'colorvisible')) {
             $css .=
-            '#bottom_buttonsectioncontainer .bottom_buttonsection.sectionvisible {
+            '#bottom_mooin4ectioncontainer .bottom_mooin4ection.sectionvisible {
                 background: ' . $colorvisible . ';
             }
             ';
@@ -359,12 +359,12 @@ class format_buttons_renderer extends format_topics_renderer
                 $currentdivisorhtml = str_replace('[br]', '<br>', $currentdivisorhtml);
                 $currentdivisorhtml = html_writer::tag('div', $currentdivisorhtml, ['class' => 'divisortext']);
                 if ($course->inlinesections) {
-                    $inline = 'inlinebuttonsections';
+                    $inline = 'inlinemooin4ections';
                 }
-                $html .= html_writer::tag('div', $currentdivisorhtml, ['class' => "divisorsection $inline"]);
+                //$html .= html_writer::tag('div', $currentdivisorhtml, ['class' => "divisorsection $inline"]);
                 $divisorshow[$currentdivisor] = true;
             }
-            $id = 'bottom_buttonsection-' . $section;
+            $id = 'bottom_mooin4ection-' . $section;
            
             if ($course->sequential) {
                 $name = '&bull;&bull;&bull;';
@@ -378,8 +378,8 @@ class format_buttons_renderer extends format_topics_renderer
                  
                 }
             }
-            $class = 'bottom_buttonsection';
-            $onclick = 'M.format_buttons.show(' . $sections . ',' . $section . ',' . $course->id . ')';
+            $class = 'bottom_mooin4ection';
+            $onclick = 'M.format_mooin4.show(' . $sections . ',' . $section . ',' . $course->id . ')';
             if (!$thissection->available &&
                 !empty($thissection->availableinfo)) {
                 $class .= ' sectionhidden';
@@ -428,9 +428,9 @@ class format_buttons_renderer extends format_topics_renderer
         $html.=html_writer::end_tag('div');
         
 
-        $html = html_writer::tag('div', $html, ['id' => 'bottom_buttonsectioncontainer', 'class' => $course->buttonstyle]);
+        $html = html_writer::tag('div', $html, ['id' => 'bottom_mooin4ectioncontainer', 'class' => $course->mooin4tyle]);
         if ($PAGE->user_is_editing()) {
-            $html .= html_writer::tag('div', get_string('editing', 'format_buttons'), ['class' => 'alert alert-warning alert-block fade in']);
+            $html .= html_writer::tag('div', get_string('editing', 'format_mooin4'), ['class' => 'alert alert-warning alert-block fade in']);
         }
         
         
@@ -443,7 +443,7 @@ class format_buttons_renderer extends format_topics_renderer
      * @return string
      */
     protected function start_nav_list() {
-        return html_writer::start_tag('div', ['class' => 'buttons_nav']);
+        return html_writer::start_tag('div', ['class' => 'mooin4_nav']);
     }
 
     /**
@@ -452,7 +452,7 @@ class format_buttons_renderer extends format_topics_renderer
      * @return string
      */
     protected function start_section_list() {
-        return html_writer::start_tag('ul', ['class' => 'buttons'], array('id' => 'buttons_id'));
+        return html_writer::start_tag('ul', ['class' => 'mooin4'], array('id' => 'mooin4_id'));
     }
 
     /**
@@ -592,7 +592,7 @@ class format_buttons_renderer extends format_topics_renderer
         $modinfo = get_fast_modinfo($course);
         $course = course_get_format($course)->get_course();
 
-        //$url =  new moodle_url('/course/format/buttons/infos.php', array('id'=>$course->id));
+        //$url =  new moodle_url('/course/format/mooin4/infos.php', array('id'=>$course->id));
     
         // $PAGE->set_url($url);
         //redirect($url, false);
@@ -676,24 +676,32 @@ class format_buttons_renderer extends format_topics_renderer
         
         global $USER;
         global $PAGE;
+        global $DB;
 
         // $courseconfig = get_config('moodlecourse');
         // echo('$courseconfig');
-        // var_dump($course->numsections);
-
-       // $url = new moodle_url('/course/view.php', array('id' => $course->id));
-     
-        
+    
+        $coursess = get_courses();
         $modinfo = get_fast_modinfo($course);
-        // var_dump($modinfo -> sections);
-
-        $course = course_get_format($course)->get_course();
-
+        $sections_all = $modinfo->get_section_info_all();
+        $courseformat = course_get_format($course)->get_course();
+        // $coursenumsections = $courseformat->get_last_section_number();
         $context = context_course::instance($course->id);
+        //$sectionss = $modinfo->get_section_info_all();//$DB->get_records('course_sections', array('course' => $course->id));
+        $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+
         // Title with completion help icon.
         $completioninfo = new completion_info($course);
-
-        // buttons format - ini
+        
+        
+        // $courseformat = course_get_format($course);
+        // var_dump($courseformat);
+        foreach ($coursesectionss as $section) {
+            // Assert that with unmodified section names, get_section_name returns the same result as get_default_section_name.
+            //$this->assertEquals($courseformat->get_default_section_name($section), $courseformat->get_section_name($section));
+            // var_dump($section);
+        }
+        // mooin4 format - ini
         if (isset($_COOKIE['sectionvisible_' . $course->id])) {
             $sectionvisible = $_COOKIE['sectionvisible_' . $course->id];
         } else if ($course->marker > 0) {
@@ -703,6 +711,7 @@ class format_buttons_renderer extends format_topics_renderer
         }
         $htmlsection = false;
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
+            // var_dump($thissection);
             $htmlsection[$section] = '';
             if ($section == 0) {
                 $section0 = $thissection;
@@ -753,7 +762,6 @@ class format_buttons_renderer extends format_topics_renderer
 
             // array_push($sections_array, $current);
             echo $current;
-           
         }
         if ($course->sectionposition == 1 and isset($htmlsection0)) {
             echo html_writer::tag('span', $htmlsection0, ['class' => 'below']);
@@ -768,6 +776,7 @@ class format_buttons_renderer extends format_topics_renderer
                 echo $this->stealth_section_footer();
             }
             echo $this->end_section_list();
+            echo("End Renderer in mooin4");
             echo html_writer::start_tag('div', ['id' => 'changenumsections', 'class' => 'mdl-right']);
             $straddsection = get_string('increasesections', 'moodle');
             $url = new moodle_url('/course/changenumsections.php', ['courseid' => $course->id,
@@ -790,13 +799,13 @@ class format_buttons_renderer extends format_topics_renderer
             echo $this->end_section_list();
         }
         // Set & edit User preferences
-        $listOfPreferences = array('buttons_display' => null, 'card_display' => 'yes');
+        $listOfPreferences = array('mooin4_display' => null, 'card_display' => 'yes');
 
         set_user_preferences($listOfPreferences);
 
         // var_dump( get_user_preferences());
         if (!$PAGE->user_is_editing()) {
-            $PAGE->requires->js_init_call('M.format_buttons.init', [$course->numsections, $sectionvisible, $course->id]);
+            $PAGE->requires->js_init_call('M.format_mooin4.init', [$course->numsections, $sectionvisible, $course->id]);
         }
         
         // var_dump($sections_array);

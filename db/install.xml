@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="course/format/buttons/db" VERSION="20220124" COMMENT="XMLDB file for Moodle course/format/buttons"
+<XMLDB PATH="course/format/mooin4/db" VERSION="20220405" COMMENT="XMLDB file for Moodle course/format/mooin4"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="format_buttons" COMMENT="Default comment for format_buttons, please edit me">
+    <TABLE NAME="format_mooin4" COMMENT="Default comment for format_mooin4, please edit me">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
       </FIELDS>
@@ -12,37 +12,61 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="course_buttons_nav_card" COMMENT="DB for the course buttons fomat, for the card navigation.">
+    <TABLE NAME="format_mooin4_chapter" COMMENT="DB table for the chapter in table of content course mooin4 fomat.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="news_forum" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="news_forum_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="News Forum Description." SEQUENCE="false"/>
-        <FIELD NAME="teilnehmenden" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="teilnehmenden_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Teilnehmenden Description." SEQUENCE="false"/>
-        <FIELD NAME="diskussionsforen" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="diskussionsforen_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Diskussion Forum Description." SEQUENCE="false"/>
-        <FIELD NAME="social_media" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="social_media_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Social Media Description." SEQUENCE="false"/>
-        <FIELD NAME="inhaltsverzeichnis" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="inhaltsverzeichnis_desc" TYPE="char" LENGTH="120" NOTNULL="false" DEFAULT="Inhaltsverzeichnis Description." SEQUENCE="false"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="chapter_title" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sectionnumber" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for format_mooin4_chapter"/>
+        <KEY NAME="sectionid" TYPE="foreign" FIELDS="sectionid" REFTABLE="format_mooin4_section" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseid" UNIQUE="false" FIELDS="courseid"/>
+        <INDEX NAME="sectionid" UNIQUE="false" FIELDS="sectionid" COMMENT="Links to section table"/>
+      </INDEXES>
     </TABLE>
-    <TABLE NAME="buttons_online_users_map" COMMENT="New table for handle the online users map Lat/Lng coordinates for users in the course format buttons">
+    <TABLE NAME="format_mooin4_section" COMMENT="DB Table for handle the section though the chapter in table of content course format mooin4">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="lat" TYPE="number" LENGTH="15" NOTNULL="true" DEFAULT="0.0000000000" SEQUENCE="false" DECIMALS="12"/>
-        <FIELD NAME="lng" TYPE="number" LENGTH="15" NOTNULL="true" DEFAULT="0.0000000000" SEQUENCE="false" DECIMALS="12"/>
-        <FIELD NAME="city" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="country" TYPE="char" LENGTH="2" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="sectiontext" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="sectiondone" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="chapterid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="sectionurl" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="the url to load, when the section has been click"/>
       </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for format_mooin4_section"/>
+        <KEY NAME="chapterid" TYPE="foreign" FIELDS="chapterid" REFTABLE="format_mooin4_chapter" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="chapterid" UNIQUE="false" FIELDS="chapterid" COMMENT="Links to chapter table"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="format_mooin4_section_check" COMMENT="DB Table for handle if the section has been check on the chapter in table of content course format mooin4">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="chapterid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timecheck" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for format_mooin4_section"/>
+        <KEY NAME="chapterid" TYPE="foreign" FIELDS="chapterid" REFTABLE="format_mooin4_chapter" REFFIELDS="id"/>
+        <KEY NAME="sectionid" TYPE="foreign" FIELDS="sectionid" REFTABLE="format_mooin4_section" REFFIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
         <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="sectionid" UNIQUE="false" FIELDS="sectionid" COMMENT="Links to format_mooin4_section table"/>
+        <INDEX NAME="courseid" UNIQUE="false" FIELDS="courseid" COMMENT="Links to course table"/>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="Links to user table"/>
+        <INDEX NAME="chapterid" UNIQUE="false" FIELDS="chapterid" COMMENT="Links to chapter table"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>
