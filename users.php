@@ -22,13 +22,12 @@
  * @package core_user
  */
 
-// use format_mooin4\mooin4_online_users_map;
+
 
 require_once('../../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
 require_once($CFG->libdir.'/filelib.php');
 require_once('../mooin4/lib.php');
-// require_once('../mooin4/mooin4_online_users_map.php');
 
 define('USER_SMALL_CLASS', 20);   // Below this is considered small.
 define('USER_LARGE_CLASS', 200);  // Above this is considered large.
@@ -372,7 +371,7 @@ if ($bulkoperations && $mode === MODE_BRIEF) {
 $tablecolumns[] = 'userpic';
 $tablecolumns[] = 'fullname';
 
-$extrafields = \core_user\fields::for_identity($context, false)->get_required_fields(); //get_extra_user_fields($context);
+$extrafields = get_extra_user_fields($context); // \core_user\fields::for_identity($context, false)->get_required_fields(); //
 $tableheaders[] = get_string('userpic');
 $tableheaders[] = get_string('fullnameuser');
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="course/format/mooin4/db" VERSION="20220405" COMMENT="XMLDB file for Moodle course/format/mooin4"
+<XMLDB PATH="course/format/mooin4/db" VERSION="20220413" COMMENT="XMLDB file for Moodle course/format/mooin4"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
@@ -36,6 +36,8 @@
         <FIELD NAME="sectiondone" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="chapterid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="sectionurl" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="the url to load, when the section has been click"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the course where the section belong"/>
+        <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the section possition in a chapter"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for format_mooin4_section"/>

@@ -114,6 +114,10 @@ $string['diskussionsforen_desc'] = ' Hier finden Sie alle Diskussionsforen zu di
 $string['inhaltsverzeichnis_desc'] = ' Inhaltsverzeichnis zu diesem Kurs.';
 $string['social_media_desc'] = ' Bleiben Sie mit unseren verschiedenen sozialen Netzwerken auf dem Laufenden.';
 $string['mooin4:aluhatsoff'] = 'Sensible Nutzerdaten sehen';
+$string['mooin4:readuserpage'] = 'Nutzerdaten sehen';
+$string['mooin4:createchapter'] = 'Create a new Chapter in table of content';
+$string['mooin4:managechapter'] = 'Manage a specific Chapter in table of content (move,update, deleted)';
+$string['mooin4:managesection'] = 'Manage a specific section in chapter (move,update, deleted)';
 $string['unenrol'] = 'Unsubscribe from this course';
 
 

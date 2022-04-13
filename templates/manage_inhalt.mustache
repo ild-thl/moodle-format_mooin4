@@ -23,6 +23,7 @@
     }
     
 }}
+{{^myCondition}}
 <button class="btn btn-primary" onclick="location.href='{{editurl}}'"><span class="fa-stack">
   <i class="fa fa-circle-thin fa-stack-2x"></i>
   <i class="fa fa fa-plus fa-stack-1x"></i>
@@ -34,46 +35,89 @@
 {{#blokinhalt}}
 <div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default">
     <div class="card-body">
-      <h2 class="card-title " style="color: grey; font-weight: 500;">{{id}}. {{divisortext}}</h2>
+      
+      <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
      <div class=" container" style="max-width: 100% !important;">
-        <div class="row align-items-start" style="color: grey;">
+        <div class="row d-flex justify-content-between" style="color: grey;">
           {{#sectionData}}
-          
-            <div class="col-2 section-id" >{{id}}. {{sectionId}} </div>
-            <div class="col-8 section-text">
-              <input type="button" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectionText}}' style="cursor: pointer;"  onclick="location.href='{{sectionUrl}}'">
+              <div class="col-2" role="group" aria-label="Basic example">
+                <button class="btn btn-secondary">
+                  <i class="fa fa fa-arrows"></i>
+                </button>
+                <button class="btn btn-light">
+                  <i class="fa fa fa-pencil"></i>
+                </button>
+                <button class="btn btn-danger">
+                  <i class="fa fa fa-trash"></i>
+                </button>
+              </div>
+            <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
+            <div class="col-6 section-text">
+              <input type="button" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer;"  onclick="location.href='{{sectionurl}}'">
             </div>
            
            <div class="form-check col-2 section-done">
-                 <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectionDone}}" aria-label="..." style="float: right;">
+                 <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
            </div>
            {{/sectionData}}
         </div>
         <br />
         <br />
      </div>
-      
-      <div class="d-flex justify-content-between">
-
-        <button class="btn btn-secondary"><span class="fa-stack">
-          <i class="fa fa-circle-thin fa-stack-2x"></i>
-          <i class="fa fa fa-arrows fa-stack-1x"></i>
-        </span></i>Move Card</button>
-        <button class="btn btn-light"><span class="fa-stack">
-          <i class="fa fa-circle-thin fa-stack-2x"></i>
-          <i class="fa fa fa-plus fa-stack-1x"></i>
-        </span></i>Add new Section</button>
-        <button class="btn btn-light"><span class="fa-stack">
-          <i class="fa fa-circle-thin fa-stack-2x"></i>
-          <i class="fa fa fa-pencil fa-stack-1x"></i>
-        </span></i>Update Card</button>
-        <button class="btn btn-danger"><span class="fa-stack">
-          <i class="fa fa-circle-thin fa-stack-2x"></i>
-          <i class="fa fa fa-trash fa-stack-1x"></i>
-        </span></i> Deleted Card</button>
-        
-      </div>
+        <div class="d-flex justify-content-between">
+          
+          <div class="btn-group" role="group">
+            <button class="btn btn-secondary"><span class="fa-stack">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa fa-arrows fa-stack-1x"></i>
+            </span></i>Move Chapter</button>
+            
+            <button class="btn btn-light"><span class="fa-stack">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa fa-pencil fa-stack-1x"></i>
+            </span></i>Update Chapter</button>
+            <button class="btn btn-danger"><span class="fa-stack">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa fa-trash fa-stack-1x"></i>
+            </span></i> Deleted Chapter</button>
+          </div>
+            <button class="btn btn-light"><span class="fa-stack">
+            <i class="fa fa-circle-thin fa-stack-2x"></i>
+            <i class="fa fa fa-plus fa-stack-1x"></i>
+            </span></i>Add new Section</button>
+            
+        </div>
     </div>
   </div>
 {{/blokinhalt}}
+{{/myCondition}}
 
+{{#myCondition}}
+<br />
+
+{{#blokinhalt}}
+<div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default">
+    <div class="card-body">
+      
+      <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
+     <div class=" container" style="max-width: 100% !important;">
+        <div class="row d-flex justify-content-between" style="color: grey;">
+          {{#sectionData}}
+              
+            <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
+            <div class="col-8 section-text">
+              <input type="button" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer;"  onclick="location.href='{{sectionurl}}'">
+            </div>
+           
+           <div class="form-check col-2 section-done">
+                 <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
+           </div>
+           {{/sectionData}}
+        </div>
+        <br />
+        <br />
+     </div>
+    </div>
+  </div>
+{{/blokinhalt}}
+{{/myCondition}}

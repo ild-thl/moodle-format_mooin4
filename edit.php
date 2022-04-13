@@ -76,6 +76,7 @@ $course_new = $courseformat->get_course();
 
 
 require_login($course); // $course
+
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_context(\context_course::instance($course->id));
@@ -83,12 +84,6 @@ $PAGE->set_context(\context_course::instance($course->id));
 $PAGE->set_title('Edit Inhalt');
 $PAGE->set_heading('Edit Inhalt');
 $PAGE->navbar->add('Edit inhalt');
-
-$getlastsectionid = $DB->get_records('format_mooin4_chapter', array(), 'sectionid', 'sectionid', IGNORE_MISSING);
-$getlastid = $DB->get_records('format_mooin4_chapter', array(), 'id', 'id', IGNORE_MISSING);
-
-$lastsectionid = array_key_last($getlastsectionid);
-$lastid = array_key_last($getlastid);
 
 // We instaciate our form here.
 $edit_form = new edit();
@@ -100,18 +95,7 @@ if ($edit_form->is_cancelled()) {
 } else if ($fromform = $edit_form->get_data()) {    
   //In this case you process validated data. $edit_form->get_data() returns data posted in form.
   var_dump($fromform);
-  // Save the new creae Chapter in the format_mooin4_chapter DB
-  $new_chapter = new stdClass();
-  $new_chapter->id = $lastid + 1;
-  $new_chapter->courseid = $userPreferencesEdit;
-  $new_chapter->chapter_title = $fromform->chapter_title;
-  $new_chapter->sectionid = $lastsectionid + 1;
-  $new_chapter->sectionnumber = $fromform->section_number;
 
-  // var_dump($new_chapter);
-   $DB->insert_record('format_mooin4_chapter', $new_chapter);
-
-   //unset($new_chapter);
     $new_array_text = [];
     $new_array_int = [];
     $new_array = [];
