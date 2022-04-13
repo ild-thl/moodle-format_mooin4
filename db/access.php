@@ -25,7 +25,7 @@
     )
 ); */
 $capabilities = array(
-    'format/mooin4:myaddinstance' => array(
+    /* 'format/mooin4:myaddinstance' => array(
     'captype' => 'write',
     'contextlevel' => CONTEXT_SYSTEM,
     'archetypes' => array(
@@ -47,13 +47,14 @@ $capabilities = array(
             'user' => CAP_ALLOW
         )
     )
-    ,
+    , */
     'format/mooin4:readuserpage' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+            'manager' => CAP_ALLOW,
+            'student' => CAP_ALLOW
         )
     ),
     'format/mooin4:aluhatsoff' => array(
@@ -61,11 +62,39 @@ $capabilities = array(
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-			'manager' => CAP_ALLOW
+			'manager' => CAP_ALLOW,
+            'student' => CAP_ALLOW
         )
-        ),
+    ),
+    'format/mooin4:createchapter' => [
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archtypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW
+        ]
 
-    //  >>> Capbilities for Online users map
-
-    //  <<< Capbilities for Online users map
+    ],
+    'format/mooin4:managechapter' => [
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archtypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW
+        ]
+    ],
+    'format/mooin4:managesection' => [
+        'riskbitmask' => RISK_CONFIG,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archtypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW
+        ]
+    ]
 );

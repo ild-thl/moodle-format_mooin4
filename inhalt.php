@@ -22,8 +22,6 @@
  * @package core_user
  */
 
-// use format_mooin4\mooin4_online_users_map;
-
 require_once('../../../config.php');
 require_once($CFG->libdir.'/tablelib.php');
 require_once($CFG->libdir.'/filelib.php');
@@ -82,20 +80,23 @@ $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
 
 $frontpagectx = context_course::instance(SITEID);
+// User roles
+$roles = get_user_roles($context, $USER->id, false);
 
 echo $OUTPUT->header();
 
 $arr = [];
+$userrole = true;
 foreach ($course_new as $key => $value) {
-    if(str_contains($key, 'divisor')){
+    if(strpos($key, 'divisor') === 0 ){
+        //str_contains($key, 'divisor')
         // var_dump($value);
-        //echo('<br>');
         if($value != 0 && $value != ''){
            $arr[$key] = $value;
         }     
     }
 }
-// print_r($course_new);
+// print_r($arr);
 
 $inhaltblock = array();
 $sectionblock = array();
@@ -106,10 +107,14 @@ $last_arr = [];
 $a = 1;
 $j = 0;
 $h = 1;
-$sectionUrl = new moodle_url('http://localhost/moodle/course/view.php', array('id' => $courseid));
+$sectionUrl = new moodle_url('/course/view.php', array('id' => $courseid));
+
 foreach ($arr as $key => $value) {
+   /*  print_r($value);
+    echo('<br>'); */
     // Create a new array to save the Category data text and index
-    if(str_contains($key, 'divisortext')) {
+    if(strpos($key, 'divisortext') === 0) {
+        // str_contains($key, 'divisortext')
         // $inhaltblock['courseId'] = $courseid;
         array_push($inhaltblock, (object)[
             'id' =>$a++,
@@ -123,6 +128,8 @@ foreach ($arr as $key => $value) {
      
     if(!strstr($key, 'text')){
         $t = $j;
+        $db_chapter_courseid = [];
+        $db_chapter_sectionid = [];
         if ($value > 0) {
             // echo('<br>' . 'Value ' . $j++ . ' ' . $value . '<br>');
             $inhaltblock[$j++]->sectionnumber = $value;
@@ -135,12 +142,18 @@ foreach ($arr as $key => $value) {
             $dataobjects->sectionnumber = $inhaltblock[$t]->sectionnumber;
 
             // Insert Data in format_mooin4_chapter;
-            $dbtest_chapter = $DB->get_records('format_mooin4_chapter', array(), 'sectionid', 'sectionid', IGNORE_MISSING);
-            if (empty($dbtest_chapter) && !in_array($dataobjects->sectionid, (array)$dbtest_chapter)) {
-                $DB->insert_record('format_mooin4_chapter', $dataobjects);
-                
+            $db_chapter = $DB->get_records('format_mooin4_chapter', array(), 'id', '*', IGNORE_MISSING);
+            foreach ($db_chapter as $key => $valuecheck) {
+                array_push($db_chapter_courseid,$valuecheck->courseid . $valuecheck->sectionid);
             }
-            unset($dataobjects);
+            
+            // echo(count((array)$dataobjects));
+           // array_count_values((array)$dataobjects);
+           $val = $dataobjects->courseid . $dataobjects->sectionid;
+           if(!in_array($val, $db_chapter_courseid)){
+            $DB->insert_record('format_mooin4_chapter', $dataobjects);
+           }
+           unset($dataobjects);
             
             array_push($arr_values,$value);
             for ($i=1; $i < $value +1; $i++) {
@@ -148,62 +161,103 @@ foreach ($arr as $key => $value) {
                 array_push($check, (object)[
                     'sectionId' => $i,
                     'sectionDone' => 0,
-                    'sectionText' => 'Section Title ' . $k,
-                    'sectionUrl' => 'http://localhost/moodle/course/view.php?id=' . $courseid . '#section=' . $k,
+                    'sectionText' => 'Section Title ' . $i,
+                    'sectionUrl' => $sectionUrl. '#section=' . $k,
+                    'chapterId' => $j
                 ]);
+                $db_section_sectionid = [];
+                $datasection = new  stdClass();
+
+                $datasection->id = $k;
+                $datasection->sectionid = $i;
+                $datasection->sectiondone = 0;
+                $datasection->sectiontext = 'Section Title ' . $i;
+                $datasection->sectionurl = $sectionUrl . '#section=' . $k;
+                $datasection->chapterid = $j;
+                $datasection->courseid = $courseid;
+
+                //print_r($datasection);
+                //echo('<br>');
+
+                // Insert Data in format_mooin4_section;
+                $db_section = $DB->get_records('format_mooin4_section', array(), 'id', '*', IGNORE_MISSING);
+                if(empty($db_section)){
+                    $DB->insert_record('format_mooin4_section', $datasection);
+                } else {
+                    foreach ($db_section as $k => $v) {
+                        array_push($db_section_sectionid, $v->courseid . $v->chapterid . $v->sectionid);
+                    }
+                    //print_r($db_section_sectionid);
+                    $valsection = $courseid . $j . $i;
+                    //print_r($valsection);
+                    if(!in_array($valsection, $db_section_sectionid)){
+                        $DB->insert_record('format_mooin4_section', $datasection);
+                    }
+                }
+                
+                //print_r($datasection);
             } 
+            
         }
     }    
 };
 
 echo('<br>');
+// Get the data from the DB Chapter and section
 
+$db_chapter = "SELECT * FROM mdl2_format_mooin4_chapter  fmc WHERE fmc.courseid = {$courseid}";
+$sql_chapter = $DB->get_records_sql($db_chapter);
+
+$db_section = "SELECT * FROM mdl2_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
+$sql_section = $DB->get_records_sql($db_section);
+
+// print_r($data_section);
 // Create the new array for Section list base on the number of section in each categorie
 foreach ($arr_values as $key => $value) {
-    $sectionblock = array_slice($check, 0, $value);
-    array_splice($check, 0, $value);
-    array_push($arr_result,$sectionblock );  
+    $sectionblock = array_slice($sql_section, 0, $value); // $check = $sql_section
+    array_splice($sql_section, 0, $value); // $check = $sql_section
+    array_push($arr_result,$sectionblock );
 }
 // print_r($arr_result);
-// print_r($arr_result);
+$inhalt = array_merge((array) $sql_chapter);
+
 // Create the new structure for the table of content, each categorie with is specific sections number and if the section has been done or not
-for ($i=0; $i <count($inhaltblock) ; $i++) { 
-    for ($j=0; $j < count($arr_result); $j++) { 
+for ($i=0; $i < count($inhalt) ; $i++) { //$sql_chapter == $inhaltblock
+    for ($j=0 ; $j < count($arr_result); $j++) { 
+        // print_r($arr_result[$j]);;
+        // echo('<br>');
         if($i == $j) {
             /* $inhaltblock[$i] = (array)$inhaltblock[$i];
             $inhaltblock[$i]['sectionData'] = $arr_result[$j];
             $inhaltblock[$i] = (object)$inhaltblock[$i]; */
             // One line
-            $inhaltblock[$i] = (object) array_merge( (array)$inhaltblock[$i], array( 'sectionData' => $arr_result[$j] ) );
+            $inhalt[$i] = (object) array_merge( (array)$inhalt[$i], array( 'sectionData' => $arr_result[$j] ) );
         }
     }
 }
 
-/* $json_pretty = json_encode($inhaltblock, JSON_PRETTY_PRINT);
-echo "<pre>" . $json_pretty . "<pre/>";
-echo('<br>'); */
+/* $json_pretty = json_encode($inhalt, JSON_PRETTY_PRINT);
+echo "<pre>" . $json_pretty . "<pre/>"; */
 
-
+echo('<br>');
+//Check if the user is a student (roleid = 5) or not.
+$checkstudent= [];
+foreach ($roles as $key => $value) {
+    array_push($checkstudent, $value->roleid);
+}
+if(!in_array('5',$checkstudent)){
+    $userrole = false;
+}else {
+    $userrole = true;
+}
+// var_dump($checkstudent);
 $templatecontext = (object)[
-    'blokinhalt' => array_values($inhaltblock),
-    'editurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $courseid )),    
+    'blokinhalt' => array_values($inhalt),
+    'editurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $courseid )),
+    'myCondition' => $userrole
 ];
 
 echo $OUTPUT->render_from_template('format_mooin4/manage_inhalt', $templatecontext);
-
-// var_dump($course_new);
-// Some test to get DB table content
-$dbtest_section = $DB->get_records('format_mooin4_section', array(), 'id', '*', IGNORE_MISSING);
-$dbtest_chapter = $DB->get_records('format_mooin4_chapter', array(), 'sectionid','sectionid', IGNORE_MISSING);
-$dbtest_course = $DB->get_records('course', array(), 'id', '*', IGNORE_MISSING);
-
-// print_r($dbtest_course);
-if (isset($dbtest_section)) {
-    //print_r($dbtest_section);
-    //var_dump(array_key_last($dbtest_chapter));
-} else {
-    echo('doesn\'t exist');
-}
 
 // Set preference $courseid to save the id 
 $listOfPreferencesEdit = array('id' => $courseid);

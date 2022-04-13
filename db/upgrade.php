@@ -28,37 +28,8 @@
 
 // defined('MOODLE_INTERNAL') || die();
 
-/* function xmldb_format_mooin4_upgrade($oldversion) {
-    global $DB;
+function xmldb_format_mooin4_upgrade($oldversion) {
+    global $CFG, $DB;
 
-    $dbman = $DB->get_manager();
-
-
-    if ($oldversion < 2020072801) {
-        $table = new xmldb_table('course_mooin4_nav_card');
-
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
-        $table->add_field('news_forum', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('news_dorum_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('teilnehmenden', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('teilnehmenden_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('diskussionsforen', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('diskussionsforen_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('social_media', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('social_media_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('inhaltsverzeichnis', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('inhaltsverzeichnis_desc', XMLDB_TYPE_CHAR, '120', null, XMLDB_NOTNULL, null, null);
-
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        // }
-
-        upgrade_plugin_savepoint(true, 2020072801, 'format', 'mooin4');
-    }
-    
-    purge_all_caches();
-    
     return true;
-} */
+}
