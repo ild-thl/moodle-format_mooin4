@@ -110,36 +110,56 @@
     $infos_data[] = array(
         "title"   => $course_name, 
         "desc" =>strip_tags($desc), 
-        "title_url" => new moodle_url('/course/view.php', array('id'=>$course->id))
+        "title_url" => new moodle_url('/course/view.php', array('id'=>$course->id)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-laptop" viewBox="0 0 16 16">
+        <path d="M13.5 3a.5.5 0 0 1 .5.5V11H2V3.5a.5.5 0 0 1 .5-.5h11zm-11-1A1.5 1.5 0 0 0 1 3.5V12h14V3.5A1.5 1.5 0 0 0 13.5 2h-11zM0 12.5h16a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5z"/>
+      </svg>'
     );
     $infos_data[] = array(
         "title"   => get_string('inhaltsverzeichnis', 'format_mooin4'), 
         "desc" => get_string('inhaltsverzeichnis_desc', 'format_mooin4'),
-        "title_url" => new moodle_url('/course/format/mooin4/inhalt.php', array('id'=>$course->id))
+        "title_url" => new moodle_url('/course/format/mooin4/inhalt.php', array('id'=>$course->id)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
+        <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+      </svg>'
     );
     
     $infos_data[] = array(
         "title"   => get_string('newsforen', 'format_mooin4'), 
         "desc" => get_string('newsforen_desc', 'format_mooin4'), 
-        "title_url" => new moodle_url('/mod/forum/view.php', array('f'=>$course->id - 1))
+        "title_url" => new moodle_url('/mod/forum/view.php', array('f'=>$course->id - 1)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+        <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+      </svg>'
     );
         
     $infos_data[] = array(
         "title"   => get_string('diskussionsforen', 'format_mooin4'), 
         "desc" => get_string('diskussionsforen_desc', 'format_mooin4'),
-        "title_url" => new moodle_url('/course/format/mooin4/forum_view.php', array('id'=>$course->id))
+        "title_url" => new moodle_url('/course/format/mooin4/forum_view.php', array('id'=>$course->id)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+      </svg>'
     );
     
     $infos_data[] = array(
         "title"   => get_string('teilnehmenden', 'format_mooin4'), 
         "desc" => get_string('teilnehmenden_desc', 'format_mooin4'),
-        "title_url" => new moodle_url('/course/format/mooin4/users.php', array('id'=>$course->id))
+        "title_url" => new moodle_url('/course/format/mooin4/users.php', array('id'=>$course->id)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+      </svg>'
     );
     
     $infos_data[] = array(
         "title"   => get_string('social_media', 'format_mooin4'), 
         "desc" => get_string('social_media_desc', 'format_mooin4'), 
-        "title_url" => new moodle_url('/course/format/mooin4/view_social.php', array('id'=>$course->id))
+        "title_url" => new moodle_url('/course/format/mooin4/view_social.php', array('id'=>$course->id)),
+        "svg" => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+        <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+      </svg>'
     );
         
 

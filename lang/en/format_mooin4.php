@@ -81,8 +81,8 @@ $string['navsections_help'] = 'Choose which Navigation should use in der Kurse.'
 $string['navsectionscards'] = 'Cards navigation display.';
 $string['navsectionstabs'] = 'Tabs navigation display.';
 $string['sectionnameinfos'] = 'Title Info Course Page.';
-$string['mooin4_inhalt_header'] = 'Course Table of content';
-$string['mooin4_inhalt_header_help'] = 'Configure your Course format mooin4 table of content Card here.';
+/* $string['mooin4_inhalt_header'] = 'Course Table of content';
+$string['mooin4_inhalt_header_help'] = 'Configure your Course format mooin4 table of content Card here.'; */
 $string['mooin4_nav_course_news_desc'] = 'Newsforum card description.';
 $string['mooin4_nav_course_news_desc_help'] = 'Give a small description for the card newsforum.';
 $string['mooin4_nav_course_news'] = 'News forum';
@@ -170,3 +170,11 @@ $string['numberofchapter'] = 'Number of chapters';
 $string['change'] = 'Change';
 $string['defaultgrouping'] = 'Default grouping';
 $string['structure'] = 'Structure';
+
+// Inhalt Page Content
+$string['delete_section'] = 'Delete Section';
+$string['delete_chapter'] = 'Delete Chapter';
+$string['chapter_not_empty'] = 'Chapter has to be empty, before you can delete it !';
+$string['chapter_okey'] = 'OK';
+$string['chapter_empty'] = '';
+$string['chapter_empty'] = 'Do you really want to definetly delete this chapter ?';

@@ -49,6 +49,17 @@ $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 $PAGE->set_url('/course/format/mooin4/inhalt.php', array(
 		'id' => $courseid ));
 
+// Get User Preferences
+get_user_preferences();
+$userPreferencesEdit = get_user_preferences('id');
+// $teacherPreferenceEdit = get_user_preferences('gotoedit');
+
+
+// Check if each section have an unique number, after adding new sections
+// Get user preference from edit form
+// $teacherPreferencesNumsectionAdd = get_user_preferences('sectionadd');  
+// $teacherPreferencesNumsectionRemove = get_user_preferences('sectionremove'); 
+
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
     if ($context->contextlevel != CONTEXT_COURSE) {
@@ -71,10 +82,17 @@ $course_new = $courseformat->get_course();
 require_login($course);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_context(\context_course::instance($courseid));
+$PAGE->set_context(\context_course::instance($course->id));
 $PAGE->set_title(get_string("inhalt",'format_mooin4'));
 $PAGE->set_heading(get_string('courseinhalt','format_mooin4'));
 $PAGE->navbar->add(get_string('inhalt','format_mooin4',));
+
+// Load JS on the inhalt page
+$PAGE->requires->js_call_amd('format_mooin4/edit');
+$PAGE->requires->js_call_amd('format_mooin4/add');
+$PAGE->requires->js_call_amd('format_mooin4/confirm_section');
+$PAGE->requires->js_call_amd('format_mooin4/confirm_chapter');
+
 
 $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
@@ -84,19 +102,17 @@ $frontpagectx = context_course::instance(SITEID);
 $roles = get_user_roles($context, $USER->id, false);
 
 echo $OUTPUT->header();
-
-$arr = [];
-$userrole = true;
-foreach ($course_new as $key => $value) {
-    if(strpos($key, 'divisor') === 0 ){
-        //str_contains($key, 'divisor')
-        // var_dump($value);
-        if($value != 0 && $value != ''){
-           $arr[$key] = $value;
-        }     
-    }
+// var_dump($course_new);
+$section_all_content = $DB->get_records('course_sections', ['course' => $courseid]);
+// var_dump($section_all_content);
+foreach ($section_all_content as $key => $value) {
+    // echo($value->section . '<br>');
+    //echo"<pre>"; print_r($value);
 }
-// print_r($arr);
+
+/* var_dump($course);
+echo('<br>');
+var_dump($courseid); */
 
 $inhaltblock = array();
 $sectionblock = array();
@@ -104,118 +120,176 @@ $check = [];
 $arr_values = [];
 $arr_result= [];
 $last_arr = [];
-$a = 1;
+$a = 0;
 $j = 0;
-$h = 1;
+$h = 0;
+$arr = [];
+$userrole = true;
 $sectionUrl = new moodle_url('/course/view.php', array('id' => $courseid));
+$chapterafteredit = [];
+$sectionafteredit = [];
 
-foreach ($arr as $key => $value) {
-   /*  print_r($value);
-    echo('<br>'); */
-    // Create a new array to save the Category data text and index
-    if(strpos($key, 'divisortext') === 0) {
-        // str_contains($key, 'divisortext')
-        // $inhaltblock['courseId'] = $courseid;
-        array_push($inhaltblock, (object)[
-            'id' =>$a++,
-            'divisortext' => $value,
-            'courseid' => $courseid,
-            'idsection' => $h++
-            
-        ]);
+/* if($teacherPreferenceEdit == false){ */
+    // echo('Go to Edit is false');
+    foreach ($course_new as $key => $value) {
+        if(strpos($key, 'divisor') === 0 ){
+            //str_contains($key, 'divisor')
+            // var_dump($value);
+            if($value >= 0 && $value != ''){
+               $arr[$key] = $value;
+            }     
+        }
     }
-    // Create a new Section structure to deal with index, text and checkbox
-     
-    if(!strstr($key, 'text')){
-        $t = $j;
-        $db_chapter_courseid = [];
-        $db_chapter_sectionid = [];
-        if ($value > 0) {
-            // echo('<br>' . 'Value ' . $j++ . ' ' . $value . '<br>');
-            $inhaltblock[$j++]->sectionnumber = $value;
+    // echo count($arr);
+    // echo'<pre>' .print_r($arr);
+    
+        
+    foreach ($arr as $key => $value) {
+        // Create a new array to save the Category data text and index
+        if(strpos($key, 'divisortext') === 0) {
+            // str_contains($key, 'divisortext')
+            // $inhaltblock['courseId'] = $courseid;
+            array_push($inhaltblock, (object)[
+                'id' =>++$a,
+                'divisortext' => $value,
+                'courseid' => $courseid,
+                'idsection' => ++$h,
+                'sectionnumber' => 0,
+                
+            ]);
+        }
+        // Create a new Section structure to deal with index, text and checkbox
+        
+        if(!strstr($key, 'text')){
+            $t = $j;
+            $db_chapter_courseid = [];
+            $db_chapter_sectionid = [];
             
-            $dataobjects = new stdClass();
-            $dataobjects->id = $inhaltblock[$t]->id;
-            $dataobjects->courseid = $inhaltblock[$t]->courseid;
-            $dataobjects->chapter_title = $inhaltblock[$t]->divisortext;
-            $dataobjects->sectionid = $inhaltblock[$t]->idsection;
-            $dataobjects->sectionnumber = $inhaltblock[$t]->sectionnumber;
-
-            // Insert Data in format_mooin4_chapter;
-            $db_chapter = $DB->get_records('format_mooin4_chapter', array(), 'id', '*', IGNORE_MISSING);
-            foreach ($db_chapter as $key => $valuecheck) {
-                array_push($db_chapter_courseid,$valuecheck->courseid . $valuecheck->sectionid);
+           /*  echo('Values :');
+                echo($t);
+            echo('<br>'); */
+            if (isset( $inhaltblock[$j])) {
+                if ($value >= 0 && $inhaltblock[$j]->divisortext != '') {
+                    // echo('<br>' . 'Value ' . $j++ . ' ' . $value . '<br>');
+                    // $inhaltblock[$j++]->sectionnumber = 0;
+                   //  echo($value);
+                    $inhaltblock[$t]->sectionnumber = $value;
+    
+                    $dataobjects = new stdClass();
+                    $dataobjects->id = ++$a;
+                    $dataobjects->courseid = $inhaltblock[$t]->courseid;
+                    $dataobjects->chapter_title = $inhaltblock[$j++]->divisortext;
+                    $dataobjects->sectionid = $inhaltblock[$t]->idsection;
+                    $dataobjects->sectionnumber = $inhaltblock[$t]->sectionnumber;
+                    
+                    
+                    // Insert Data in format_mooin4_chapter;
+                    $db_chapter = $DB->get_records('format_mooin4_chapter', array(), 'sectionid', '*', IGNORE_MISSING);
+                    foreach ($db_chapter as $key => $valuecheck) {
+                        array_push($db_chapter_courseid,$valuecheck->courseid . $valuecheck->sectionid);
+                    }
+                   
+                    // echo(count((array)$dataobjects));
+                   // array_count_values((array)$dataobjects);
+                   $val = $dataobjects->courseid . $dataobjects->sectionid;
+                   if(!in_array($val, $db_chapter_courseid)){
+                    $DB->insert_record('format_mooin4_chapter', $dataobjects);
+                   }
+                   unset($dataobjects);
+                    
+                    array_push($arr_values,$value);
+                    
+                    for ($i=1; $i < $value +1; $i++) {
+                        $k = count($check) +1; // section index
+                        array_push($check, (object)[
+                            'sectionId' => $i,
+                            'sectionDone' => 0,
+                            'sectionText' => 'Lesson Title ' . $i,
+                            'sectionUrl' => $sectionUrl. '#section=' . $k,
+                            'chapterId' => $j
+                        ]);
+        
+                        $db_section_sectionid = [];
+                        $datasection = new  stdClass();
+        
+                        $datasection->id = $k;
+                        $datasection->sectionid = $i;
+                        $datasection->sectiondone = 0;
+                        $datasection->sectiontext = 'Lesson Title ' . $i;
+                        $datasection->sectionurl = $sectionUrl . '#section=' . $k;
+                        $datasection->chapterid = $j;
+                        $datasection->courseid = $courseid;
+        
+                        // Insert Data in format_mooin4_section;
+                        // $db_section = $DB->get_records('format_mooin4_section', array(), 'id', '*', IGNORE_MISSING);
+                        $sql_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
+                        $db_section = $DB->get_records_sql($sql_section);
+                        if(empty($db_section)){
+                            $DB->insert_record('format_mooin4_section', $datasection);
+                        } else {
+                            foreach ($db_section as $k => $v) {
+                                array_push($db_section_sectionid, $v->courseid . $v->chapterid . $v->sectionid);
+                            }
+                            $valsection = $courseid . $j . $i;
+                            
+                            if(!in_array($valsection, $db_section_sectionid)){
+                                // Check the right section_id in url
+                                // print_r($datasection);
+                                $DB->insert_record('format_mooin4_section', $datasection);
+                                $allSects = $DB->get_records('format_mooin4_section', ['courseid' => $courseid], 'chapterid', '*', IGNORE_MISSING);
+                                $index = 0;
+                                foreach ($allSects as $k => $v) {
+                                    $index += 1;
+                                    $sectionadd = new stdClass();
+                                    $sectionadd ->id = $v->id;
+                                    $sectionadd ->sectionid = $v -> sectionid;
+                                    $sectionadd ->sectiondone =$v -> sectiondone;
+                                    $sectionadd ->sectiontext = $v -> sectiontext;
+                                    $sectionadd ->sectionurl = $sectionUrl . '#section=' . $index;
+                                    $sectionadd ->chapterid = $v->chapterid;
+                                    $sectionadd ->courseid = $courseid;
+    
+                                    // Update the format_mooin4_section table
+                                    $DB->update_record('format_mooin4_section', $sectionadd, $bulk = false);
+                                }
+                            }
+                        }
+                    } 
+                }
             }
             
-            // echo(count((array)$dataobjects));
-           // array_count_values((array)$dataobjects);
-           $val = $dataobjects->courseid . $dataobjects->sectionid;
-           if(!in_array($val, $db_chapter_courseid)){
-            $DB->insert_record('format_mooin4_chapter', $dataobjects);
-           }
-           unset($dataobjects);
-            
-            array_push($arr_values,$value);
-            for ($i=1; $i < $value +1; $i++) {
-                $k = count($check) +1; // section index
-                array_push($check, (object)[
-                    'sectionId' => $i,
-                    'sectionDone' => 0,
-                    'sectionText' => 'Section Title ' . $i,
-                    'sectionUrl' => $sectionUrl. '#section=' . $k,
-                    'chapterId' => $j
-                ]);
-                $db_section_sectionid = [];
-                $datasection = new  stdClass();
-
-                $datasection->id = $k;
-                $datasection->sectionid = $i;
-                $datasection->sectiondone = 0;
-                $datasection->sectiontext = 'Section Title ' . $i;
-                $datasection->sectionurl = $sectionUrl . '#section=' . $k;
-                $datasection->chapterid = $j;
-                $datasection->courseid = $courseid;
-
-                //print_r($datasection);
-                //echo('<br>');
-
-                // Insert Data in format_mooin4_section;
-                $db_section = $DB->get_records('format_mooin4_section', array(), 'id', '*', IGNORE_MISSING);
-                if(empty($db_section)){
-                    $DB->insert_record('format_mooin4_section', $datasection);
-                } else {
-                    foreach ($db_section as $k => $v) {
-                        array_push($db_section_sectionid, $v->courseid . $v->chapterid . $v->sectionid);
-                    }
-                    //print_r($db_section_sectionid);
-                    $valsection = $courseid . $j . $i;
-                    //print_r($valsection);
-                    if(!in_array($valsection, $db_section_sectionid)){
-                        $DB->insert_record('format_mooin4_section', $datasection);
-                    }
-                }
-                
-                //print_r($datasection);
-            } 
-            
-        }
-    }    
-};
-
-echo('<br>');
+        }    
+    };
+   
+    // print_r($inhaltblock);
 // Get the data from the DB Chapter and section
 
-$db_chapter = "SELECT * FROM mdl2_format_mooin4_chapter  fmc WHERE fmc.courseid = {$courseid}";
+$db_chapter = "SELECT * FROM mdl_format_mooin4_chapter  fmc WHERE fmc.courseid = {$courseid}";
 $sql_chapter = $DB->get_records_sql($db_chapter);
+// $sql_chapter = $DB->get_records('format_mooin4_chapter', ['courseid'=>$courseid], 'id');
 
-$db_section = "SELECT * FROM mdl2_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
+$db_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
 $sql_section = $DB->get_records_sql($db_section);
 
-// print_r($data_section);
+
+// echo"<pre>"; print_r($sql_section);
+
+//sort the section Array base on the chapterid and sectionid
+$result = json_decode(json_encode($sql_section), true);
+
+function sortById($x, $y) {
+    return $x['chapterid'] - $y['chapterid'];
+}
+
+usort($result, 'sortById');
+//echo "<pre>"; print_r($result);
+
+// End srting the receiving array section from the DB format_mooin4_section.
+
 // Create the new array for Section list base on the number of section in each categorie
 foreach ($arr_values as $key => $value) {
-    $sectionblock = array_slice($sql_section, 0, $value); // $check = $sql_section
-    array_splice($sql_section, 0, $value); // $check = $sql_section
+    $sectionblock = array_slice($result, 0, $value); // $check = $sql_section
+    array_splice($result, 0, $value); // $check = $sql_section
     array_push($arr_result,$sectionblock );
 }
 // print_r($arr_result);
@@ -239,7 +313,6 @@ for ($i=0; $i < count($inhalt) ; $i++) { //$sql_chapter == $inhaltblock
 /* $json_pretty = json_encode($inhalt, JSON_PRETTY_PRINT);
 echo "<pre>" . $json_pretty . "<pre/>"; */
 
-echo('<br>');
 //Check if the user is a student (roleid = 5) or not.
 $checkstudent= [];
 foreach ($roles as $key => $value) {
@@ -254,13 +327,15 @@ if(!in_array('5',$checkstudent)){
 $templatecontext = (object)[
     'blokinhalt' => array_values($inhalt),
     'editurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $courseid )),
+    'updateurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $userPreferencesEdit )),
     'myCondition' => $userrole
 ];
-
+// <input type="button" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer;"  onclick="location.href='{{sectionurl}}'">
+// <a href='{{& sectionurl }}' class="sectionedit{{courseid}}{{chapterid}}{{sectionid}} editsection" id="sectiontext">{{ sectiontext }}</a>
 echo $OUTPUT->render_from_template('format_mooin4/manage_inhalt', $templatecontext);
 
 // Set preference $courseid to save the id 
-$listOfPreferencesEdit = array('id' => $courseid);
+$listOfPreferencesEdit = array('id' => $courseid, 'gotoedit'=> false);
 
 set_user_preferences($listOfPreferencesEdit);
 echo $OUTPUT->footer();

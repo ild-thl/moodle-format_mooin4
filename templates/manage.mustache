@@ -28,14 +28,12 @@
 <div class="card-columns outer_card">
 {{#cards}}
 
-    <div class="card shadow-sm p-3 mb-5 bg-white rounded inner_card" onclick="location.href='{{title_url}}'" id="mooin4">
+    <div class="card shadow-sm p-3 mb-5 bg-white  inner_card" onclick="location.href='{{title_url}}'" id="mooin4" style="box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px; border-radius: 12px;">
         <div class="card-body">
             <h3 class="card-title font-weight-bolder title_card">
                 <a  class="text-decoration-none" style="color:rgb(128, 128, 128);">
-                    <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-bookmarks-fill svg_size" viewBox="0 0 16 16">
-                        <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4z"/>
-                        <path d="M4.268 1A2 2 0 0 1 6 0h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L13 13.768V2a1 1 0 0 0-1-1H4.268z"/>
-                    </svg>
+                    
+                    {{& svg}}
                     {{title}}
                 </a>
             </h3>

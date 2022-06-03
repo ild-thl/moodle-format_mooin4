@@ -35,14 +35,22 @@ require_once('../mooin4/lib.php'); */
         }
 
         $mform = $this->_form;
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+        $mform->addElement('hidden', 'sectionid');
+        $mform->setType('sectionid', PARAM_INT);
         $mform->addElement('text', 'chapter_title', 'Chapter Title');
         $mform->setType('chapter_title', PARAM_NOTAGS);
         $mform->setDefault('chapter_title', 'Enter a chapter title');
 
-        $mform-> addElement('select', 'section_number', 'Section number',
-            $sectionmenu,
-        );
-    
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+        $key = 'chapterid';
+        if (strpos($actual_link, $key) == false){
+            $mform-> addElement('select', 'sectionnumber', 'Section number',
+                $sectionmenu,
+            );
+        }
         $this->add_action_buttons($cancel = true, "Save Chapter");
     }
 

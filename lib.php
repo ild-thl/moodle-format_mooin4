@@ -538,49 +538,7 @@ class format_mooin4 extends format_topics {
      * @return array array of references to the added form elements
      */
 
-    public function create_edit_form_elements(&$mform, $forsection = false) {
-        global $CFG, $OUTPUT, $PAGE, $USER, $COURSE, $DB;
-
-        $elements = parent::create_edit_form_elements($mform, $forsection);
-        
-        if(!$forsection && (empty($COURSE->id) || $COURSE->id == SITEID)) {
-            // Add "numsections" element to the create course form - it will force new course to be prepopulated
-            // with empty sections.
-            // The "Number of sections" option is no longer available when editing course, instead teachers should
-            // delete and add sections when needed.
-
-            $maxsections = get_config('moodlecourse', 'maxsections');
-            $numsections = $mform->getElementValue('numsections');
-            $numsections = $numsections[0];
-
-            if($numsections > $maxsections) {
-                $element = $mform->getElement('numsections');
-                for($i = $maxsections + 1; $i <= $numsections; $i++){
-                    $element->addOption("$i", $i);
-                }
-            }
-        }
-
-        // $context = $this->get_context();
-        $this->content = new stdClass();
-
-        static $courseformatoptions = false;
-        $courseconfig = get_config('moodlecourse');
-
-        $options = $this->course_format_options();
-        
-        // Add new Settings in course Format mooin4 Lib for the inhaltsverzeichnis card.
-        $attributes=array('size'=>'20');
-        
-        $elements[] = $mform->addElement('header', 'mooin4_inhalt_header', get_string('mooin4_inhalt_header', 'format_mooin4'));
-        $mform->addHelpButton('mooin4_inhalt_header', 'mooin4_inhalt_header', 'format_mooin4', true);
-        $elements[] = $mform->addElement('hidden', 'config_chapEnable', '', array('id' => 'id_config_chapEnable') ); // get_string('mooin4_inhalt_header', 'format_mooin4')
-        //$elements[] = $mform->setDefault('config_chapEnable', 0);
-        //$elements[] = $mform->setType('config_chapEnable', PARAM_INT);
-        
-       
-        return $elements;
-    }
+    // public function create_edit_form_elements(&$mform, $forsection = false) {}
 
     /**
      * Returns true if the course has a front page.
