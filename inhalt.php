@@ -88,10 +88,19 @@ $PAGE->set_heading(get_string('courseinhalt','format_mooin4'));
 $PAGE->navbar->add(get_string('inhalt','format_mooin4',));
 
 // Load JS on the inhalt page
+// Edit a Section Title ( Name )
 $PAGE->requires->js_call_amd('format_mooin4/edit');
+// Add new section in Chapter and in DB [format_mooin4_chapter && course_sections]
 $PAGE->requires->js_call_amd('format_mooin4/add');
+// Confirm deletein a Section inside a Chapter, Section and Course_sections Table and updating the lib.php content also
 $PAGE->requires->js_call_amd('format_mooin4/confirm_section');
+// Confirm deleting a Chapter in Chapter Table ( it has to be empty ), update the lib.php content also.
 $PAGE->requires->js_call_amd('format_mooin4/confirm_chapter');
+// Confirm Move Chapter, update the Chapter, Section, Course_sections Table and lib.php content.
+$PAGE->requires->js_call_amd('format_mooin4/confirm_chapter_move');
+
+// Confirm Move Section in Chapter, Update Chapter, Section, Course_sections Table and lib.php content.
+// $PAGE->requires->js_call_amd('format_mooin4/confirm_section_move);
 
 
 $systemcontext = context_system::instance();
@@ -264,7 +273,7 @@ $sectionafteredit = [];
     // print_r($inhaltblock);
 // Get the data from the DB Chapter and section
 
-$db_chapter = "SELECT * FROM mdl_format_mooin4_chapter  fmc WHERE fmc.courseid = {$courseid}";
+$db_chapter = "SELECT * FROM mdl_format_mooin4_chapter  fmc WHERE fmc.courseid = {$courseid} ORDER BY fmc.sectionid";
 $sql_chapter = $DB->get_records_sql($db_chapter);
 // $sql_chapter = $DB->get_records('format_mooin4_chapter', ['courseid'=>$courseid], 'id');
 

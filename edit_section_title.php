@@ -65,6 +65,8 @@ $section = 0;
     $upSection->availability = $db_call_data->availability;
 
     $DB->update_record('course_sections', $upSection);
+    // Purge all cache to directly see the changes occur in frontend.
+    rebuild_course_cache($_POST['courseid'], true);
     // Redirect the browser
 header("Refresh: 0");
     

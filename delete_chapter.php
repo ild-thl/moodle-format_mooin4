@@ -71,7 +71,19 @@ foreach ($chapterData as $key => $value) {
         $DB->update_record('format_mooin4_chapter', $update_ch);
     }
 }
- 
+
+// Update the format_mooin4_section also because we also have the chapterid(sectonid) there
+$update_section = $DB->get_records('format_mooin4_section', ['courseid' => $_POST['courseid']], 'chapterid','*', IGNORE_MISSING);
+foreach ($update_section as $k => $v) {
+    if($v->chapterid > intval($_POST['chapterid'])){
+        $update_sect = new stdClass();
+
+        $update_sec->id = $v->id;
+        $update_sec->chapterid = $v->chapterid - 1;
+        
+        $DB->update_record('format_mooin4_section', $update_sec);
+    }
+}
 // Update the lib.php structur
 // var_dump($course_new);
 

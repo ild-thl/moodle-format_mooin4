@@ -69,7 +69,7 @@ $d = 'numsections';
 
 $courseformat->update_course_format_options($course_new);
 
-// Updateby adding new lektion in  the right chapter data in DB(format_mooin_chapter)
+// Update by adding new lektion in  the right chapter data in DB(format_mooin_chapter)
 $addNewSection = new stdClass();
 $addNewSection->id = $_POST['id'];
 $addNewSection->courseid = $_POST['courseid'];

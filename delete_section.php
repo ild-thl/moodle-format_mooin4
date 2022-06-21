@@ -64,8 +64,8 @@ $courseId = $_POST['courseid'];
 $sectionId = $_POST['sectionid'];
 $chapterId = $_POST['chapterid'];
 // Delete the Section in the DB table format_mooin4_section
-// $DB->delete_records('format_mooin4_section', ['course' => $POST['courseid'], 'section' =>$_POST['sectionid']]);
-$DB-> delete_records_select('format_mooin4_section', "(courseid = {$courseId} AND chapterid = {$chapterId} AND sectionid = {$sectionId})");
+$DB->delete_records('format_mooin4_section', ['courseid' =>$courseId, 'chapterid' => $chapterId, 'sectionid' =>$sectionId]);
+// $DB-> delete_records_select('format_mooin4_section', "(courseid = {$courseId} AND chapterid = {$chapterId} AND sectionid = {$sectionId})");
 
 // Update the format mooin4 section after deleted the right section
 $update_section = $DB->get_records('format_mooin4_section', ['courseid' => $_POST['courseid']], 'chapterid','*', IGNORE_MISSING);
@@ -150,5 +150,9 @@ $d = 'numsections';
 (array)$course_new->$d -= 1;
 
 $courseformat->update_course_format_options($course_new);
+
+// Purge all cache to directly see the changes occur in frontend.
+// rebuild_course_cache($_POST['courseid'], true);
+
 // Redirect the browser
 header("Refresh: 0");
