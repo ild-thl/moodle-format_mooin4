@@ -82,12 +82,16 @@
           <input type="hidden" class="chapter_title{{sectionid}}" id="chapter_title" name="chapter_title" value="{{chapter_title}}">
           <input type="hidden" class="chapter_sectionnumber{{sectionid}}" id="chapter_sectionnumber" name="chapter_sectionnumber" value="{{sectionnumber}}">
           <div class="btn-group" role="group">
-            <button class="btn btn-secondary"><span class="fa-stack">
+            <button class="btn btn-dark chapter{{sectionid}} up"><span class="fa-stack">
               <i class="fa fa-circle-thin fa-stack-2x"></i>
-              <i class="fa fa fa-arrows fa-stack-1x"></i>
-            </span></i>Move Chapter</button>
+              <i class="fa fa-arrow-up fa-stack-1x"></i>
+            </span></i></button>
+            <button class="btn btn-light chapter{{sectionid}} down"><span class="fa-stack">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+              <i class="fa fa-arrow-down fa-stack-1x"></i>
+            </span></i></button>
             
-            <button class="btn btn-light" onclick="location.href='{{editurl}}&chapterid={{sectionid}}'"><span class="fa-stack">
+            <button class="btn btn-secondary" onclick="location.href='{{editurl}}&chapterid={{sectionid}}'"><span class="fa-stack">
               <i class="fa fa-circle-thin fa-stack-2x"></i>
               <i class="fa fa fa-pencil fa-stack-1x"></i>
             </span></i>Rename Chapter</button>

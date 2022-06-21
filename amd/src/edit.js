@@ -31,7 +31,7 @@ define(['jquery'], ($) => {
     var sectionDone = 0;
     var sectionUrl = "";
 
-        $('.section_edit').click(function(event) {
+    $('.section_edit').click(function(event) {
                 // Fetch all the chapter- and section-id  to build the current clicked section in event
                 courseIndex = event.currentTarget.classList[0].substring(9, event.currentTarget.classList[0].length);
                 chapterIndex = event.currentTarget.classList[1].substring(10, event.currentTarget.classList[1].length);
@@ -69,8 +69,8 @@ define(['jquery'], ($) => {
                         inputText.prop("onclick", null);
                     }
                 }
-            });
-            $('.section_save').click(function(event) {
+    });
+    $('.section_save').click(function(event) {
                 event.preventDefault();
                 sectionNewEdit.css('display', 'inline-block');
                 sectionNewSave.css('display', 'none');
@@ -100,5 +100,5 @@ define(['jquery'], ($) => {
                 });
                 // Window.location.reload();
                 /* Y.log(data); */
-            });
     });
+});
