@@ -178,3 +178,5 @@ $string['chapter_not_empty'] = 'Chapter has to be empty, before you can delete i
 $string['chapter_okey'] = 'OK';
 $string['chapter_empty'] = '';
 $string['chapter_empty'] = 'Do you really want to definetly delete this chapter ?';
+$string['reseterror'] = 'Please reset and error occured';
+$string['resetpage_course'] = 'Reset page course please';

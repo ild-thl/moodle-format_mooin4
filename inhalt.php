@@ -23,8 +23,12 @@
  */
 
 require_once('../../../config.php');
-require_once($CFG->libdir.'/tablelib.php');
-require_once($CFG->libdir.'/filelib.php');
+require_once($CFG->dirroot . '/my/lib.php');
+require_once('../../../course/lib.php');
+require_once($CFG->libdir.'/completionlib.php');
+
+/* require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir.'/filelib.php'); */
 require_once('../mooin4/lib.php');
 
 define('USER_SMALL_CLASS', 20);   // Below this is considered small.
@@ -46,8 +50,13 @@ $roleid       = optional_param('roleid', 0, PARAM_INT); // Optional roleid, 0 me
 $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 
-$PAGE->set_url('/course/format/mooin4/inhalt.php', array(
-		'id' => $courseid ));
+$edit  = optional_param('edit',null,PARAM_BOOL);     // Turn editing on and off
+$reset  = optional_param('reset', null, PARAM_BOOL);
+
+$url = new moodle_url('/course/format/mooin4/inhalt.php', array('id'=>$courseid));
+
+
+$PAGE->set_url($url);
 
 // Get User Preferences
 get_user_preferences();
@@ -80,6 +89,7 @@ $courseformat = course_get_format($course);
 $course_new = $courseformat->get_course();
 
 require_login($course);
+
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_context(\context_course::instance($course->id));
@@ -98,9 +108,8 @@ $PAGE->requires->js_call_amd('format_mooin4/confirm_section');
 $PAGE->requires->js_call_amd('format_mooin4/confirm_chapter');
 // Confirm Move Chapter, update the Chapter, Section, Course_sections Table and lib.php content.
 $PAGE->requires->js_call_amd('format_mooin4/confirm_chapter_move');
-
 // Confirm Move Section in Chapter, Update Chapter, Section, Course_sections Table and lib.php content.
-// $PAGE->requires->js_call_amd('format_mooin4/confirm_section_move);
+$PAGE->requires->js_call_amd('format_mooin4/confirm_section_move');
 
 
 $systemcontext = context_system::instance();
@@ -110,18 +119,14 @@ $frontpagectx = context_course::instance(SITEID);
 // User roles
 $roles = get_user_roles($context, $USER->id, false);
 
+// End for the test
 echo $OUTPUT->header();
-// var_dump($course_new);
+
 $section_all_content = $DB->get_records('course_sections', ['course' => $courseid]);
-// var_dump($section_all_content);
 foreach ($section_all_content as $key => $value) {
     // echo($value->section . '<br>');
     //echo"<pre>"; print_r($value);
 }
-
-/* var_dump($course);
-echo('<br>');
-var_dump($courseid); */
 
 $inhaltblock = array();
 $sectionblock = array();
@@ -174,9 +179,6 @@ $sectionafteredit = [];
             $db_chapter_courseid = [];
             $db_chapter_sectionid = [];
             
-           /*  echo('Values :');
-                echo($t);
-            echo('<br>'); */
             if (isset( $inhaltblock[$j])) {
                 if ($value >= 0 && $inhaltblock[$j]->divisortext != '') {
                     // echo('<br>' . 'Value ' . $j++ . ' ' . $value . '<br>');
@@ -198,8 +200,6 @@ $sectionafteredit = [];
                         array_push($db_chapter_courseid,$valuecheck->courseid . $valuecheck->sectionid);
                     }
                    
-                    // echo(count((array)$dataobjects));
-                   // array_count_values((array)$dataobjects);
                    $val = $dataobjects->courseid . $dataobjects->sectionid;
                    if(!in_array($val, $db_chapter_courseid)){
                     $DB->insert_record('format_mooin4_chapter', $dataobjects);
@@ -243,7 +243,6 @@ $sectionafteredit = [];
                             
                             if(!in_array($valsection, $db_section_sectionid)){
                                 // Check the right section_id in url
-                                // print_r($datasection);
                                 $DB->insert_record('format_mooin4_section', $datasection);
                                 $allSects = $DB->get_records('format_mooin4_section', ['courseid' => $courseid], 'chapterid', '*', IGNORE_MISSING);
                                 $index = 0;
@@ -277,7 +276,7 @@ $db_chapter = "SELECT * FROM mdl_format_mooin4_chapter  fmc WHERE fmc.courseid =
 $sql_chapter = $DB->get_records_sql($db_chapter);
 // $sql_chapter = $DB->get_records('format_mooin4_chapter', ['courseid'=>$courseid], 'id');
 
-$db_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
+$db_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid} ORDER BY fms.sectionid";
 $sql_section = $DB->get_records_sql($db_section);
 
 
@@ -301,7 +300,6 @@ foreach ($arr_values as $key => $value) {
     array_splice($result, 0, $value); // $check = $sql_section
     array_push($arr_result,$sectionblock );
 }
-// print_r($arr_result);
 $inhalt = array_merge((array) $sql_chapter);
 
 // Create the new structure for the table of content, each categorie with is specific sections number and if the section has been done or not

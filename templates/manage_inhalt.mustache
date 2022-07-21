@@ -23,119 +23,140 @@
     }
     
 }}
-{{^myCondition}}
-<button class="btn btn-primary" onclick="location.href='{{editurl}}'"><span class="fa-stack">
-  <i class="fa fa-circle-thin fa-stack-2x"></i>
-  <i class="fa fa fa-plus fa-stack-1x"></i>
-</span></i>Add new Chapter</button>
-<br />
-<br />
-<br />
-
-{{#blokinhalt}}
-<div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default">
-    <div class="card-body">
-      <div class="d-flex justify-content-between">
-        <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
-        
-      </div>
-     <div class=" container" style="max-width: 100% !important;">
-        <div class="row d-flex justify-content-between" style="color: grey;">
+<!-- <!DOCTYPE html> -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+    rel = "stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>  
+     /*  $( function() {
+        $( "#section_move1, #section_move2, #section_move3, #section_move4" ).sortable({
+          connectWith: ".draggable-zone"
+        }).disableSelection();
+      } ); */
+      </script>  
+  </head>
+  <body>
+    {{^myCondition}}
+    <button class="btn btn-primary" onclick="location.href='{{editurl}}'"><span class="fa-stack">
+      <i class="fa fa-circle-thin fa-stack-2x"></i>
+      <i class="fa fa fa-plus fa-stack-1x"></i>
+    </span></i>Add new Chapter</button>
+    <br />
+    <br />
+    <br />
+    {{#blokinhalt}}
+    <div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default">
+        <div class="card-body"  id="chapter_body">
+          <div class="d-flex justify-content-between">
+            <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
+            
+          </div>
           {{#sectionData}}
-              <div class="col-2" role="group" aria-label="Basic example" style="margin-top: 12px;">
-                <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} section_move btn btn-secondary">
-                  <i class="fa fa fa-arrows"></i>
-                </button>
-                <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} section_edit sectionEdit{{chapterid}}{{sectionid}} btn btn-light" style="display: inline-block;" id="sectiontoedit ">
-                  <i class="fa fa fa-pencil"></i>
-                </button>
-                <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}}  section_save sectionSave{{chapterid}}{{sectionid}} btn btn-light" style="display: none;" id="saveeditsection">
-                  <i class="fa fa fa-save"></i>
-                </button>
-                <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} section-url{{sectionurl}} section_delete btn btn-danger">
-                  <i class="fa fa fa-trash"></i>
-                </button>
-              </div>
-              <input type="hidden" class="id_section{{chapterid}}{{sectionid}}" id="id_section" name="id_section" value="{{id}}">
-              <input type="hidden" class="url_section{{chapterid}}{{sectionid}}" id="url_section" name="url_section" value="{{sectionurl}}">
-              <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
-              <div class="col-6 section-text">
-                  <input type="text" readonly class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} editsection section{{courseid}}{{chapterid}}{{sectionid}} form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer; border: none; outline: none;" onclick="location.href='{{sectionurl}}'" >
-              </div>
-              <div class="form-check col-1">
-                    <input class="form-check-input position-static section-done{{chapterid}}{{sectionid}}" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
-              </div>
-              <div class="col-1">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                  <label class="custom-control-label" for="customSwitch1"></label>
+        <div class=" container draggable-zone drop-zone chapter{{chapterid}} section{{sectionid}} sectionnumb{{sectionnumber}} section_find moodle-core-dragdrop-draghandle"  id="section_move{{chapterid}}{{sectionid}}"   style="max-width: 100% !important; padding-bottom: 8px;">
+          
+              <div class="row d-flex justify-content-between section_to_move course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}}"  style="color: grey;">
+                <div class="col-2" role="group" aria-label="Basic example" style="margin-top: 12px;">
+                    <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} btn btn-secondary" id="section_drag_drop{{sectionid}}">
+                      <i class="fa fa fa-arrows"></i>
+                    </button>
+                    <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} section_edit sectionEdit{{chapterid}}{{sectionid}} btn btn-light" style="display: inline-block;" id="sectiontoedit ">
+                      <i class="fa fa fa-pencil"></i>
+                    </button>
+                    <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}}  section_save sectionSave{{chapterid}}{{sectionid}} btn btn-light" style="display: none;" id="saveeditsection">
+                      <i class="fa fa fa-save"></i>
+                    </button>
+                    <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} section-url{{sectionurl}} section_delete btn btn-danger">
+                      <i class="fa fa fa-trash"></i>
+                    </button>
+                </div>
+                <input type="hidden" class="id_section{{chapterid}}{{sectionid}}" id="id_section" name="id_section" value="{{id}}">
+                <input type="hidden" class="url_section{{chapterid}}{{sectionid}}" id="url_section" name="url_section" value="{{sectionurl}}">
+                <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
+                <div class="col-6 section-text">
+                      <input type="text" readonly class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} editsection section{{courseid}}{{chapterid}}{{sectionid}} form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer; border: none; outline: none;" onclick="location.href='{{sectionurl}}'" >
+                </div>
+                <div class="form-check col-1" style="margin: auto;">
+                        <input class="form-check-input position-static section-done{{chapterid}}{{sectionid}}" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
+                </div>
+                <div class="col-1" style="margin: auto;">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                      <label class="custom-control-label" for="customSwitch1"></label>
+                    </div>
                 </div>
               </div>
-           {{/sectionData}}
         </div>
-        <br />
-        <br />
-     </div>
-        <div class="d-flex justify-content-between">
-          <input type="hidden" class="id_chapter{{sectionid}}" id="id_chapter" name="id_chapter" value="{{id}}">
-          <input type="hidden" class="id_course{{sectionid}}" id="id_course" name="id_course" value="{{courseid}}">
-          <input type="hidden" class="chapter_title{{sectionid}}" id="chapter_title" name="chapter_title" value="{{chapter_title}}">
-          <input type="hidden" class="chapter_sectionnumber{{sectionid}}" id="chapter_sectionnumber" name="chapter_sectionnumber" value="{{sectionnumber}}">
-          <div class="btn-group" role="group">
-            <button class="btn btn-dark chapter{{sectionid}} up"><span class="fa-stack">
-              <i class="fa fa-circle-thin fa-stack-2x"></i>
-              <i class="fa fa-arrow-up fa-stack-1x"></i>
-            </span></i></button>
-            <button class="btn btn-light chapter{{sectionid}} down"><span class="fa-stack">
-              <i class="fa fa-circle-thin fa-stack-2x"></i>
-              <i class="fa fa-arrow-down fa-stack-1x"></i>
-            </span></i></button>
-            
-            <button class="btn btn-secondary" onclick="location.href='{{editurl}}&chapterid={{sectionid}}'"><span class="fa-stack">
-              <i class="fa fa-circle-thin fa-stack-2x"></i>
-              <i class="fa fa fa-pencil fa-stack-1x"></i>
-            </span></i>Rename Chapter</button>
-            
-            <button class="btn btn-danger chapter{{sectionid}} chapter_delete "><span class="fa-stack">
-              <i class="fa fa-circle-thin fa-stack-2x"></i>
-              <i class="fa fa fa-trash fa-stack-1x"></i>
-            </span></i> Delete Chapter</button>
-          </div>
-            <button class="btn btn-light chapter{{sectionid}} chapteraddsection"><span class="fa-stack">
-            <i class="fa fa-circle-thin fa-stack-2x"></i>
-            <i class="fa fa fa-plus fa-stack-1x"></i>
-            </span></i>Add new Lesson</button>
-            
-        </div>
-    </div>
-  </div>
-{{/blokinhalt}}
-{{/myCondition}}
-
-{{#myCondition}}
-<br />
-
-{{#blokinhalt}}
-<div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default; max-width: 90%; margin: auto; box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;; border-radius: 12px; border: 0px !important">
-    <div class="card-body">
-      
-      <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
-     <div class=" container" style="max-width: 100% !important;">
-        <div class="row d-flex justify-content-between" style="color: grey;">
-          {{#sectionData}}
-              
-            <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
-            <div class="col-8 section-text">
-              <input type="text" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer; outline: none;"  onclick="location.href='{{sectionurl}}'">
+        {{/sectionData}}
+            <div class="d-flex justify-content-between" style="padding-top: 14px">
+              <input type="hidden" class="id_chapter{{sectionid}}" id="id_chapter" name="id_chapter" value="{{id}}">
+              <input type="hidden" class="id_course{{sectionid}}" id="id_course" name="id_course" value="{{courseid}}">
+              <input type="hidden" class="chapter_title{{sectionid}}" id="chapter_title" name="chapter_title" value="{{chapter_title}}">
+              <input type="hidden" class="chapter_sectionnumber{{sectionid}}" id="chapter_sectionnumber" name="chapter_sectionnumber" value="{{sectionnumber}}">
+              <div class="btn-group" role="group">
+                <button class="btn btn-dark chapter{{sectionid}} up"><span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa-arrow-up fa-stack-1x"></i>
+                </span></i></button>
+                <button class="btn btn-light chapter{{sectionid}} down"><span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa-arrow-down fa-stack-1x"></i>
+                </span></i></button>
+                
+                <button class="btn btn-secondary" onclick="location.href='{{editurl}}&chapterid={{sectionid}}'"><span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa fa-pencil fa-stack-1x"></i>
+                </span></i>Rename Chapter</button>
+                
+                <button class="btn btn-danger chapter{{sectionid}} chapter_delete "><span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa fa-trash fa-stack-1x"></i>
+                  </span></i> Delete Chapter
+                </button>
+              </div>
+              <button class="btn btn-light chapter{{sectionid}} chapteraddsection"><span class="fa-stack">
+                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                <i class="fa fa fa-plus fa-stack-1x"></i>
+                </span></i>Add new Lesson
+              </button>
+                
             </div>
-           
-           <div class="form-check col-2 section-done">
-                 <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
-           </div>
-           {{/sectionData}}
         </div>
-     </div>
-    </div>
-  </div>
-{{/blokinhalt}}
-{{/myCondition}}
+      </div>
+    {{/blokinhalt}}
+    {{/myCondition}}
+
+    {{#myCondition}}
+    <br />
+
+    {{#blokinhalt}}
+    <div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default; max-width: 90%; margin: auto; box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;; border-radius: 12px; border: 0px !important">
+        <div class="card-body">
+          
+          <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
+        <div class=" container" style="max-width: 100% !important;">
+            <div class="row d-flex justify-content-between" style="color: grey;">
+              {{#sectionData}}
+                  
+                <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
+                <div class="col-8 section-text">
+                  <input type="text" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer; outline: none;"  onclick="location.href='{{sectionurl}}'">
+                </div>
+              
+              <div class="form-check col-2 section-done">
+                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
+              </div>
+              {{/sectionData}}
+            </div>
+        </div>
+        </div>
+      </div>
+    {{/blokinhalt}}
+    {{/myCondition}}
+  
+  
+  </body>
+</html>
