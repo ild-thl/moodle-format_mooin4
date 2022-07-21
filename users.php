@@ -582,7 +582,7 @@ $city_list = array();
         $templatecontext = (object)[
             'title' => $map_title,
             'desc' =>   $map_descr,
-            'user_data' => (array)$array_temp
+            'userdata' => array_values($array_temp),//(array)$array_temp
         ];
         echo $OUTPUT->render_from_template('format_mooin4/map_manage', $templatecontext);
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

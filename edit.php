@@ -101,67 +101,6 @@ $url = new moodle_url('/course/format/mooin4/inhalt.php', array('id' => $course-
 if ($edit_form->is_cancelled()) {
     redirect($url, 'You cancelled the creation or update of a chapter');
 } else if ($fromform = $edit_form->get_data()) {
-
-    $new_array_text = [];
-    $new_array_int = [];
-    $new_array = [];
-    foreach ($course_new as $key => $value) {
-        if(!str_contains($key, 'divisor')){
-            if($value != '' || $value != 0){
-                array_push($new_array, (object)[
-                    $key => $value
-                ]);
-            }
-        }
-        if(str_contains($key, 'divisor')){
-            // var_dump($value);
-            if($value != '' && $value != 0){
-                array_push($new_array_text, (object)[
-                    $key => $value
-                ]);
-            }
-            if($value == '' || $value == 0){
-                array_push($new_array_int, (object)[
-                    $key => $value
-                ]);            
-            }
-        }
-    }
-    $t = count($new_array_text)/2 +1;
-    $b = 'divisortext' . strval($t);
-    $c = 'divisor' . strval($t);
-    $d = 'numsections';
-    (array)$course_new->$b = $fromform->chapter_title;
-    (array)$course_new->$c = $fromform->sectionnumber;
-    (array)$course_new->$d += $fromform->sectionnumber; 
-
-    $courseformat->update_course_format_options($course_new);
-    
-    // print_r($course_new);
-    // Update the course_sections Table in DB, because it also containt all the course sections
-    $c_sections = $DB->get_records('course_sections', ['course' => $userPreferencesEdit], 'section', '*');
-    echo('Course sections in : ' . $userPreferencesEdit . ' ' . $fromform->sectionnumber . '<br>');
-    echo count($c_sections);
-
-    // the right section inside the course
-    $section_num = count($c_sections) - 1;
-
-    $lenght = $fromform->sectionnumber;
-    for ($i=1; $i < $lenght +1; $i++) { 
-
-        $data_insert = new stdClass();
-    
-        $data_insert->course = $userPreferencesEdit;   // Create a new week structure
-        $data_insert->section = $section_num + $i;
-        $data_insert->name = null;
-        $data_insert->summary = '';
-        $data_insert->summaryformat = FORMAT_HTML;
-        $data_insert->visible = 1;
-        $data_insert->availability = null;
-        $data_insert->timemodified = time();
-        
-        $DB->insert_record('course_sections', $data_insert);
-    }
    
     // Update Chapter data
     if($fromform->sectionid){
@@ -170,10 +109,7 @@ if ($edit_form->is_cancelled()) {
 
         $chapter_update->id = $fromform->id;
         $chapter_update->chapter_title = $fromform->chapter_title;
-        // $chapter_update->sectionid = $fromform->sectionid;
-        // $chapter_update->sectionnumber = $fromform->sectionnumber;
-        
-        echo("Chapter Update");
+
         // var_dump($chapter_update);
         $DB->update_record('format_mooin4_chapter', $chapter_update);
 
@@ -181,42 +117,10 @@ if ($edit_form->is_cancelled()) {
         
             $t = $fromform->sectionid;
             $b = 'divisortext' . strval($t);
-            $c = 'divisor' . strval($t);
-            $d = 'numsections';
-            $e = json_encode($course_new->$c);
-            // $int_numsections = json_decode('[' . $e . ']', true);
-            $int_numsections = intval($e);
-            $v = 0;
-            $a = 0;
+            
 
             (array)$course_new->$b = $chapter_update->chapter_title;
-            (array)$course_new->$c = $chapter_update->sectionnumber;
-
-            if(intval($int_numsections) > $chapter_update->sectionnumber){
-                $v = intval($int_numsections) - $chapter_update->sectionnumber;
-                (array)$course_new->$d -= $v;
-                for ($i=0; $i < $v; $i++) { 
-                    $DB->delete_records('format_mooin4_section', ['chapterid' => $chapter_update->sectionid]);
-                }
-            }else if(intval($int_numsections) < $chapter_update->sectionnumber){
-                $a = $chapter_update->sectionnumber - intval($int_numsections);
-                (array)$course_new->$d += $a; 
-            }else {
-                (array)$course_new->$d += 0;
-            }
             
-            echo("Number Sections v : " . '<br>'.'<br>');
-             echo( $v);
-             echo( '') . '<br>';
-
-             echo("Number Sections a : " . '<br>'.'<br>');
-             echo( $a);
-             echo( '') . '<br>';
-            
-             // Save the numsection number changes in preference
-             $listOfNumSectionEdit = array('sectionadd' => $a, 'sectionremove' => $v);
-
-            set_user_preferences($listOfNumSectionEdit);
             $courseformat->update_course_format_options($course_new);
 
             redirect($url, ' You updated a the chapter : ' . $fromform->chapter_title);
@@ -225,8 +129,6 @@ if ($edit_form->is_cancelled()) {
     }
 
     redirect($url, ' You created a new chapter : ' . $fromform->chapter_title);
-  //In this case you process validated data. $edit_form->get_data() returns data posted in form.
-  // var_dump($fromform);
 }
 
 // Edit an existing chapter
