@@ -40,7 +40,7 @@
       </script>  
   </head>
   <body>
-    {{^myCondition}}
+    {{^editingOn}}
     <button class="btn btn-primary" onclick="location.href='{{editurl}}'"><span class="fa-stack">
       <i class="fa fa-circle-thin fa-stack-2x"></i>
       <i class="fa fa fa-plus fa-stack-1x"></i>
@@ -48,6 +48,7 @@
     <br />
     <br />
     <br />
+    {{/editingOn}}
     {{#blokinhalt}}
     <div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default">
         <div class="card-body"  id="chapter_body">
@@ -55,10 +56,12 @@
             <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
             
           </div>
+          
           {{#sectionData}}
         <div class=" container draggable-zone drop-zone chapter{{chapterid}} section{{sectionid}} sectionnumb{{sectionnumber}} section_find moodle-core-dragdrop-draghandle"  id="section_move{{chapterid}}{{sectionid}}"   style="max-width: 100% !important; padding-bottom: 8px;">
           
               <div class="row d-flex justify-content-between section_to_move course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}}"  style="color: grey;">
+                {{^editingOn}}
                 <div class="col-2" role="group" aria-label="Basic example" style="margin-top: 12px;">
                     <button class="course-id{{courseid}} chapter-id{{chapterid}} section-id{{sectionid}} btn btn-secondary" id="section_drag_drop{{sectionid}}">
                       <i class="fa fa fa-arrows"></i>
@@ -73,6 +76,7 @@
                       <i class="fa fa fa-trash"></i>
                     </button>
                 </div>
+                {{/editingOn}}
                 <input type="hidden" class="id_section{{chapterid}}{{sectionid}}" id="id_section" name="id_section" value="{{id}}">
                 <input type="hidden" class="url_section{{chapterid}}{{sectionid}}" id="url_section" name="url_section" value="{{sectionurl}}">
                 <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
@@ -82,20 +86,24 @@
                 <div class="form-check col-1" style="margin: auto;">
                         <input class="form-check-input position-static section-done{{chapterid}}{{sectionid}}" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
                 </div>
+                {{^editingOn}}
                 <div class="col-1" style="margin: auto;">
                     <div class="custom-control custom-switch">
                       <input type="checkbox" class="custom-control-input" id="customSwitch1">
                       <label class="custom-control-label" for="customSwitch1"></label>
                     </div>
                 </div>
+                {{/editingOn}}
               </div>
         </div>
         {{/sectionData}}
+        
             <div class="d-flex justify-content-between" style="padding-top: 14px">
               <input type="hidden" class="id_chapter{{sectionid}}" id="id_chapter" name="id_chapter" value="{{id}}">
               <input type="hidden" class="id_course{{sectionid}}" id="id_course" name="id_course" value="{{courseid}}">
               <input type="hidden" class="chapter_title{{sectionid}}" id="chapter_title" name="chapter_title" value="{{chapter_title}}">
               <input type="hidden" class="chapter_sectionnumber{{sectionid}}" id="chapter_sectionnumber" name="chapter_sectionnumber" value="{{sectionnumber}}">
+              {{^editingOn}}
               <div class="btn-group" role="group">
                 <button class="btn btn-dark chapter{{sectionid}} up"><span class="fa-stack">
                   <i class="fa fa-circle-thin fa-stack-2x"></i>
@@ -117,46 +125,16 @@
                   </span></i> Delete Chapter
                 </button>
               </div>
+              
               <button class="btn btn-light chapter{{sectionid}} chapteraddsection"><span class="fa-stack">
                 <i class="fa fa-circle-thin fa-stack-2x"></i>
                 <i class="fa fa fa-plus fa-stack-1x"></i>
                 </span></i>Add new Lesson
               </button>
-                
+              {{/editingOn}}
             </div>
         </div>
       </div>
-    {{/blokinhalt}}
-    {{/myCondition}}
-
-    {{#myCondition}}
-    <br />
-
-    {{#blokinhalt}}
-    <div class="card shadow-sm p-3 mb-5 bg-white inner_card" style="cursor: default; max-width: 90%; margin: auto; box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;; border-radius: 12px; border: 0px !important">
-        <div class="card-body">
-          
-          <h2 class="card-title " style="color: grey; font-weight: 500;">{{sectionid}}. {{chapter_title}}</h2>
-        <div class=" container" style="max-width: 100% !important;">
-            <div class="row d-flex justify-content-between" style="color: grey;">
-              {{#sectionData}}
-                  
-                <div class="col-2 section-id" >{{chapterid}}. {{sectionid}} </div>
-                <div class="col-8 section-text">
-                  <input type="text" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer; outline: none;"  onclick="location.href='{{sectionurl}}'">
-                </div>
-              
-              <div class="form-check col-2 section-done">
-                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{sectiondone}}" aria-label="..." style="float: right;">
-              </div>
-              {{/sectionData}}
-            </div>
-        </div>
-        </div>
-      </div>
-    {{/blokinhalt}}
-    {{/myCondition}}
-  
-  
+    {{/blokinhalt}} 
   </body>
 </html>

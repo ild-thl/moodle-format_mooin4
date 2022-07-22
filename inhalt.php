@@ -41,17 +41,25 @@ define('MODE_USERDETAILS', 1);
 global $DB;
 global $PAGE;
 
-$page         = optional_param('page', 0, PARAM_INT); // Which page to show.
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
-$mode         = optional_param('mode', null, PARAM_INT); // Use the MODE_ constants.
-$accesssince  = optional_param('accesssince', 0, PARAM_INT); // Filter by last access. -1 = never.
-$search       = optional_param('search', '', PARAM_RAW); // Make sure it is processed with p() or s() when sending to output!
-$roleid       = optional_param('roleid', 0, PARAM_INT); // Optional roleid, 0 means all enrolled users (or all on the frontpage).
 $contextid    = optional_param('contextid', 0, PARAM_INT); // One of this or.
 $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 
-$edit  = optional_param('edit',null,PARAM_BOOL);     // Turn editing on and off
+// new paramater
+$id          = optional_param('id', 0, PARAM_INT);
+$name        = optional_param('name', '', PARAM_TEXT);
+$edit        = optional_param('edit', -1, PARAM_BOOL); // Turn editing on and off
+$hide        = optional_param('hide', 0, PARAM_INT);
+$show        = optional_param('show', 0, PARAM_INT);
+$idnumber    = optional_param('idnumber', '', PARAM_RAW);
+$sectionid   = optional_param('sectionid', 0, PARAM_INT);
+$section     = optional_param('section', 0, PARAM_INT);
+$move        = optional_param('move', 0, PARAM_INT);
+$marker      = optional_param('marker',-1 , PARAM_INT);
+$switchrole  = optional_param('switchrole',-1, PARAM_INT); // Deprecated, use course/switchrole.php instead.
+$return      = optional_param('return', 0, PARAM_LOCALURL);
 $reset  = optional_param('reset', null, PARAM_BOOL);
+
+//end
 
 $url = new moodle_url('/course/format/mooin4/inhalt.php', array('id'=>$courseid));
 
@@ -63,12 +71,6 @@ get_user_preferences();
 $userPreferencesEdit = get_user_preferences('id');
 // $teacherPreferenceEdit = get_user_preferences('gotoedit');
 
-
-// Check if each section have an unique number, after adding new sections
-// Get user preference from edit form
-// $teacherPreferencesNumsectionAdd = get_user_preferences('sectionadd');  
-// $teacherPreferencesNumsectionRemove = get_user_preferences('sectionremove'); 
-
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
     if ($context->contextlevel != CONTEXT_COURSE) {
@@ -79,16 +81,39 @@ if ($contextid) {
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     $context = context_course::instance($course->id, MUST_EXIST);
 }
-// Not needed anymore.
-// unset($contextid);
-// unset($courseid);
-// $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
-// $modinfo = get_fast_modinfo($course);
-// $sectionss = $modinfo->get_section_info_all();
+
 $courseformat = course_get_format($course);
 $course_new = $courseformat->get_course();
 
+// Remove any switched roles before checking login
+if ($switchrole == 0 && confirm_sesskey()) {
+    role_switch($switchrole, $context);
+}
+
+// $section = $DB->get_field('course_sections', 'section', array('id' => $sectionid, 'course' => $courseid), MUST_EXIST);
+
 require_login($course);
+
+// Switchrole - sanity check in cost-order...
+$reset_user_allowed_editing = false;
+if ($switchrole > 0 && confirm_sesskey() &&
+    has_capability('moodle/role:switchroles', $context)) {
+    // is this role assignable in this context?
+    // inquiring minds want to know...
+    $aroles = get_switchable_roles($context);
+    if (is_array($aroles) && isset($aroles[$switchrole])) {
+        role_switch($switchrole, $context);
+        // Double check that this role is allowed here
+        require_login($course);
+    }
+    // reset course page state - this prevents some weird problems ;-)
+    $USER->activitycopy = false;
+    $USER->activitycopycourse = NULL;
+    unset($USER->activitycopyname);
+    unset($SESSION->modform);
+    $USER->editing = 0;
+    $reset_user_allowed_editing = true;
+}
 
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
@@ -119,8 +144,95 @@ $frontpagectx = context_course::instance(SITEID);
 // User roles
 $roles = get_user_roles($context, $USER->id, false);
 
+if ($reset_user_allowed_editing) {
+    // ugly hack
+    unset($PAGE->_user_allowed_editing);
+}
+
+if (!isset($USER->editing)) {
+    $USER->editing = 0;
+}
+
+if ($PAGE->user_allowed_editing()) {
+    if (($edit == 1) and confirm_sesskey()) {
+        $USER->editing = 1;
+        // Redirect to site root if Editing is toggled on frontpage
+        if ($course->id == SITEID) {
+            redirect($CFG->wwwroot .'/?redirect=0');
+        } else if (!empty($return)) {
+            redirect($CFG->wwwroot . $return);
+        } else {
+            $url = new moodle_url($PAGE->url, array('notifyeditingon' => 1));
+            redirect($url);
+        }
+    } else if (($edit == 0) and confirm_sesskey()) {
+        $USER->editing = 0;
+        if(!empty($USER->activitycopy) && $USER->activitycopycourse == $course->id) {
+            $USER->activitycopy       = false;
+            $USER->activitycopycourse = NULL;
+        }
+        // Redirect to site root if Editing is toggled on frontpage
+        if ($course->id == SITEID) {
+            redirect($CFG->wwwroot .'/?redirect=0');
+        } else if (!empty($return)) {
+            redirect($CFG->wwwroot . $return);
+        } else {
+            redirect($PAGE->url);
+        }
+    }
+
+    if (has_capability('moodle/course:sectionvisibility', $context)) {
+        if ($hide && confirm_sesskey()) {
+            set_section_visible($course->id, $hide, '0');
+            redirect($PAGE->url);
+        }
+
+        if ($show && confirm_sesskey()) {
+            set_section_visible($course->id, $show, '1');
+            redirect($PAGE->url);
+        }
+    }
+
+    if (!empty($section) && !empty($move) &&
+            has_capability('moodle/course:movesections', $context) && confirm_sesskey()) {
+        $destsection = $section + $move;
+        if (move_section_to($course, $section, $destsection)) {
+            if ($course->id == SITEID) {
+                redirect($CFG->wwwroot . '/?redirect=0');
+            } else {
+                redirect(course_get_url($course));
+            }
+        } else {
+            echo $OUTPUT->notification('An error occurred while moving a section');
+        }
+    }
+} else {
+    $USER->editing = 0;
+}
+
+// We are currently keeping the button here from 1.x to help new teachers figure out
+// what to do, even though the link also appears in the course admin block.  It also
+// means you can back out of a situation where you removed the admin block. :)
+if ($PAGE->user_allowed_editing()) {
+    $buttons = $OUTPUT->edit_button($PAGE->url);
+    $PAGE->set_button($buttons);
+}
 // End for the test
 echo $OUTPUT->header();
+
+$editing_on = true;
+
+if ($USER->editing == 1) {
+    $editing_on = false;
+    // MDL-65321 The backup libraries are quite heavy, only require the bare minimum.
+    require_once($CFG->dirroot . '/backup/util/helper/async_helper.class.php');
+
+    if (async_helper::is_async_pending($id, 'course', 'backup')) {
+        echo $OUTPUT->notification(get_string('pendingasyncedit', 'backup'), 'warning');
+    }
+} else {
+    $editing_on = true;
+}
 
 $section_all_content = $DB->get_records('course_sections', ['course' => $courseid]);
 foreach ($section_all_content as $key => $value) {
@@ -231,7 +343,7 @@ $sectionafteredit = [];
         
                         // Insert Data in format_mooin4_section;
                         // $db_section = $DB->get_records('format_mooin4_section', array(), 'id', '*', IGNORE_MISSING);
-                        $sql_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid}";
+                        $sql_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid}"; // ORDER BY fms.chapterid
                         $db_section = $DB->get_records_sql($sql_section);
                         if(empty($db_section)){
                             $DB->insert_record('format_mooin4_section', $datasection);
@@ -244,7 +356,7 @@ $sectionafteredit = [];
                             if(!in_array($valsection, $db_section_sectionid)){
                                 // Check the right section_id in url
                                 $DB->insert_record('format_mooin4_section', $datasection);
-                                $allSects = $DB->get_records('format_mooin4_section', ['courseid' => $courseid], 'chapterid', '*', IGNORE_MISSING);
+                                $allSects = $DB->get_records('format_mooin4_section', ['courseid' => $courseid], 'chapterid', '*', IGNORE_MISSING); // chapterid
                                 $index = 0;
                                 foreach ($allSects as $k => $v) {
                                     $index += 1;
@@ -276,7 +388,7 @@ $db_chapter = "SELECT * FROM mdl_format_mooin4_chapter  fmc WHERE fmc.courseid =
 $sql_chapter = $DB->get_records_sql($db_chapter);
 // $sql_chapter = $DB->get_records('format_mooin4_chapter', ['courseid'=>$courseid], 'id');
 
-$db_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid} ORDER BY fms.sectionid";
+$db_section = "SELECT * FROM mdl_format_mooin4_section fms WHERE fms.courseid = {$courseid} ORDER BY fms.sectionid"; // sectionid
 $sql_section = $DB->get_records_sql($db_section);
 
 
@@ -335,7 +447,8 @@ $templatecontext = (object)[
     'blokinhalt' => array_values($inhalt),
     'editurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $courseid )),
     'updateurl' => new moodle_url('/course/format/mooin4/edit.php', array('id' => $userPreferencesEdit )),
-    'myCondition' => $userrole
+    'myCondition' => $userrole,
+    'editingOn' => $editing_on
 ];
 // <input type="button" readonly class=" form-control-plaintext" id="staticSectionTitle" value= '{{sectiontext}}' style="cursor: pointer;"  onclick="location.href='{{sectionurl}}'">
 // <a href='{{& sectionurl }}' class="sectionedit{{courseid}}{{chapterid}}{{sectionid}} editsection" id="sectiontext">{{ sectiontext }}</a>
