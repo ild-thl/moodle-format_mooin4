@@ -101,7 +101,66 @@ $url = new moodle_url('/course/format/mooin4/inhalt.php', array('id' => $course-
 if ($edit_form->is_cancelled()) {
     redirect($url, 'You cancelled the creation or update of a chapter');
 } else if ($fromform = $edit_form->get_data()) {
-   
+    $new_array_text = [];
+    $new_array_int = [];
+    $new_array = [];
+    foreach ($course_new as $key => $value) {
+        if(!str_contains($key, 'divisor')){
+            if($value != '' || $value != 0){
+                array_push($new_array, (object)[
+                    $key => $value
+                ]);
+            }
+        }
+        if(str_contains($key, 'divisor')){
+            // var_dump($value);
+            if($value != '' && $value != 0){
+                array_push($new_array_text, (object)[
+                    $key => $value
+                ]);
+            }
+            if($value == '' || $value == 0){
+                array_push($new_array_int, (object)[
+                    $key => $value
+                ]);            
+            }
+        }
+    }
+    $t = count($new_array_text)/2 +1;
+    $b = 'divisortext' . strval($t);
+    $c = 'divisor' . strval($t);
+    $d = 'numsections';
+    (array)$course_new->$b = $fromform->chapter_title;
+    (array)$course_new->$c = $fromform->sectionnumber;
+    (array)$course_new->$d += $fromform->sectionnumber; 
+
+    $courseformat->update_course_format_options($course_new);
+
+    // print_r($course_new);
+    // Update the course_sections Table in DB, because it also containt all the course sections
+    $c_sections = $DB->get_records('course_sections', ['course' => $userPreferencesEdit], 'section', '*');
+    echo('Course sections in : ' . $userPreferencesEdit . ' ' . $fromform->sectionnumber . '<br>');
+    echo count($c_sections);
+
+    // the right section inside the course
+    $section_num = count($c_sections) - 1;
+
+    $lenght = $fromform->sectionnumber;
+    for ($i=1; $i < $lenght +1; $i++) { 
+
+        $data_insert = new stdClass();
+
+        $data_insert->course = $userPreferencesEdit;   // Create a new week structure
+        $data_insert->section = $section_num + $i;
+        $data_insert->name = null;
+        $data_insert->summary = '';
+        $data_insert->summaryformat = FORMAT_HTML;
+        $data_insert->visible = 1;
+        $data_insert->availability = null;
+        $data_insert->timemodified = time();
+
+        $DB->insert_record('course_sections', $data_insert);
+    }
     // Update Chapter data
     if($fromform->sectionid){
         
