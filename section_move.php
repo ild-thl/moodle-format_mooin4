@@ -80,7 +80,7 @@ if(($_POST['direction'] == 'up') && (intval($_POST['first_chapter']) != intval($
             $update_chap_current->sectionnumber = intval($value->sectionnumber) + 1;
 
             // Update the chapter Table
-           //$DB->update_record('format_mooin4_chapter', $update_chap_current);
+           $DB->update_record('format_mooin4_chapter', $update_chap_current);
         }
     }
     foreach ($chapter_table as $key => $value) {
@@ -90,7 +90,7 @@ if(($_POST['direction'] == 'up') && (intval($_POST['first_chapter']) != intval($
             $update_chap_last->sectionnumber = $value->sectionnumber - 1;
 
             // Update the chapter Table
-           //$DB->update_record('format_mooin4_chapter', $update_chap_last);
+           $DB->update_record('format_mooin4_chapter', $update_chap_last);
         }
     }
 }
@@ -103,7 +103,7 @@ if($_POST['direction'] === 'down' && intval($_POST['first_chapter']) != intval($
             $update_chap_current->sectionnumber = intval($value->sectionnumber) + 1;
 
             // Update the chapter Table
-            //$DB->update_record('format_mooin4_chapter', $update_chap_current);
+            $DB->update_record('format_mooin4_chapter', $update_chap_current);
         }
     }
     foreach ($chapter_table as $key => $value) {
@@ -113,7 +113,7 @@ if($_POST['direction'] === 'down' && intval($_POST['first_chapter']) != intval($
             $update_chap_last->sectionnumber = $value->sectionnumber - 1;
 
             // Update the chapter Table
-            //$DB->update_record('format_mooin4_chapter', $update_chap_last);
+            $DB->update_record('format_mooin4_chapter', $update_chap_last);
         }
     }
 }
@@ -214,11 +214,11 @@ if ($_POST['direction'] == 'up') {
         }
         
     }
-    echo('Array moveUp');
+    /* echo('Array moveUp');
     echo'<pre>' . var_dump($move_up);
 
     echo('Array moveUpOtherArray');
-    echo'<pre>' . var_dump($move_up_other_array);
+    echo'<pre>' . var_dump($move_up_other_array); */
     
     // Make update in the move_up array
     
@@ -326,7 +326,7 @@ if ($_POST['direction'] == 'up') {
     // merge the two array
     $arr_merge = array_merge($move_up_other_array, $move_up);
     //echo('Array to merge');
-    echo'<pre>' . var_dump($arr_merge);
+    // echo'<pre>' . var_dump($arr_merge);
     
     // Update the data in DB mooin4_section loop throught the new Array associative and make the update correspondently.
     foreach ($arr_merge as $key => $value) {
@@ -337,7 +337,7 @@ if ($_POST['direction'] == 'up') {
         $update_section->sectionid = $value->sectionid;
         $update_section-> sectionurl = $value->sectionurl;
 
-        //$DB->update_record('format_mooin4_section', $update_section);
+        $DB->update_record('format_mooin4_section', $update_section);
     }
     
 }
@@ -560,7 +560,7 @@ if($_POST['direction'] == 'down') {
         $update_section->sectionid = $value->sectionid;
         $update_section-> sectionurl = $value->sectionurl;
 
-        //$DB->update_record('format_mooin4_section', $update_section);
+        $DB->update_record('format_mooin4_section', $update_section);
     }
 }
 
@@ -595,8 +595,8 @@ if(intval($_POST['first_chapter']) != intval($_POST['last_chapter']) ) {
                     (array)$course_new->$c += 1;
                 }
             }
-            echo('lib.php & Up');
-           //$courseformat->update_course_format_options($course_new);
+            
+           $courseformat->update_course_format_options($course_new);
         }
         if($_POST['direction'] == 'down') {
             for ($i=0; $i < count($arr)/2 + 1; $i++) {
@@ -612,8 +612,8 @@ if(intval($_POST['first_chapter']) != intval($_POST['last_chapter']) ) {
                     (array)$course_new->$c -= 1;
                 }
             }
-            echo('lib.php & Down');
-           // $courseformat->update_course_format_options($course_new);
+            
+           $courseformat->update_course_format_options($course_new);
         }
 }
 
@@ -629,14 +629,12 @@ $course_sections_table = $DB->get_records_sql(
 
 // Implematation of a new way to update the course_sections table
 $count = $DB->count_records('course_sections', array('course' => $_POST['courseid']));
-echo('Count');
-echo($count);
+
 // get the clicked section to move
 // find the clicked chapter and section
 if($_POST['direction'] == 'up'){
     // Here we should know which one is the clicked_section and the destination section
-    echo( 'In Up');
-    
+
     foreach ($section_table as $key => $value) {
         // find the section_id in the url
         if((intval($value->chapterid) == $_POST['first_chapter'] && intval($value->sectionid) == $_POST['first_section'])) {
@@ -652,20 +650,18 @@ if($_POST['direction'] == 'up'){
     // work for course_sections table 
     $section = $clicked_section;
     $destsection = $new_section_id;
-    /* move_section_to($course, $section,$destsection);
+    move_section_to($course, $section,$destsection);
 
     $response = course_get_format($course)->ajax_section_move();
      echo("Response");
     var_dump($response);
     if ($response !== null) {
         echo json_encode($response);
-    } */
+    }
    
 }
 if($_POST['direction'] == 'down') {
-    // Here we should know which one is the clicked_section and the destination section
-    echo( 'In Down');
-    
+    // Here we should know which one is the clicked_section and the destination section  
     
     // clicked section == last
     foreach ($section_table as $key => $value) {
@@ -679,8 +675,8 @@ if($_POST['direction'] == 'down') {
             $clicked_section = $section_id[2];
         }
     }
-    echo('Clicked : ' . $clicked_section);
-    echo('New Section : ' .  $new_section_id);
+    /* echo('Clicked : ' . $clicked_section);
+    echo('New Section : ' .  $new_section_id); */
 
     // work for course_sections table 
     $section = $clicked_section;
@@ -695,13 +691,13 @@ if($_POST['direction'] == 'down') {
 
     echo('Section & '  . ' Destsection');
     echo( $section . ' & ' . $destsection);
-    /* move_section_to($course, $section,$destsection);
+    move_section_to($course, $section,$destsection);
 
     $response = course_get_format($course)->ajax_section_move();
     echo("Response");
     var_dump($response); 
     if ($response !== null) {
         echo json_encode($response);
-    } */
+    }
     
 }
