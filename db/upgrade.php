@@ -33,21 +33,21 @@ function xmldb_format_mooin4_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2022072914) {
+    if ($oldversion < 2022072915) {
 
         // Define field courseid to be added to format_mooin4_section.
         $table = new xmldb_table('format_mooin4_section');
-        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'sectionurl');
-        $field = new xmldb_field('sectionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'courseid');
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'sectionurl');
+        $field = new xmldb_field('sectionid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'courseid');
         // Conditionally launch add field courseid.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
             // Launch change of default for field sectionid.
-            $dbman->change_field_default($table, $field);
+            // $dbman->change_field_default($table, $field);
         }
 
         // Mooin4 savepoint reached.
-        upgrade_plugin_savepoint(true, 2022072914, 'format', 'mooin4');
+        upgrade_plugin_savepoint(true, 2022072915, 'format', 'mooin4');
     }
     return true;
 }
