@@ -83,15 +83,15 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
             items: this.numsections,
             responsive: true,
             mobile : {
-                items : 2
+                items : 1
             },
             tablet : {
                 width : 768,
-                items : 5,
+                items : 4,
             },
             desktop : {
                 width : 1040,
-                items : 8,
+                items : 6,
             },
             deviceChanged : function (e) {
                 console.log(e);
@@ -561,10 +561,10 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
     // Bottom button variable
     var next_bottom = document.querySelector('.bottom_next'); // const
     var prev_bottom = document.querySelector('.bottom_previous');
-    var home_bottom = document.querySelector('.bottom_home');
+    // var home_bottom = document.querySelector('.bottom_home');
     
     // Next_bottom code come here...
-    next_bottom.addEventListener('click', () => {
+    next_bottom.addEventListener('click', function(){
         if (currentsection >= this.numsections -1) {
           next_bottom.classList.add('remove_pointer');
            
@@ -574,9 +574,9 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
           currentsection++;
         }
         // next_bottom.classList.add('hidden');
-        
+        console.log('Type of current section', typeof currentsection);
         console.log("Current Section next", currentsection);
-       // currentsection++;
+        // currentsection++;
          
     });
     // Previous_bottom code here ...
@@ -594,9 +594,9 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
         // currentsection--; 
     });
     // Home_bottom code come here...
-    home_bottom.addEventListener('click', () => {
+    /* home_bottom.addEventListener('click', () => {
         location.assign('http://localhost/moodle/course/format/mooin4/infos.php?id=' + courseid);
-    });
+    }); */
 
     var findHash = function (href) {
       console.log('href Hash', href);
@@ -1094,7 +1094,7 @@ M.format_mooin4.hide = function() {
         if (document.getElementById('mooin4ection-' + i) != undefined) {
             var mooin4ection = document.getElementById('mooin4ection-' + i);
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class').replace('sectionvisible', ''));
-            document.getElementById('section-' + i).style.display = 'none';
+            // document.getElementById('section-' + i).style.display = 'none';
         }
     }
 };
@@ -1107,7 +1107,8 @@ M.format_mooin4.show = function(id, courseid) {
         var currentsection = document.getElementById('section-' + id);
         // var sectionvisible = document.getElementsByClassName('sectionvisble');
         var parentDOM = document.getElementById("slider_inner");
-       
+        console.log('Mooin4section', mooin4ection);
+        console.log('currentsection', currentsection);
         if (mooin4ection && currentsection) {
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class') + ' sectionvisible');
             currentsection.style.display = 'block';
@@ -1115,7 +1116,7 @@ M.format_mooin4.show = function(id, courseid) {
             
             M.format_mooin4.h5p();
         }
-        var testTarget =  parentDOM.getElementsByClassName("sectionvisible")[0]; 
+        var testTarget =  parentDOM.getElementsByClassName("sectionvisible")[0]; // [0] 
         console.log('Show sectionvisible', testTarget);
     }
 };

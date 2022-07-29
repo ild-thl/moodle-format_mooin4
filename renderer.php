@@ -139,6 +139,7 @@ class format_mooin4_renderer extends format_topics_renderer
      */
     protected function get_button_section($course, $sectionvisible) {
         global $PAGE;
+        global $DB;
         $html = '';
         $css = '';
 
@@ -207,14 +208,39 @@ class format_mooin4_renderer extends format_topics_renderer
                 $divisorshow[$currentdivisor] = true;
             }
             $id = 'mooin4ection-' . $section;
+            
+            
             if ($course->sequential) {
-                $name = $lektion . $section;  
+                $name = $lektion . $section;
+                // fetch the section name in the DB
+                /* $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+                foreach ($coursesectionss as $key => $value) {
+                    if (intval($value->section) == $section) {
+                        if ($value->name) {
+                            $name = $value->name;
+                        } else {
+                            $name = $lektion . $section; 
+                        }
+                    }
+                } */
             } else {
                 if (isset($course->{'divisor' . $currentdivisor}) &&
                 $course->{'divisor' . $currentdivisor} == 1) {
                     $name = '&bull;&bull;&bull;';
                 } else {
-                    $name = $lektion . $count;
+                   $name = $lektion . $count;
+                   // fetch the section name in the DB
+                /* $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+                foreach ($coursesectionss as $key => $value) {
+                    if (intval($value->section) == $section) {
+                        if ($value->name) {
+                            $name = $value->name;
+                            
+                        } else {
+                            $name = $lektion . $section;
+                        }
+                    }
+                } */
                 }
             }
             if ($course->sectiontype == 'alphabet' && is_numeric($name)) {
@@ -279,7 +305,7 @@ class format_mooin4_renderer extends format_topics_renderer
         return $html;
     }
 
-            /**
+    /**
      * Get_button_section
      *
      * @param stdclass $course
@@ -401,25 +427,27 @@ class format_mooin4_renderer extends format_topics_renderer
             $count++;
         }
         
-        $html.=html_writer::start_tag('div', array('class'=>'bottom_previous', 'id' => 'id_bottom_previous'));
-        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-left', 'viewBox'=>'0 0 16 16']);
+        $html.=html_writer::start_tag('div', array('class'=>'bottom_previous', 'id' => 'id_bottom_previous')); // array('class'=>'bottom_previous', 'id' => 'id_bottom_previous')
+        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-left', 'viewBox'=>'0 0 24 24']);
         $html.=html_writer::start_tag('path', ['fill-rule'=>'evenodd','d'=>'M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z']);
         $html.=html_writer::end_tag('path');
+        $html.=html_writer::start_span('bottom_button_right') . 'Vorherige Lektion' . html_writer::end_span();
         $html.=html_writer::end_tag('svg');
         
         $html.=html_writer::end_tag('div');
 
         
-        $html.=html_writer::start_tag('div', array('class'=>'bottom_home', 'id' => 'id_bottom_home'));
+        /* $html.=html_writer::start_tag('div', array('class'=>'bottom_home', 'id' => 'id_bottom_home'));
         $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-house-door-fill', 'viewBox'=>'0 0 16 16']);
         $html.=html_writer::start_tag('path', ['fill-rule'=>'evenodd','d'=>'M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z']);
         $html.=html_writer::end_tag('path');
         $html.=html_writer::end_tag('svg');
         
-        $html.=html_writer::end_tag('div');
+        $html.=html_writer::end_tag('div'); */
 
-        $html.=html_writer::start_tag('div', array('class'=>'bottom_next', 'id' => 'id_bottom_next'));
-        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-right', 'viewBox'=>'0 0 16 16']);
+        $html.=html_writer::start_tag('div', array('class'=>'bottom_next', 'id' => 'id_bottom_next')); // array('class'=>'bottom_next', 'id' => 'id_bottom_next')
+        $html.=html_writer::start_span('bottom_button_right') . 'Nächste Lektion' . html_writer::end_span();
+        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-right', 'viewBox'=>'0 0 24 24']);
         $html.=html_writer::start_tag('path', ['fill-rule'=>'evenodd','d'=>'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z']);
         $html.=html_writer::end_tag('path');
         $html.=html_writer::end_tag('svg');
@@ -544,7 +572,7 @@ class format_mooin4_renderer extends format_topics_renderer
         return $o;
     }
 
-     /**
+    /**
      * Generate the html for the 'Jump to' menu on a single section page.
      *
      * @param stdClass $course The course entry from DB
@@ -578,7 +606,7 @@ class format_mooin4_renderer extends format_topics_renderer
         return $o;
     }
 
-       /**
+    /**
      * Output the html for a single section page .
      *
      * @param stdClass $course The course entry from DB
@@ -742,12 +770,12 @@ class format_mooin4_renderer extends format_topics_renderer
             }
             $htmlsection[$section] .= $this->section_footer();
         }
-        if ($section0->summary || !empty($modinfo->sections[0]) || $PAGE->user_is_editing()) {
+        /* if ($section0->summary || !empty($modinfo->sections[0]) || $PAGE->user_is_editing()) {
             $htmlsection0 = $this->section_header($section0, $course, false, 0);
             $htmlsection0 .= $this->courserenderer->course_section_cm_list($course, $section0, 0);
             $htmlsection0 .= $this->courserenderer->course_section_add_cm_control($course, 0, 0);
             $htmlsection0 .= $this->section_footer();
-        }
+        } */
         echo $completioninfo->display_help_icon();
         echo $this->output->heading($this->page_title(), 2, 'accesshide');
         echo $this->course_activity_clipboard($course, 0);
@@ -758,11 +786,11 @@ class format_mooin4_renderer extends format_topics_renderer
         echo $this->get_button_section($course, $sectionvisible);
         
        //  $sections_array = array(); // $modinfo -> sections;
-        foreach ($htmlsection as $current) {
+        /* foreach ($htmlsection as $current) {
 
             // array_push($sections_array, $current);
             echo $current;
-        }
+        } */
         if ($course->sectionposition == 1 and isset($htmlsection0)) {
             echo html_writer::tag('span', $htmlsection0, ['class' => 'below']);
         }
