@@ -444,7 +444,6 @@ class format_mooin4 extends format_topics {
         if ($sectionno !== null) {
             if ($sr !== null) {
                 if ($sr) {
-                    
                     $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
                     $sectionno = $sr;
                 } else {
@@ -528,6 +527,7 @@ class format_mooin4 extends format_topics {
             return context_course::instance($this->courseid);
         }
     }
+
     /**
      * Adds format options elements to the course/section edit form
      *
@@ -548,7 +548,25 @@ class format_mooin4 extends format_topics {
     public function has_view_page() {
         return true;
     }
-}  
+}
+    /**
+     * Get the course section mods
+     */
+    function get_course_section_mods($courseid, $sectionid, $resubmission=false) {
+        global $DB;
+    
+        if (empty($courseid)) {
+            return false; // avoid warnings
+        }
+    
+        if (empty($sectionid)) {
+            return false; // avoid warnings
+        }
+    
+        return $DB->get_records_sql("SELECT cm.*, m.name as modname
+                                       FROM {modules} m, {course_modules} cm
+                                      WHERE cm.course = ? AND cm.section= ? AND cm.completion !=0 AND cm.module = m.id AND m.visible = 1", array($courseid, $sectionid)); // no disabled mods
+    } 
 /**
  * Implements callback inplace_editable() allowing to edit values in-place
  *

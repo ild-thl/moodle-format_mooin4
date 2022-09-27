@@ -28,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/course/format/topics/renderer.php');
 //moodleform is defined in formslib.php
 require_once("$CFG->libdir/formslib.php");
+require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->libdir . '/completionlib.php');
+require_once($CFG->dirroot.'/course/format/mooin4/lib.php');
 
 /**
  * format_mooin4_renderer
@@ -129,7 +132,77 @@ class format_mooin4_renderer extends format_topics_renderer
             return $lektion . $alpha;
         }
     }
+    /**
+     * Count the number of course modules with completion tracking activated
+     * in this section, and the number which the student has completed
+     * Exclude labels if we are using sub tiles, as these are not checkable
+     * Also exclude items the user cannot see e.g. restricted
+     * @param array $sectioncmids the ids of course modules to count
+     * @param array $coursecms the course module objects for this course
+     * @return array with the completion data x items complete out of y
+     */
+    public function section_progress($sectioncmids, $coursecms) {
+        $completed = 0;
+        $outof = 0;
+       
+        global $DB, $USER;
+        //var_dump($coursecms);
+        
+        foreach ($sectioncmids as $cmid) {
+            $thismod = $coursecms[$cmid];
+            if ($thismod->uservisible && !$thismod->deletioninprogress) {
+                
+                if ($thismod->completion != COMPLETION_TRACKING_NONE) { // $this->completioninfo->is_enabled($thismod) 
+                    $outof++;
 
+                    // Check if the user is reviewing the attempt.
+                    
+                    /* if (isset($USER->modattempts[$this->properties->id])) {
+                        $completed = 100;
+                    } */
+                    $coursemodulecompletion = $DB->get_records_sql(
+                        'SELECT cmc.* FROM {course_modules_completion} cmc WHERE cmc.coursemoduleid = ?', array($thismod->id));
+                    var_dump((int)$thismod->id);
+                    // var_dump($coursemodulecompletion);
+                    foreach ($coursemodulecompletion as $key => $value) {
+                        if (($thismod->id == $value->coursemoduleid ) && ($value->completionstate == 1) && ( $value->userid == $USER->id)){
+                            $completed++;
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return array('completed' => $completed, 'outof' => $outof);
+    }
+    /**
+     * Prepare the data required to render a progress indicator (.e. 2/3 items complete)
+     * to be shown on the tile or as an overall course progress indicator
+     * @param int $numcomplete how many items are complete
+     * @param int $numoutof how many items are available for completion
+     * @param boolean $aspercent should we show the indicator as a percentage or numeric
+     * @param boolean $isoverall whether this is an overall course completion indicator
+     * @return array data for output template
+     */
+    public function completion_indicator($numcomplete, $numoutof, $aspercent, $isoverall) {
+        $percentcomplete = $numoutof == 0 ? 0 : round(($numcomplete / $numoutof) * 100, 0); // round(($numcomplete / $numoutof) * 100, 0);
+        $progressdata = array(
+            'numComplete' => $numcomplete,
+            'numOutOf' => $numoutof,
+            'percent' => $percentcomplete,
+            'isComplete' => $numcomplete > 0 && $numcomplete == $numoutof ? 1 : 0,
+            'isOverall' => $isoverall,
+        );
+        if ($aspercent) {
+            // Percent in circle.
+            $progressdata['showAsPercent'] = true;
+            $circumference = 106.8;
+            $progressdata['percentCircumf'] = $circumference;
+            $progressdata['percentOffset'] = round(((100 - $percentcomplete) / 100) * $circumference, 0);
+        }
+        $progressdata['isSingleDigit'] = $percentcomplete < 10 ? true : false; // Position single digit in centre of circle.
+        return $progressdata;
+    }
     /**
      * Get_button_section
      *
@@ -143,6 +216,7 @@ class format_mooin4_renderer extends format_topics_renderer
         $html = '';
         $css = '';
 
+        
         $html.=html_writer::start_tag('div', array('class'=>'carousel-container'));
         $html.=html_writer::start_tag('div', array('class'=>'carousel', 'id' =>'slider'));
         $html.=html_writer::start_tag('div', array('class'=>'carousel-inner', 'id' => 'slider_inner'));
@@ -201,28 +275,56 @@ class format_mooin4_renderer extends format_topics_renderer
                 $currentdivisorhtml = format_string($course->{'divisortext' . $currentdivisor});
                 $currentdivisorhtml = str_replace('[br]', '<br>', $currentdivisorhtml);
                 $currentdivisorhtml = html_writer::tag('div', $currentdivisorhtml, ['class' => 'divisortext']);
+                
                 if ($course->inlinesections) {
                     $inline = 'inlinemooin4ections';
                 }
                 // $html .= html_writer::tag('div', $currentdivisorhtml, ['class' => "divisorsection $inline"]);
                 $divisorshow[$currentdivisor] = true;
             }
+            $mods = get_course_section_mods($course->id   , $section);
+            // var_dump($mods);
             $id = 'mooin4ection-' . $section;
+            $v = $this->get_section_grades($section);
+            $ocp = round($v);
             
+            // echo('OCP :' . $ocp);
             
-            if ($course->sequential) {
-                $name = $lektion . $section;
+            if ($course->sequential) { 
+                //$name = $lektion . $section;
                 // fetch the section name in the DB
-                /* $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+                $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+                // $coursesectionss = $DB->get_records('format_mooin4_section', array('courseid' => $course->id));
+                
                 foreach ($coursesectionss as $key => $value) {
                     if (intval($value->section) == $section) {
+                        // echo($value->section);
                         if ($value->name) {
                             $name = $value->name;
+                            if ($ocp != -1) {
+                                $name .= '<br />' . $this->get_progress_bar($ocp, 100, $section);
+                            } else {
+                                // if ($value->visible) {
+                                // var_dump($modinfo->sections[$section]);
+                                //if (isset($modinfo->sections[$section])) {
+                                    $completionthistile = $this->section_progress($modinfo->sections[$section], $modinfo->cms);
+
+                                    // var_dump($completionthistile);
+                                    // use the completion_indicator to show the right percentage in secton
+                                    $section_percent = $this->completion_indicator($completionthistile['completed'], $completionthistile['outof'], true, false);
+                                    
+                                    
+                                    // var_dump($section_percent);
+                                    $name .= '<br />' . $this->get_progress_bar($section_percent['percent'], 100, $section);
+                               // }
+                            //}
+                            }
+                                                        
                         } else {
-                            $name = $lektion . $section; 
+                            $name = $lektion . $section;// ; 
                         }
                     }
-                } */
+                }
             } else {
                 if (isset($course->{'divisor' . $currentdivisor}) &&
                 $course->{'divisor' . $currentdivisor} == 1) {
@@ -243,6 +345,7 @@ class format_mooin4_renderer extends format_topics_renderer
                 } */
                 }
             }
+            
             if ($course->sectiontype == 'alphabet' && is_numeric($name)) {
                 $name = $this->number_to_alphabet($name);
             }
@@ -251,6 +354,7 @@ class format_mooin4_renderer extends format_topics_renderer
             }
             $class = 'mooin4ection';
             $onclick = 'M.format_mooin4.show(' . $section . ',' . $course->id . ')';
+            
             if (!$thissection->available &&
                 !empty($thissection->availableinfo)) {
                 $class .= ' sectionhidden';
@@ -270,7 +374,9 @@ class format_mooin4_renderer extends format_topics_renderer
             // $html.= html_writer::div('Previous', 'previous_btn', array('id' => 'btn_previous')); // <div class="toad" id="tophat">Mr</div>
             
             $html .= html_writer::tag('div', $name, ['id' => $id, 'class' => $class, 'onclick' => $onclick]);
+            // $html .= html_writer::tag('div', $currentdivisorhtml, ['class' => "divisorsection $inline"]);
             $count++;
+            
         }
         $html.=html_writer::end_tag('div');
 
@@ -304,7 +410,118 @@ class format_mooin4_renderer extends format_topics_renderer
         
         return $html;
     }
+    /**
+     * get the section grade function
+     */
+    function get_section_grades(&$section) {
+        global $DB, $CFG, $USER, $COURSE, $SESSION;
+        require_once($CFG->libdir . '/gradelib.php');
 
+        if (isset($section)) {
+            // $mods = get_course_section_mods($COURSE->id, $section);//print_object($mods);
+            // Find a way to get the right section from the DB
+            
+            $sec = $DB->get_record_sql("SELECT cs.id 
+                        FROM {course_sections} cs
+                        WHERE cs.course = ? AND cs.section = ?", array($COURSE->id, $section));
+
+           /*  var_dump($sec);
+            echo('SEC.'); */
+            $mods = $DB->get_records_sql("SELECT cm.*, m.name as modname
+                        FROM {modules} m, {course_modules} cm
+                    WHERE cm.course = ? AND cm.section= ? AND cm.completion !=0 AND cm.module = m.id AND m.visible = 1", array($COURSE->id, (int)$sec->id));
+
+            
+            $percentage = 0;
+            $mods_counter = 0;
+            $max_grade = 10.0;
+            
+            foreach ($mods as $mod) {
+                if (($mod->modname == 'hvp') && $mod->visible == 1) {
+                    $skip = false;
+
+                    if (isset($mod->availability)) {
+                        $availability = json_decode($mod->availability);
+                        foreach ($availability->c as $criteria) {
+                            if ($criteria->type == 'language' && ($criteria->id != $SESSION->lang)) {
+                                $skip = true;
+                            }
+                        }
+                    }
+                     if (!$skip) {
+                        $grading_info = grade_get_grades($mod->course, 'mod', 'hvp', $mod->instance, $USER->id);
+                        $grading_info = (object)($grading_info);// new, convert an array to object
+                        $user_grade = $grading_info->items[0]->grades[$USER->id]->grade;
+
+                        $percentage += $user_grade;
+                        $mods_counter++;
+                    }
+                }
+            }
+            
+            if ($mods_counter != 0) {
+                return ($percentage / $mods_counter) * $max_grade; //$percentage * $mods_counter; // $percentage / $mods_counter
+            } else {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
+    }
+    
+    /**
+     * check if an activity is hvp or not
+     * @section
+     * return true
+     */
+    function get_section_activity(&$section) {
+        global $DB, $CFG, $USER, $COURSE, $SESSION;
+        
+        if(isset($section)) {
+            $mods = get_course_section_mods($COURSE->id, $section);//print_object($mods);
+
+            $percentage = 0;
+            $mods_counter = 0;
+            $result = false;
+
+            foreach ($mods as $mod) {
+                echo('Inside');
+                // $result = false;
+                if (($mod->modname == 'hvp') && $mod->visible == 1) { // hvp
+                    $val = false;
+                    
+                    if($val) {
+                        $result= true;
+                    }
+                    // $result = $mod->modname;
+                } else {
+                    $result =false;
+                }
+                return $result;
+            }
+           return $result; 
+        }
+    }
+    /**
+     * Get  Progress bar
+     */
+    function get_progress_bar($p, $width, $sectionid = 0) {
+        //$p_width = $width / 100 * $p;
+        $result =
+            html_writer::tag('div',
+                html_writer::tag('div',
+                    html_writer::tag('div',
+                        '',
+                        array('style' => 'width: ' . $p . '%; height: 15px; border: 0px; background: #9ADC00; text-align: center; float: left; border-radius: 12px', 'id' => 'mooin4ection' . $sectionid)
+                    ),
+                    array('style' => 'width: ' . $width . '%; height: 15px; border: 1px; background: #aaa; solid #aaa; margin: 0 auto; padding: 0;  border-radius: 12px')
+                ) .
+                html_writer::tag('div', $p . '%', array('style' => 'float: right; padding: 0; position: relative; color: #555; width: 100%; font-size: 12px; transform: translate(-50%, -50%);margin-top: -8px;left: 50%;')) .
+                html_writer::tag('div', '', array('style' => 'clear: both;'))  .
+                html_writer::start_span('',['style' => 'float: left;font-size: 12px; margin-left: 12px']) . $p .' % bearbeitet' . html_writer::end_span(), //, 'id' => 'oc-progress-text-' . $sectionid
+                array( 'style' => 'position: relative')); // 'class' => 'oc-progress-div',
+        return $result;
+    }
     /**
      * Get_button_section
      *
@@ -381,9 +598,10 @@ class format_mooin4_renderer extends format_topics_renderer
             if (isset($course->{'divisor' . $currentdivisor}) &&
                 $course->{'divisor' . $currentdivisor} != 0 &&
                 !isset($divisorshow[$currentdivisor])) {
-                $currentdivisorhtml = format_string($course->{'divisortext' . $currentdivisor});
+                /* $currentdivisorhtml = format_string($course->{'divisortext' . $currentdivisor});
                 $currentdivisorhtml = str_replace('[br]', '<br>', $currentdivisorhtml);
-                $currentdivisorhtml = html_writer::tag('div', $currentdivisorhtml, ['class' => 'divisortext']);
+                $currentdivisorhtml = html_writer::tag('div', $currentdivisorhtml, ['class' => 'divisortext']); */
+                
                 if ($course->inlinesections) {
                     $inline = 'inlinemooin4ections';
                 }
@@ -426,16 +644,18 @@ class format_mooin4_renderer extends format_topics_renderer
             $html .= html_writer::tag('div', '', ['id' => $id, 'class' => $class, 'onclick' => $onclick]);
             $count++;
         }
-        
-        $html.=html_writer::start_tag('div', array('class'=>'bottom_previous', 'id' => 'id_bottom_previous')); // array('class'=>'bottom_previous', 'id' => 'id_bottom_previous')
-        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-left', 'viewBox'=>'0 0 24 24']);
+                        
+        $html.=html_writer::start_tag('div', array('class'=>'bottom_previous tn btn-secondary btn', 'id' => 'id_bottom_previous', 'style' => 'float: left')); // array('class'=>'bottom_previous', 'id' => 'id_bottom_previous')
+        $html.=html_writer::start_tag('button', array('class'=> "btn btn-light btn-circle btn-xl", 'style' => 'border-radius: 60px;padding: 2px 2px;margin-right: 8px;'));
+        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-left', 'viewBox'=>'0 0 16 16']);
         $html.=html_writer::start_tag('path', ['fill-rule'=>'evenodd','d'=>'M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z']);
         $html.=html_writer::end_tag('path');
-        $html.=html_writer::start_span('bottom_button_right') . 'Vorherige Lektion' . html_writer::end_span();
+        $html.=html_writer::end_tag('button');
+        $html.=html_writer::start_span('bottom_button_left') . 'Vorherige Lektion' . html_writer::end_span();
         $html.=html_writer::end_tag('svg');
-        
+            
         $html.=html_writer::end_tag('div');
-
+        
         
         /* $html.=html_writer::start_tag('div', array('class'=>'bottom_home', 'id' => 'id_bottom_home'));
         $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-house-door-fill', 'viewBox'=>'0 0 16 16']);
@@ -445,12 +665,15 @@ class format_mooin4_renderer extends format_topics_renderer
         
         $html.=html_writer::end_tag('div'); */
 
-        $html.=html_writer::start_tag('div', array('class'=>'bottom_next', 'id' => 'id_bottom_next')); // array('class'=>'bottom_next', 'id' => 'id_bottom_next')
+        
+        $html.=html_writer::start_tag('div', array('class'=>'bottom_next tn btn-primary btn', 'id' => 'id_bottom_next', 'style' => 'float: right')); // array('class'=>'bottom_next', 'id' => 'id_bottom_next')
         $html.=html_writer::start_span('bottom_button_right') . 'Nächste Lektion' . html_writer::end_span();
-        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-right', 'viewBox'=>'0 0 24 24']);
+        $html.=html_writer::start_tag('button', array('class'=> "btn btn-light btn-circle btn-xl", 'style' => 'border-radius: 60px;padding: 2px 2px;margin-left: 8px;'));
+        $html.=html_writer::start_tag('svg', ['xmlns'=> 'http://www.w3.org/2000/svg', 'width'=>'32', 'height'=> '32', 'fill'=>'currentColor', 'class'=> 'bi bi-chevron-right rounded-circle', 'viewBox'=>'0 0 16 16']);
         $html.=html_writer::start_tag('path', ['fill-rule'=>'evenodd','d'=>'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z']);
         $html.=html_writer::end_tag('path');
         $html.=html_writer::end_tag('svg');
+        $html.=html_writer::end_tag('button');
         $html.=html_writer::end_tag('div');
 
         $html.=html_writer::end_tag('div');
@@ -523,6 +746,7 @@ class format_mooin4_renderer extends format_topics_renderer
             if (course_get_format($course)->is_section_current($section)) {
                 $sectionstyle = ' current';
             }
+            
         }
         
         $o.= html_writer::start_tag('li', array('id' => 'section-'.$section->section,
@@ -531,7 +755,7 @@ class format_mooin4_renderer extends format_topics_renderer
 
         // Create a span that contains the section title to be used to create the keyboard section move menu.
         $o .= html_writer::tag('span', get_section_name($course, $section), array('class' => 'hidden sectionname'));
-
+        
         $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
         $o.= html_writer::tag('div', $leftcontent, array('class' => 'left side'));
 
@@ -554,6 +778,7 @@ class format_mooin4_renderer extends format_topics_renderer
         // Button format - ini
         if ($course->showdefaultsectionname) {
             $o.= $this->output->heading($sectionname, 3, 'sectionname' . $classes);
+            
         }
         // Button format - end
 
@@ -566,7 +791,9 @@ class format_mooin4_renderer extends format_topics_renderer
             // "Hidden sections are shown in collapsed form".
             // $o .= $this->format_summary_text('Some Summary text');
             $o .= $this->format_summary_text($section);
+            
         }
+        
         $o .= html_writer::end_tag('div');
 
         return $o;
@@ -708,7 +935,7 @@ class format_mooin4_renderer extends format_topics_renderer
 
         // $courseconfig = get_config('moodlecourse');
         // echo('$courseconfig');
-    
+        //var_dump($sections);
         $coursess = get_courses();
         $modinfo = get_fast_modinfo($course);
         $sections_all = $modinfo->get_section_info_all();
@@ -717,11 +944,14 @@ class format_mooin4_renderer extends format_topics_renderer
         $context = context_course::instance($course->id);
         //$sectionss = $modinfo->get_section_info_all();//$DB->get_records('course_sections', array('course' => $course->id));
         $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
+        $modules_course = $DB->get_records('course_modules', array('course' => $course->id));
 
+        //var_dump($coursesectionss);
         // Title with completion help icon.
         $completioninfo = new completion_info($course);
         
-        
+        // var_dump($completioninfo->completion);
+        /* echo('End of Completion'); */
         // $courseformat = course_get_format($course);
         // var_dump($courseformat);
         foreach ($coursesectionss as $section) {
@@ -737,7 +967,9 @@ class format_mooin4_renderer extends format_topics_renderer
         } else {
             $sectionvisible = 1;
         }
-        $htmlsection = false;
+        // $htmlsection = false;
+        $htmlsection = [];
+        $section0 = new stdClass();
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
             // var_dump($thissection);
             $htmlsection[$section] = '';
@@ -767,9 +999,34 @@ class format_mooin4_renderer extends format_topics_renderer
                 $htmlsection[$section] .= $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                 $htmlsection[$section] .= $this->courserenderer->course_section_add_cm_control($course, $section, 0);
 
+                //echo($this->get_section_grades($section));
+                
+                /* foreach ($thissection as $value) {
+                    var_dump($value);
+                } */
+                $course_module = $thissection->sequence;
+                $module = explode(',', $course_module);
+                
+                for ($i=0; $i < count($module); $i++) { 
+                    foreach ($modules_course as $key => $value) {
+                        if ( !$PAGE->user_is_editing() && ($i == count($module) - 1) && ($module[$i] == $value->id) && ((int)$value->module == 13)) {
+                            $htmlsection[$section] .= html_writer::start_tag('div', array('class'=>'bottom_complete btn btn-outline-secondary', 'id' => 'id_bottom_complete')); // . $section
+                
+                            $htmlsection[$section] .= html_writer::start_span('bottom_button_right') . 'Lektion Complete' . html_writer::end_span();
+                            $htmlsection[$section] .= html_writer::end_tag('div');
+                            
+                        }
+                        
+                    }
+                }
+                /* if( isset($thissection->sequence)) { 
+                                        
+                } */
+                
             }
             $htmlsection[$section] .= $this->section_footer();
         }
+        // Is responsible for section 0 ( comment it, if you don't want to show the section 0)
         /* if ($section0->summary || !empty($modinfo->sections[0]) || $PAGE->user_is_editing()) {
             $htmlsection0 = $this->section_header($section0, $course, false, 0);
             $htmlsection0 .= $this->courserenderer->course_section_cm_list($course, $section0, 0);
@@ -786,10 +1043,13 @@ class format_mooin4_renderer extends format_topics_renderer
         echo $this->get_button_section($course, $sectionvisible);
         
        //  $sections_array = array(); // $modinfo -> sections;
-        /* foreach ($htmlsection as $current) {
-
-            // array_push($sections_array, $current);
+        foreach ($htmlsection as $current) {
             echo $current;
+        }
+        /* if($htmlsection) {
+            foreach ($htmlsection as $current) {
+                echo $current;
+            }    
         } */
         if ($course->sectionposition == 1 and isset($htmlsection0)) {
             echo html_writer::tag('span', $htmlsection0, ['class' => 'below']);

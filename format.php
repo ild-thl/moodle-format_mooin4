@@ -78,7 +78,9 @@ if (!empty($displaysection)) {
        redirect('/moodle/course/format/mooin4/infos.php'.'?id='.$courseid);
      }
      if(get_user_preferences('mooin4_display') ==  'yes') {
-        $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection);
+        
+        $PAGE->navbar;
+        $renderer->print_multiple_section_page($course, null, null, null, null, null);
      }
 }
 

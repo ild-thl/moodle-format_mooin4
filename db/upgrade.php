@@ -33,7 +33,7 @@ function xmldb_format_mooin4_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2022072915) {
+    if ($oldversion < 2022090914) {
 
         // Define field courseid to be added to format_mooin4_section.
         $table = new xmldb_table('format_mooin4_section');
@@ -47,7 +47,7 @@ function xmldb_format_mooin4_upgrade($oldversion) {
         }
 
         // Mooin4 savepoint reached.
-        upgrade_plugin_savepoint(true, 2022072915, 'format', 'mooin4');
+        upgrade_plugin_savepoint(true, 2022090914, 'format', 'mooin4');
     }
     return true;
 }

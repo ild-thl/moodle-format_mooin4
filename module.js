@@ -58,10 +58,11 @@ M.format_mooin4 = M.format_mooin4 || {
 };
 
 M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
-    
+
     this.ourYUI = Y;
     this.numsections = parseInt(numsections);
     console.log('currentSection', currentsection);
+    console.log('Numsection', this.numsections);
     /* document.getElementById('mooin4ectioncontainer').style.display = 'table'; */
    /*  U.img = args[0].img;
       U.str = args[0].str;
@@ -87,11 +88,11 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
             },
             tablet : {
                 width : 768,
-                items : 4,
+                items : 3,
             },
             desktop : {
                 width : 1040,
-                items : 6,
+                items : 5,
             },
             deviceChanged : function (e) {
                 console.log(e);
@@ -190,7 +191,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               });
             }
         }
-        
         //Get index for a specific element in carousel
         function getIndex(element) {
           console.log("Get Index", element);
@@ -231,7 +231,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               var previous_step_slide_total = (current_step - 1) * item_per_step, // 8
                 slides_left = (slides.length - current_step * item_per_step), // 1
                 result = previous_step_slide_total + slides_left; // --> 9
-                
                 console.log('Step', steps);
                 console.log('current step', current_step);
                 console.log('previous step slide total', previous_step_slide_total);
@@ -445,7 +444,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               M.format_mooin4.show(currentsection - 1, courseid); 
           } */
         }
-        
         // Move Forward 
         function moveForward() {
             if (current_step >= steps - 1) return false;
@@ -498,12 +496,10 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
         // MoveTo function
         function moveTo(step) {
           if (step < 0 || step > steps - 1) return false;
-      
           var percentage = 100 / item_per_step,
             x = item_per_step > 1 ?
             percentage * get_slides_to_move(step) :
             step * percentage;
-      
           carousel_container.style.transform = 'translateX(-' + x + '%)';
           current_step = step;
 
@@ -521,7 +517,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               prev_button.classList.remove('hidden');
             }
           }
-      
           if (next_button) {
             if (current_step >= steps - 1) {
               next_button.classList.add('hidden');
@@ -556,50 +551,73 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
             setItems: setItems
           }
     }
-    
-    console.log(' This is Y', Y);
     // Bottom button variable
-    var next_bottom = document.querySelector('.bottom_next'); // const
-    var prev_bottom = document.querySelector('.bottom_previous');
-    // var home_bottom = document.querySelector('.bottom_home');
-    
-    // Next_bottom code come here...
-    next_bottom.addEventListener('click', function(){
-        if (currentsection >= this.numsections -1) {
-          next_bottom.classList.add('remove_pointer');
-           
-        } else {
-          next_bottom.classList.remove('remove_pointer');
-          M.format_mooin4.show(currentsection + 1, courseid);
+    var nextBottom = document.querySelector('.bottom_next');
+    var prevBottom = document.querySelector('.bottom_previous');
+    // First come into the course page when section egal to 1
+    // NextBottom code come here...
+    nextBottom.addEventListener('click', function(event) {
+      console.log('Numsection', event.view.M.format_mooin4.numsections);
+      var url = event.view.window.location.href;
+      console.log(parseInt(url.substring(url.lastIndexOf('=') + 1)) + 1);
+      console.log(this.numsections);
+      console.log(event);
+      var sectionInUrl = parseInt(url.substring(url.lastIndexOf('=') + 1)) + 1;
+      var numSections = event.view.M.format_mooin4.numsections;
+      if (sectionInUrl >= numSections) {
+        M.format_mooin4.show(parseInt(currentsection) + 1, courseid);
+        currentsection++;
+        nextBottom.classList.add('remove_pointer');
+        nextBottom.classList.add('disable_button');
+      } else {
+          nextBottom.classList.remove('remove_pointer');
+          nextBottom.classList.remove('disable_button');
+          M.format_mooin4.show(parseInt(currentsection) + 1, courseid);
           currentsection++;
-        }
-        // next_bottom.classList.add('hidden');
-        console.log('Type of current section', typeof currentsection);
-        console.log("Current Section next", currentsection);
-        // currentsection++;
-         
+      }
+      if (currentsection > 1) {
+          prevBottom.classList.remove('remove_pointer');
+          prevBottom.classList.remove('disable_button');
+      }
+      // nextBottom.classList.add('hidden');
+      console.log('Type of current section', typeof currentsection);
+      console.log("Current Section next", currentsection);
+      // currentsection++;
     });
     // Previous_bottom code here ...
-    prev_bottom.addEventListener('click', () => {
-        if (currentsection <= 1) {
-          prev_bottom.classList.add('remove_pointer');
-            
-        } else {
-          prev_bottom.classList.remove('remove_pointer');
-          M.format_mooin4.show(currentsection - 1, courseid);
-          currentsection--;
-        }
-       
-        console.log("Current Section Previous", currentsection);
-        // currentsection--; 
+    prevBottom.addEventListener('click', function(event) {
+      var url = event.view.window.location.href;
+      var sectionInUrl = parseInt(url.substring(url.lastIndexOf('=') + 1));
+      if (sectionInUrl - 1 > 1) {
+        prevBottom.classList.remove('remove_pointer');
+        prevBottom.classList.remove('disable_button');
+        M.format_mooin4.show(parseInt(currentsection) - 1, courseid);
+        currentsection--;
+      } else {
+        M.format_mooin4.show(parseInt(currentsection) - 1, courseid);
+        currentsection--;
+        prevBottom.classList.add('remove_pointer');
+        prevBottom.classList.add('disable_button');
+      }
+      var numSections = event.view.M.format_mooin4.numsections;
+      if (currentsection < numSections) {
+          nextBottom.classList.remove('remove_pointer');
+          nextBottom.classList.remove('disable_button');
+      }
+      // Currentsection--;
     });
     // Home_bottom code come here...
     /* home_bottom.addEventListener('click', () => {
         location.assign('http://localhost/moodle/course/format/mooin4/infos.php?id=' + courseid);
     }); */
+    // check if the button to valide a section has been clcik into the section
+    var sectionValide = document.querySelector('#id_bottom_complete');
+    // Console.log("Section Validated", sectionValide);
 
-    var findHash = function (href) {
-      console.log('href Hash', href);
+    sectionValide.addEventListener('click', function(event) {
+      console.log(event);
+    });
+    var findHash = function(href) {
         var id = null;
         if (href.indexOf('#section=') !== 0) {
             var split = href.split('#section=');
@@ -609,7 +627,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
     };
 
     var hash = findHash(window.location.href);
-    // console.log('Hash', hash);
     if (hash) {
         currentsection = hash;
     }
@@ -618,475 +635,11 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
         M.format_mooin4.show(currentsection, courseid);
     }
 
-    Y.delegate('click', function (e) {
-       
-        var href = e.currentTarget.get('href');
-        currentsection = findHash(href);
-        M.format_mooin4.show(currentsection, courseid)
+    Y.delegate('click', function(e) {
+      var href = e.currentTarget.get('href');
+      currentsection = findHash(href);
+      M.format_mooin4.show(currentsection, courseid);
     }, '[data-region="drawer"]', '[data-type="30"]');
-
-    // Table of content configuration come here!!!!
-    var Chapters = {
-      table: null,
-      chap_enable: null,
-      chap_count: null,
-      subchap_count: null,
-      subchap_enable: null,
-      chap_container: null,
-      chapterBg: "#DFDFDF",
-      subChapterBg: "#FFA7FF",
-      topicBg: "#FFFF91",
-      sectionCounter: 0,
-      sectionNames: [],
-      isEditingName: false,
-      init: function( sectionNames ) {
-        this.sectionNames = sectionNames;
-        this.table = Y.one('#chaptersTableContainer table tbody');
-        this.chap_enable = Y.one('input#id_config_chapEnable');
-        //this.subchap_enable = Y.one('input#id_config_subChapEnable');
-        this.chap_container = Y.one('#chaptersContainer');
-        this.chap_count = Y.one('#chaptersCount');
-        this.subchap_count = Y.one('#subChaptersCount');
-        var self = this;
-        Y.one('#chap-enable').on('click', function() {
-            var newValue = '';
-            if (self.chap_enable.get('value') === '1') {
-                this.one('img').set('src', U.img.show);
-                self.chap_container.hide();
-                Y.all('.cm-chapter-enable').hide();
-                newValue = 0;
-            } else {
-                this.one('img').set('src', U.img.hide);
-                self.chap_container.show();
-                Y.all('.cm-chapter-enable').show();
-                newValue = 1;
-            }
-            self.chap_enable.set('value', newValue);
-            config.chapEnable = newValue;
-            self.draw();
-        });
-        Y.one('#subchap-enable').on('click', function() {
-          var newValue = '', valueChanged = false;
-          if (self.subchap_enable.get('value') === '1') {
-              this.one('img').set('src', U.img.show);
-              newValue = 0;
-              Y.all('.cm-subchapter-enable').hide();
-              valueChanged = true;
-          } else {
-              if (confirm(U.str.warningsubchapenable)) {
-                  this.one('img').set('src', U.img.hide);
-                  Y.one('.cm-subchapter-enable').show();
-                  newValue = 1;
-                  valueChanged = true;
-              }
-          }
-          if (valueChanged) {
-              self.subchap_enable.set('value', newValue);
-              config.subChapEnable = newValue;
-              config.subChaptersCount = config.chapters.length;
-              self.subchap_count.set('value', config.subChaptersCount);
-              self.resetSubchapterGroupings().draw();
-          }
-      });
-        this.listenInputs();
-        this.enableEdits(); //listeners for editing chapter and subchapter names 
-        this.draw();
-      },
-      listenInputs: function () {
-        var self = this;
-            this.chap_count.on('keypress', function( e ) {
-                if ( e.keyCode === 13 ) {
-                    e.preventDefault();
-                    self.changeChapterNo();
-                    return false;
-                }
-            });
-            this.subchap_count.on('keypress', function( e ) {
-                if ( e.keyCode === 13 ) {
-                    e.preventDefault();
-                    self.changeSubChapterNo();
-                    return false;
-                }
-            });
-            Y.one('#btn-change-chap-no').on('click', function( e ) {
-                self.changeChapterNo();
-            });
-            Y.one('#btn-change-subchap-no').on('click', function( e ) {
-                self.changeSubChapterNo();
-            });
-            Y.one('#btn-default-grouping').on('click', function( e ) {
-                self.defaultGrouping(false).draw();
-            });
-      },
-      changeChapterNo: function() {
-        var val = parseInt(this.chap_count.get('value'));
-        if (isNaN(val) || val < 1 || val > this.sectionNames.length || (config.subChapEnable && val > config.subChaptersCount)) {
-            alert(U.str.wrongnumber);
-            this.chap_count.set('value', config.chapters.length);
-            return ;
-        }
-        if (!confirm(U.str.warningchapnochange)) {
-            this.chap_count.set('value', config.chapters.length);
-            return false;
-        }
-        this.defaultGrouping(true).draw();
-      },
-      enableEdits: function () {
-        var self = this;
-            //"live" event listeners for chapter editing names
-            this.table.delegate('click', function() {
-                if (self.isEditingName) {
-                    return false;
-                }
-                var tr = this.ancestor('tr'),
-                    isChapter = (this.hasClass('cm-edit-chapter')),
-                    span = tr.one(isChapter ? '.cm-chapter-name' : ''),// .cm-subchapter-name
-                    input = tr.one(isChapter ? '.edit-chapter-name' : ''); //.edit-subchapter-name
-                span.hide();
-                input.show();
-                input.focus();
-                self.isEditingName = true;
-            }, 'a.cm-edit-chapter, '); // a.cm-edit-subchapter
-            this.table.delegate('keypress', function( e ) {
-                var tr = this.ancestor('tr'),
-                    isChapter = (this.hasClass('edit-chapter-name')),
-                    span = tr.one(isChapter ? '.cm-chapter-name' : ''); //.cm-subchapter-name
-                if (e.keyCode === 13) {
-                    self.doneEditingName( span, this, isChapter );
-                    e.preventDefault();
-                    return false;
-                }
-            }, '.edit-chapter-name, '); // .edit-subchapter-name
-            this.table.delegate('blur', function() {
-                var tr = this.ancestor('tr'),
-                    isChapter = (this.hasClass('edit-chapter-name')),
-                    span = tr.one(isChapter ? '.cm-chapter-name' : ''); //.cm-subchapter-name
-                    self.doneEditingName( span, this, isChapter );
-            }, '.edit-chapter-name, '); //.edit-subchapter-name
-            this.table.delegate('click', function() {
-                var tr = this.ancestor('tr'),
-                    dir = this.get('rel').split('-');
-                self.moveTopic(tr, dir[0], typeof dir[1] !== 'undefined' ? dir[1] : null);
-            }, '.cm-move-topic');
-           /*  this.table.delegate('click', function() {
-                var tr = this.ancestor('tr'),
-                    dir = this.get('rel');
-                self.moveSubChapter(tr, dir);
-            }, '.cm-move-subchapter'); */
-      },
-      draw: function () {
-          this.table.empty();
-          this.table.append(this.getHeader()); 
-          this.sectionCounter = 0;
-            
-          for (var i = 0; i < config.chapters.length; i++) {
-              var chapter = config.chapters[i];
-              this.table.append(this.getChapterRow(chapter, i));
-                
-              this.drawChapter(chapter, i);
-          }
-      },
-      getHeader: function() {
-        var html = '<tr><td align="center" colspan="2" width="400">' + U.str.chapters + '</td>';
-       /*  if (config.subChapEnable) {
-            html += '<td align="center" colspan="3" width="200">' + U.str.subchapters + '</td>';
-        } */
-        html += '<td align="center" colspan="2" width="400">' + U.str.sections + '</td></tr>'
-        return html;
-      },
-      getChapterRow: function(chapter, index) {
-        var chapterCounts = '';
-        if (! config.chapEnable) { // || ! config.subChapEnable
-            chapterCounts = chapter.childElements[0].count;
-        }
-        var html = '<tr id="cm-chapter-' + index + '"><td width="20" align="left" style="background-color:' + this.chapterBg + '">' + 
-                '<a href="javascript:void(0)" class="cm-edit-chapter"><img alt="" src="' + U.img.edit + '" /></a></td>';
-        //chapter cell
-        html += '<td align="left" style="background-color:' + this.chapterBg + '"><span class="cm-chapter-name">' + chapter.name + '</span>' + 
-                '<input type="text" style="display: none" class="edit-chapter-name" name="chapterNames[]" value="' + chapter.name + '" />' + 
-                '<input type="hidden" name="chapterCounts[]" value="' + chapterCounts + '" />' + 
-                '<input type="hidden" name="chapterChildElementsNumber[]" value="' + chapter.childElements.length + '" /></td>';
-       /*  if (config.subChapEnable) {
-            //3 empty <td>s
-            html += '<td style="background-color:' + this.chapterBg + '">&nbsp;</td><td style="background-color:' + this.chapterBg + '">&nbsp;</td>';
-            html += '<td style="background-color:' + this.chapterBg + '">&nbsp;</td>';
-        } */
-        //2 empty <td>s
-        html += '<td style="background-color:' + this.chapterBg + '">&nbsp;</td><td style="background-color:' + this.chapterBg + '">&nbsp;</td>';
-        return html;
-      },
-      drawChapter: function(chapter, i) {
-        var clr, html = '', next = {}, previous = {}, 
-                    count = chapter.childElements.length, 
-                    chapterCount = config.chapters.length;
-            
-            for (var k = 0; k < count; k++) {
-                var element = chapter.childElements[k];
-                if (config.subChapEnable) {
-                    if (element.type === 'topic') {
-                        clr = this.topicBg;
-                    } else {
-                        clr = this.subChapterBg;
-                    }
-                    //2 empty <td>s
-                    html += '<tr id="cm-subchapter-' + i + '-' + k + '"><td>&nbsp;</td><td>&nbsp;</td>';
-                    var w = '20', temp = '';
-                    // add move image
-                    if (element.type === 'topic' && (next.type === 'subchapter' || previous.type === 'subchapter')) {
-                        w = '40';
-                    }
-                    
-                    if (i > 0 && k === 0 && count > 1) {
-                        w = '40';
-                        //move up subchapter
-                        temp = '<a href="javascript:void(0)" class="cm-move-subchapter" rel="up"><img alt="" src="' + U.img.up + '" /></a>';
-                    } else if (i !== chapterCount - 1 && k === count - 1 && count > 1) {
-                        w = '40'
-                        //move down subchapter
-                        temp = '<a href="javascript:void(0)" class="cm-move-subchapter" rel="down"><img alt="" src="' + U.img.down + '" /></a>'
-                    }
-                    html += '<td align="center" style="background-color:' + clr + '" width="' + w + '">' + temp;
-                    //gets the next (row) that could be: 1) next child element of current chapter; 2) new chapter - first child element; 3) empty for the last chapter, last row
-                    next = (k === count - 1) ? (i === chapterCount - 1 ? {type:'___'} : config.chapters[i + 1].childElements[0]) : chapter.childElements[k + 1];
-                    //get the previous (row): 1) last child of the previous chapter; 2) previous child element in current chapter; 3) empty for first chapter, first row
-                    previous = (k === 0) ? (i === 0 ? {type:'___'} : config.chapters[i - 1].childElements.slice(-1)[0]) : chapter.childElements[k - 1];
-                    
-                    if (element.type === 'topic' && (next.type === 'subchapter' || previous.type === 'subchapter')) {
-                        //move topic right (topic in column of subchapter)
-                        var a = '<a href="javascript:void(0)" class="cm-move-topic"';
-                        
-                        if (previous.type === 'subchapter') {
-                            a += ' rel="right-above"';
-                        } else {
-                            a += ' rel="right-below"';
-                        }
-                        a += '><img alt="" src="' + U.img.right + '" /></a>';
-                        html += a;
-                    }
-                    html += '</td>';
-                    // add edit subchapter name
-                    html += '<td width="20" align="center" style="background-color:' + clr + '">';
-                    if (element.type === 'subchapter') {
-                        //edit link
-                        html += '<a href="javascript:void(0)" class="cm-edit-subchapter"><img alt="" src="' + U.img.edit + '" /></a>';
-                    } else {
-                        //do nothing, this will be empty for now
-                        html += '&nbsp;'
-                    }
-                    html += '</td>';
-
-                    //add subchapter name column or topic name if type == "topic"
-                    html += '<td align="left" style="background-color:' + clr + '">';
-                    if (element.type === 'subchapter') {
-                        html += '<span class="cm-subchapter-name">' + element.name + '</span>';
-                    } else if (element.type === 'topic') {
-                        html += '<span class="cm-section-name">' + this.sectionNames[this.sectionCounter++] + '</span>';
-                    }
-                    //create inputs
-                    html += '<input type="text" style="display: none" class="edit-subchapter-name" name="childElementNames[]" value="';
-                    html += (element.type === 'subchapter' ? element.name : '') + '" />';
-                    html += '<input type="hidden" name="childElementCounts[]" value="';
-                    html += (element.type === 'subchapter' ? element.count : '') + '" />';
-                    html += '<input type="hidden" name="childElementTypes[]" value="' + element.type + '" />';
-
-                    // add 2 empty <td>s
-                    html += '</td><td style="background-color:' + clr + '">&nbsp;</td><td style="background-color:' + clr + '">&nbsp;</td>';
-                    //end row
-                    html += '</tr>';
-                }
-                if (! config.subChapEnable || element.type === 'subchapter') { //create topics
-                    for (var j = 0; j < element.count; j++) {
-                        //2 empty <td>s
-                        html += '<tr id="index-' + i + '-' + k + '-' + j + '"><td>&nbsp;</td><td>&nbsp;</td>';
-                        
-                        //add another 3 empty tds if subchaptersEnable
-                        if (config.subChapEnable) {
-                            html += '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
-                        }
-                        // add move image
-                        html += '<td align="center" style="background-color:' + this.topicBg + '"';
-                        var tw = '20';
-                        
-                        if (element.count > 1 && j === 0 && (i > 0 || (k > 0 && config.subChapEnable))) {
-                            var links = '';
-                            //move the topic left and above the subchapter
-                            if (config.subChapEnable) {
-                                tw = '40';
-                                links += '<a href="javascript:void(0)" class="cm-move-topic" rel="left-above"><img alt="" src="' + U.img.left + '" /></a>'
-                            }
-                            //move up link
-                            links += '<a href="javascript:void(0)" class="cm-move-topic" rel="up"><img alt="" src="' + U.img.up + '" /></a>';
-                            html += ' width="' + tw + '">' + links;
-                            
-                        } else if (element.count > 1 && j === element.count - 1 && (i < chapterCount - 1 || (k < count - 1 && config.subChapEnable))) {
-                            var links = '';
-                            //move topic left and below current subchapter
-                            if (config.subChapEnable) {
-                                tw = '40';
-                                links += '<a href="javascript:void(0)" class="cm-move-topic" rel="left-below"><img alt="" src="' + U.img.left + '" /></a>'
-                            }
-                            //move down link
-                            links += '<a href="javascript:void(0)" class="cm-move-topic" rel="down"><img alt="" src="' + U.img.down + '" /></a>';
-                            html += ' width="' + tw + '">' + links;
-                        }
-                        html += '</td>';
-                        // add section name
-                        html += '<td align="left" style="background-color:' + this.topicBg + '">' + this.sectionNames[this.sectionCounter++] + '</td></tr>';
-                    }
-                }
-            }
-            this.table.append(html);
-      },
-      doneEditingName: function(span, input, isChapter) {
-        var tr = span.ancestor('tr'),
-            name = input.get('value');
-        if (! name) {
-            alert( isChapter ? U.str.emptychapname :  'Enter a Chapter name'); // U.str.emptysubchapname
-            return true;
-        }
-        input.hide();
-        span.show().set('innerHTML', name);
-        this.isEditingName = false;
-        if (isChapter) {
-            var index = parseInt(tr.get('id').replace('cm-chapter-', ''));
-            config.chapters[index].name = name;
-        } /* else {
-            var parts = tr.get('id').replace('cm-subchapter-', '').split('-');
-            config.chapters[parseInt(parts[0])].childElements[parseInt(parts[1])].name = name;
-        } */
-      },
-      defaultGrouping: function(hardReset) {
-            
-        if (hardReset) {
-            config.chapters = [];
-        } else {
-            this.chap_count.set('value', config.chapters.length);
-        }
-        var chapNo = parseInt(this.chap_count.get('value'));
-        var c = Math.floor(this.sectionNames.length / chapNo);
-        var r = this.sectionNames.length - c * chapNo;
-        for (var i = 0; i < chapNo; i++) {
-            if (! config.subChapEnable || hardReset) {
-                if (hardReset) {
-                    config.chapters[i] = {
-                        name: U.str.chapter + ' ' + (i+1)
-                    };
-                }
-                config.chapters[i].childElements = [];
-                config.chapters[i].childElements[0] = {
-                    type: 'subchapter',
-                    count: i < r ? c + 1 : c
-                };
-            }
-        }
-        this.resetSubchapterGroupings(hardReset);
-        return this;
-      },
-      defaultGrouping: function(hardReset) {
-            
-        if (hardReset) {
-            config.chapters = [];
-        } else {
-            this.chap_count.set('value', config.chapters.length);
-        }
-        var chapNo = parseInt(this.chap_count.get('value'));
-        var c = Math.floor(this.sectionNames.length / chapNo);
-        var r = this.sectionNames.length - c * chapNo;
-        for (var i = 0; i < chapNo; i++) {
-            console.log('That is Chapter number', chapNo);
-            //if (! config.subChapEnable || hardReset) { 
-                if (hardReset) {
-                    config.chapters[i] = {
-                        name: U.str.chapter + ' ' + (i+1)
-                    };
-                }
-                config.chapters[i].childElements = [];
-               /*  config.chapters[i].childElements[0] = {
-                    type: 'subchapter',
-                    count: i < r ? c + 1 : c
-                }; */
-          //}
-        }
-        //this.resetSubchapterGroupings(hardReset);
-        return this;
-      },
-      moveTopic: function(){
-        var target = tr.get('id').replace('cm-subchapter-', '').replace('index-', '').replace('cm-chapter-', '').split('-'),
-        upperTR = tr.previous(), //this should be TR with subchapter
-        mostUpperTR	= upperTR.previous(), //chapter or normal topic from another subchapter
-        evenMoreUpperTR = mostUpperTR.previous(),
-        lowerTR = tr.next(),
-        mostLowerTR = lowerTR.next(),
-        chapterIndex = parseInt(target[0]),
-        subChapterIndex = parseInt(target[1]);
-        var targetChapterIndex = chapterIndex + 1;
-        if (config.subChapEnable) {
-          if (direction === 'up') {
-              if (mostUpperTR.all('td').item(4).one('.cm-section-name') || evenMoreUpperTR.all('td').item(4).one('.cm-section-name')) {
-                  alert(U.str.cannotmovetopicup);
-                  return;
-              }
-              if (subChapterIndex === 0) {
-                  var prev = config.chapters[chapterIndex - 1].childElements;
-                  config.chapters[chapterIndex - 1].childElements[prev.length - 1].count++;
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count--;
-              } else {
-                  config.chapters[chapterIndex].childElements[subChapterIndex - 1].count++;
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count--;
-              }
-          } else if (direction === 'down') {
-              if (lowerTR.all('td').item(4).one('.cm-section-name') || mostLowerTR.all('td').item(4).one('.cm-section-name')) {
-                  alert(U.str.cannotmovetopicdown);
-                  return;    
-              }
-              if (subChapterIndex === config.chapters[chapterIndex].childElements.length - 1) {
-                  config.chapters[chapterIndex + 1].childElements[0].count++;
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count--;
-              } else {
-                  config.chapters[chapterIndex].childElements[subChapterIndex + 1].count++;
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count--;
-              }
-          } else if (direction === 'right') {
-              config.chapters[chapterIndex].childElements.splice(subChapterIndex, 1);
-              if (whereToInsert === 'above') {
-                  if (subChapterIndex === 0) {
-                      chapterIndex --;
-                      subChapterIndex = config.chapters[chapterIndex].childElements.length;
-                  }
-                  config.chapters[chapterIndex].childElements[subChapterIndex - 1].count++;
-              } else {
-                  if (subChapterIndex === config.chapters[chapterIndex].childElements.length) {
-                      chapterIndex++;
-                      subChapterIndex = 0;
-                  }
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count++;
-              }
-          } else if (direction === 'left') {
-              var child = {
-                  type: 'topic'
-              };
-              if (whereToInsert === 'above') {
-                  config.chapters[chapterIndex].childElements.splice(subChapterIndex, 0, child);
-                  config.chapters[chapterIndex].childElements[subChapterIndex + 1].count--;
-              } else {
-                  config.chapters[chapterIndex].childElements.splice(subChapterIndex + 1, 0, child);
-                  config.chapters[chapterIndex].childElements[subChapterIndex].count --;
-              }
-          }
-        } else {
-          var targetChapterIndex = chapterIndex + 1;
-          if (direction === 'up') {
-              targetChapterIndex = chapterIndex - 1;
-          }
-          config.chapters[chapterIndex].childElements[0].count--;
-          config.chapters[targetChapterIndex].childElements[0].count++;
-        }
-      this.draw();
-        
-      },
-    };
-    console.log('This is Chapter', M.format_mooin4);
-    console.log('Href', window.location.href);
 };
 
 M.format_mooin4.hide = function() {
@@ -1094,7 +647,7 @@ M.format_mooin4.hide = function() {
         if (document.getElementById('mooin4ection-' + i) != undefined) {
             var mooin4ection = document.getElementById('mooin4ection-' + i);
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class').replace('sectionvisible', ''));
-            // document.getElementById('section-' + i).style.display = 'none';
+            document.getElementById('section-' + i).style.display = 'none';
         }
     }
 };
@@ -1105,10 +658,10 @@ M.format_mooin4.show = function(id, courseid) {
         document.location.hash = '#section=' + id ;
         var mooin4ection = document.getElementById('mooin4ection-' + id);
         var currentsection = document.getElementById('section-' + id);
-        // var sectionvisible = document.getElementsByClassName('sectionvisble');
+        var sectionvisible = document.getElementsByClassName('sectionvisible');
         var parentDOM = document.getElementById("slider_inner");
         console.log('Mooin4section', mooin4ection);
-        console.log('currentsection', currentsection);
+        console.log('sectionvisible', sectionvisible);
         if (mooin4ection && currentsection) {
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class') + ' sectionvisible');
             currentsection.style.display = 'block';
@@ -1118,9 +671,34 @@ M.format_mooin4.show = function(id, courseid) {
         }
         var testTarget =  parentDOM.getElementsByClassName("sectionvisible")[0]; // [0] 
         console.log('Show sectionvisible', testTarget);
+        var section_check = currentsection.attributes.id.value.split("-");
+        var nextBottom = document.querySelector('.bottom_next');
+        var prevBottom = document.querySelector('.bottom_previous');
+        // First come into the course page when section egal to 1
+        console.log('CCurrentsection', currentsection);
+        // Check if the visible section is the first one
+        if (section_check[1] == 1) {
+          prevBottom.classList.add('remove_pointer');
+          prevBottom.classList.add('disable_button');
+        } else {
+          prevBottom.classList.remove('remove_pointer');
+          prevBottom.classList.remove('disable_button');
+        }
+        // Check if the visible section is the last one
+        if (section_check[1] == this.numsections) {
+          nextBottom.classList.add('remove_pointer');
+          nextBottom.classList.add('disable_button');
+        } else {
+          nextBottom.classList.remove('remove_pointer');
+          nextBottom.classList.remove('disable_button');
+        }
     }
 };
 
+M.format_mooin4.valide_section = function name(id, courseid, userid) {
+  var result = courseid-userid-id;
+  return result
+}
 M.format_mooin4.h5p = function() {
     window.h5pResizerInitialized = false;
     var iframes = document.getElementsByTagName('iframe');
