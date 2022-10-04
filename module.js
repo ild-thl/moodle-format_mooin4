@@ -560,7 +560,6 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
       console.log('Numsection', event.view.M.format_mooin4.numsections);
       var url = event.view.window.location.href;
       console.log(parseInt(url.substring(url.lastIndexOf('=') + 1)) + 1);
-      console.log(this.numsections);
       console.log(event);
       var sectionInUrl = parseInt(url.substring(url.lastIndexOf('=') + 1)) + 1;
       var numSections = event.view.M.format_mooin4.numsections;
@@ -606,17 +605,7 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
       }
       // Currentsection--;
     });
-    // Home_bottom code come here...
-    /* home_bottom.addEventListener('click', () => {
-        location.assign('http://localhost/moodle/course/format/mooin4/infos.php?id=' + courseid);
-    }); */
-    // check if the button to valide a section has been clcik into the section
-    var sectionValide = document.querySelector('#id_bottom_complete');
-    // Console.log("Section Validated", sectionValide);
 
-    sectionValide.addEventListener('click', function(event) {
-      console.log(event);
-    });
     var findHash = function(href) {
         var id = null;
         if (href.indexOf('#section=') !== 0) {
@@ -666,10 +655,9 @@ M.format_mooin4.show = function(id, courseid) {
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class') + ' sectionvisible');
             currentsection.style.display = 'block';
             document.cookie = 'sectionvisible_' + courseid + '=' + id + '; path=/';
-            
             M.format_mooin4.h5p();
         }
-        var testTarget =  parentDOM.getElementsByClassName("sectionvisible")[0]; // [0] 
+        var testTarget = parentDOM.getElementsByClassName("sectionvisible")[0];
         console.log('Show sectionvisible', testTarget);
         var section_check = currentsection.attributes.id.value.split("-");
         var nextBottom = document.querySelector('.bottom_next');
@@ -695,10 +683,6 @@ M.format_mooin4.show = function(id, courseid) {
     }
 };
 
-M.format_mooin4.valide_section = function name(id, courseid, userid) {
-  var result = courseid-userid-id;
-  return result
-}
 M.format_mooin4.h5p = function() {
     window.h5pResizerInitialized = false;
     var iframes = document.getElementsByTagName('iframe');
