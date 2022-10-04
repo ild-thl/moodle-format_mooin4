@@ -80,7 +80,7 @@ if (!empty($displaysection)) {
      if(get_user_preferences('mooin4_display') ==  'yes') {
         
         $PAGE->navbar;
-        $renderer->print_multiple_section_page($course, null, null, null, null, null);
+        $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection);
      }
 }
 

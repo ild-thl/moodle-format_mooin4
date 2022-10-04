@@ -552,7 +552,7 @@ class format_mooin4 extends format_topics {
     /**
      * Get the course section mods
      */
-    function get_course_section_mods($courseid, $sectionid, $resubmission=false) {
+    /* function get_course_section_mods($courseid, $sectionid, $resubmission=false) {
         global $DB;
     
         if (empty($courseid)) {
@@ -566,7 +566,7 @@ class format_mooin4 extends format_topics {
         return $DB->get_records_sql("SELECT cm.*, m.name as modname
                                        FROM {modules} m, {course_modules} cm
                                       WHERE cm.course = ? AND cm.section= ? AND cm.completion !=0 AND cm.module = m.id AND m.visible = 1", array($courseid, $sectionid)); // no disabled mods
-    } 
+    }  */
 /**
  * Implements callback inplace_editable() allowing to edit values in-place
  *
