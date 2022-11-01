@@ -70,17 +70,19 @@ $temp_bloc = $first_bloc;
 // echo('Display Section'. $displaysection);
 
 if (!empty($displaysection)) {
-    echo($displaysection);
-    $renderer->print_single_section_page($course, null, null, null, null, $displaysection);
+    // $renderer->print_single_section_page($course, null, null, null, null, $displaysection);
+    $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection);
 } else {
     // $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection);
-     if((get_user_preferences('mooin4_display') == null && get_user_preferences('card_display') == null ) || get_user_preferences('card_display') == 'yes' ){
+     /* if((get_user_preferences('mooin4_display') == null && get_user_preferences('card_display') == null ) || get_user_preferences('card_display') == 'yes' ){
        redirect('/moodle/course/format/mooin4/infos.php'.'?id='.$courseid);
-     }
+     } */
      if(get_user_preferences('mooin4_display') ==  'yes') {
         
         $PAGE->navbar;
         $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection);
+     }else {
+        redirect('/moodle/course/format/mooin4/infos.php'.'?id='.$courseid);
      }
 }
 

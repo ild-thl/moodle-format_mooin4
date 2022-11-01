@@ -14,6 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ // eslint-disable-next-line linebreak-style
  * format_mooin4_renderer
  *
  * @package    format_mooin4
