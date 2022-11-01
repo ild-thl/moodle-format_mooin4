@@ -966,9 +966,10 @@ if ($mode === MODE_USERDETAILS) {  // Print simple listing.
             if ($mode === MODE_BRIEF && !isset($hiddenfields['badges']) && has_capability('format/mooin4:aluhatsoff', $context)) {
 				// oncampus Badges anzeigen
 				$badges = '';
-				//$badges .= get_badges_list($user->id).get_badges_list($user->id, $course->id);
-				
-				// nur wenn der teilnehmer kein teacher ist werden badges angezeigt
+				// $badges .= get_badges_list($user->id).get_badges_list($user->id, $course->id);
+                $badges .= get_badges_list($user->id, $course->id);
+
+                // nur wenn der teilnehmer kein teacher ist werden badges angezeigt
 				$ccontext = context_course::instance($course->id);
 				$roles = get_user_roles($ccontext, $user->id, false);
 				$not_a_teacher = true;

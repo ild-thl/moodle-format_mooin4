@@ -23,10 +23,28 @@
 
     }
 }}
-{{#sectionid}}
-<div class="bottom_complete btn btn-outline-secondary" id="id_bottom_complete-{{.}}">
-    <span class="bottom_button">
+<!-- <!DOCTYPE html> -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+    rel = "stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> 
+  </head>
+  <body>
+    {{#check_show}}
+      <div class="complete_section btn btn-outline-primary" type='button' name="id_bottom_complete-{{sectionId}}" id="id_bottom_complete-{{sectionId}}">
         {{sectiontext}}
-    </span>
-</div>
-{{/sectionid}}
+      </div>
+    {{/check_show}}
+    {{^check_show}}
+      <form method="post">
+        <input class="bottom_complete btn btn-outline-secondary" type="submit" name="id_bottom_complete-{{sectionId}}" id="id_bottom_complete-{{sectionId}}"  value=" {{sectiontext}}" onclick={{click_event}}> <!-- onclick={{click_event}} onsubmit={{click_event}}-->
+        </input>
+      </form>
+    {{/check_show}}
+
+    
+</body>
+</html>

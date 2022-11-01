@@ -133,6 +133,41 @@ class format_mooin4_renderer extends format_topics_renderer
         }
     }
     /**
+     * Set a section without h5p element as done
+     *
+     * @param stdclass $course
+     * @param array $sections (argument not used)
+     * @param int $userid (argument not used)
+     * @param int $courseid (argument not used)
+     */
+    public function the_click($section, $cid, $userid) {
+        global $DB;
+
+        $res = false;
+        $q = $userid .' ' . $cid. ' ' .$section;
+        $theclick = 'M.format_mooin4.valide(' . $section . ',' . $cid . ',' . $userid .')';
+        $value_check = $DB->record_exists('user_preferences', array('value' => $q));
+        $id = $DB->count_records('user_preferences', array('userid'=> $userid));
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            
+            
+            if ( isset($_POST["id_bottom_complete-".$section])) {
+                $res = true;
+                $values = new stdClass();
+                $values->id = $id + 1;
+                $values->userid = $userid;
+                $values->name = 'section_progess_with_text'.$q;
+                $values->value = $q;
+
+                if (!$value_check) {
+                    $DB->insert_record('user_preferences',$values, true, false );
+                }
+                
+            }                
+        }
+        return $res;
+    }
+    /**
      * Count the number of course modules with completion tracking activated
      * in this section, and the number which the student has completed
      * Exclude labels if we are using sub tiles, as these are not checkable
@@ -147,7 +182,7 @@ class format_mooin4_renderer extends format_topics_renderer
        
         global $DB, $USER, $COURSE;       
         foreach ($sectioncmids as $cmid) {
-            
+
             $thismod = $coursecms[$cmid];
             // var_dump($COURSE->id);
             if ($thismod->uservisible && !$thismod->deletioninprogress) {
@@ -155,24 +190,13 @@ class format_mooin4_renderer extends format_topics_renderer
                 if ($thismod->modname == 'label') { // $this->completioninfo->is_enabled($thismod) 
                     $outof = 1;
 
-                    // Check if the user is reviewing the attempt.
-                    
-                    /* if (isset($USER->modattempts[$this->properties->id])) {
-                        $completed = 100;
-                    } */
-                    // Get the user preference to check if the button have been clicked or not
-                    $user_pref = $DB->get_records('user_preferences', array('userid' => $USER->id));
-
-                    /* $coursemodulecompletion = $DB->get_records_sql(
-                        'SELECT cmc.* FROM {course_modules_completion} cmc WHERE cmc.coursemoduleid = ?', array($thismod->id)); */
                     $com_value = $USER->id . ' ' . $COURSE->id . ' ' . $thismod->sectionnum;
-                    echo($com_value .'\n');
-                    foreach ($user_pref as $val) {
-                        if ($com_value == $val->value) {
-                            $completed = 1;
-                        }
-                    }
-                    
+                    $value_pref = $DB->record_exists('user_preferences', array('value' => $com_value));
+                    if ($value_pref) {
+                    	$completed = 1;              
+                    }else {
+                         $completed = 0;
+                    }     
                 }
             }
         }
@@ -309,20 +333,12 @@ class format_mooin4_renderer extends format_topics_renderer
                             if ($ocp != -1) {
                                 $name .= '<br />' . $this->get_progress_bar($ocp, 100, $section);
                             } else {
-                                // if ($value->visible) {
-                                // var_dump($modinfo->sections[$section]);
-                                //if (isset($modinfo->sections[$section])) {
-                                    $completionthistile = $this->section_progress($modinfo->sections[$section], $modinfo->cms);
-
-                                    var_dump($completionthistile);
-                                    // use the completion_indicator to show the right percentage in secton
-                                    $section_percent = $this->completion_indicator($completionthistile['completed'], $completionthistile['outof'], true, false);
+                                $completionthistile = $this->section_progress($modinfo->sections[$section], $modinfo->cms);
+                                
+                                // use the completion_indicator to show the right percentage in secton
+                                $section_percent = $this->completion_indicator($completionthistile['completed'], $completionthistile['outof'], true, false);
                                     
-                                    
-                                    // var_dump($section_percent);
-                                    $name .= '<br />' . $this->get_progress_bar($section_percent['percent'], 100, $section);
-                               // }
-                            //}
+                                $name .= '<br />' . $this->get_progress_bar($section_percent['percent'], 100, $section);
                             }
                                                         
                         } else {
@@ -922,6 +938,20 @@ class format_mooin4_renderer extends format_topics_renderer
     }
 
     /**
+     * Set a section without h5p element as done
+     *
+     * @param stdclass $course
+     * @param array $sections (argument not used)
+     * @param int $userid (argument not used)
+     * @param int $courseid (argument not used)
+     */
+    public function section_current($section) {
+        $cur_sec = 'M.format_mooin4.current(' . $section . ')';
+
+        return $cur_sec;
+    }
+    
+    /**
      * Print_multiple_section_page
      *
      * @param stdclass $course
@@ -935,10 +965,17 @@ class format_mooin4_renderer extends format_topics_renderer
         global $USER;
         global $PAGE;
         global $DB;
+        global $COURSE;
 
-        // $courseconfig = get_config('moodlecourse');
-        // echo('$courseconfig');
-        //var_dump($sections);
+        // mooin4 format - ini
+        if (isset($_COOKIE['sectionvisible_' . $course->id])) {
+            $sectionvisible = $_COOKIE['sectionvisible_' . $course->id];
+            // $sectionvisible = $section;
+        } else if ($course->marker > 0) {
+            $sectionvisible = $course->marker;
+        } else {
+            $sectionvisible = 1;
+        }
         $coursess = get_courses();
         $modinfo = get_fast_modinfo($course);
         $sections_all = $modinfo->get_section_info_all();
@@ -949,32 +986,20 @@ class format_mooin4_renderer extends format_topics_renderer
         $coursesectionss = $DB->get_records('course_sections', array('course' => $course->id));
         $modules_course = $DB->get_records('course_modules', array('course' => $course->id));
 
-        //var_dump($coursesectionss);
         // Title with completion help icon.
         $completioninfo = new completion_info($course);
         
-        // var_dump($completioninfo->completion);
-        /* echo('End of Completion'); */
-        // $courseformat = course_get_format($course);
-        // var_dump($courseformat);
         foreach ($coursesectionss as $section) {
             // Assert that with unmodified section names, get_section_name returns the same result as get_default_section_name.
             //$this->assertEquals($courseformat->get_default_section_name($section), $courseformat->get_section_name($section));
-            // var_dump($section);
+            //var_dump($section);
         }
-        // mooin4 format - ini
-        if (isset($_COOKIE['sectionvisible_' . $course->id])) {
-            $sectionvisible = $_COOKIE['sectionvisible_' . $course->id];
-        } else if ($course->marker > 0) {
-            $sectionvisible = $course->marker;
-        } else {
-            $sectionvisible = 1;
-        }
-        // $htmlsection = false;
+        
         $htmlsection = [];
         $section0 = new stdClass();
         foreach ($modinfo->get_section_info_all() as $section => $thissection) {
-            // var_dump($thissection);
+            // Breadcrumb in section
+            $PAGE->navbar->add($thissection);
             $htmlsection[$section] = '';
             if ($section == 0) {
                 $section0 = $thissection;
@@ -998,62 +1023,84 @@ class format_mooin4_renderer extends format_topics_renderer
                 }
             }
             $htmlsection[$section] .= $this->section_header($thissection, $course, false, 0);
-            $section_array = [];
-            $section_arr = [];
+            
+            $section_show = [];
             if ($thissection->uservisible) {
                 $htmlsection[$section] .= $this->courserenderer->course_section_cm_list($course, $thissection, 0);
                 $htmlsection[$section] .= $this->courserenderer->course_section_add_cm_control($course, $section, 0);
 
-                //echo($this->get_section_grades($section));
-                
-                /* foreach ($thissection as $value) {
-                    var_dump($value);
-                } */
                 $course_module = $thissection->sequence;
                 $module = explode(',', $course_module);
                 
-                // $theclick = 'M.format_mooin4.valide(' . $section . ',' . $course->id . ',' . $USER->id .')';
-                // var_dump($theclick);
-                
-                for ($i=0; $i < count($module); $i++) { 
+                $val = $USER->id .' ' .$course->id .' ' . $section;
+                // Get the user preferences in DB to check if the bottom button has been already clicked
+                $pref_user = $DB->record_exists('user_preferences', array('value' => $val)); /* $DB->get_records_sql(
+                    'SELECT up.* FROM {user_preferences} up WHERE up.value = ?', array($val)); */
+                for ($i=0; $i < count($module); $i++) {
+                    $a = 1;
                     foreach ($modules_course as $key => $value) {
-                        if ( !$PAGE->user_is_editing() && ($i == count($module) - 1) && ($module[$i] == $value->id) && ((int)$value->module == 13)) {
+                        
+                        if ( !$PAGE->user_is_editing() && ($i == count($module) - 1) && (($module[$i] == $value->id) && ((int)$value->module == 13)) ) { 
                             
                             
-                            $htmlsection[$section] .= html_writer::start_tag('div', array('class'=>'bottom_complete btn btn-outline-secondary', 'id' => 'id_bottom_complete-'.$section)); //  . $section, 'onclick' => $theclick
+                            /* if (!$pref_user) {
+                                $htmlsection[$section] .= html_writer::start_tag('div', array('class'=>'bottom_complete btn btn-outline-secondary', 'id' => 'id_bottom_complete-' .$section, 'type' => 'submit', 'name'=> 'btnComplete','value' => 'Seite als bearbeitet markieren', 'onclick' => $this->the_click( $section, $course->id, $USER->id))); //  . $section, 'onclick' => $theclick || (int)$sectionvisible
                 
-                            $htmlsection[$section] .= html_writer::start_span('bottom_button') . 'Seite als bearbeitet markieren' . html_writer::end_span();
-                            $htmlsection[$section] .= html_writer::end_tag('div');
+                                $htmlsection[$section] .= html_writer::start_span('bottom_button') . 'Seite als bearbeitet markieren' . html_writer::end_span();
+                                $htmlsection[$section] .= html_writer::end_tag('div');
+                            } else {
+                                $htmlsection[$section] .= html_writer::start_tag('div', array('class'=>'complete_section bottom_complete btn btn-outline-secondary', 'id' => 'id_bottom_complete-' .$section));
+                
+                                $htmlsection[$section] .= html_writer::start_span('bottom_button') . 'Seite als bearbeitet markieren' . html_writer::end_span();
+                                $htmlsection[$section] .= html_writer::end_tag('div');
+                            } */
+                            $section_show[$section]= [
+                                'index' => $section,
+                                'module'=>$value->module
+                                
+                                
+                            ];
                             
-                            /* array_merge($section_array, $section);
-                            echo($sectionvisible);
-                            if ($sectionvisible == $section && $value->module != 24) {
-                                $templatesectioncomplete = (object)[
-                                    'sectiontext' => 'Seite als bearbeitet markieren',
-                                    'sectionid' => array_values($section_array)
-                                ];
-                                echo $this->render_from_template('format_mooin4/section_complete', $templatesectioncomplete);
-                            }   */                       
-                            
-                            
+                            // Check if the section has been already check in user preferences
+                            $v = $USER->id .' ' . $course->id . ' ' . $section_show[$section]['index'] ;
+                            $pref_user = $DB->record_exists('user_preferences', array('value' => $v));
+                            if ($this->the_click( $section_show[$section]['index'], $course->id, $USER->id) == true &&  $section_show[$section]['index'] == $section ) { // $e[2] == $section_show[$section]['index']
+                                
+                                $section_show[$section]['show'] = true;
+                            }else if($pref_user){
+                                $section_show[$section]['show'] = true; 
+                            } else {
+                                $section_show[$section]['show'] = false; 
+                            }
+                           
+                                
+                                    
+                            $templatesectioncomplete = (object)[
+                                'sectiontext' => 'Seite als bearbeitet markieren',
+                                'section' => ($section_show[$section]),
+                                'sectionId' => $section,
+                                'id' => $course->id,
+                                'check_show' => $section_show[$section]['show'],
+                                'click_event' => $this->the_click( $section_show[$section]['index'], $course->id, $USER->id)
+                            ];
+                            $htmlsection[$section] .= $this->render_from_template('format_mooin4/section_complete', $templatesectioncomplete);
                         }
                         
                     }
                     
                 }
-                // array_push($section_arr, $section_array);
-               
                 
             }
+            //var_dump(($section_show));
             // var_dump($section_array);
             // var_dump($section_arr);
             $htmlsection[$section] .= $this->section_footer();
         }
         // Is responsible for section 0 ( comment it, if you don't want to show the section 0)
         /* if ($section0->summary || !empty($modinfo->sections[0]) || $PAGE->user_is_editing()) {
-            $htmlsection0 = $this->section_header($section0, $course, false, 0);
-            $htmlsection0 .= $this->courserenderer->course_section_cm_list($course, $section0, 0);
-            $htmlsection0 .= $this->courserenderer->course_section_add_cm_control($course, 0, 0);
+            echo $this->section_header($section0, $course, false, 0);
+            echo $this->courserenderer->course_section_cm_list($course, $section0, 0);
+            echo $this->courserenderer->course_section_add_cm_control($course, 0, 0);
             $htmlsection0 .= $this->section_footer();
         } */
         echo $completioninfo->display_help_icon();
@@ -1087,7 +1134,6 @@ class format_mooin4_renderer extends format_topics_renderer
                 echo $this->stealth_section_footer();
             }
             echo $this->end_section_list();
-            echo("End Renderer in mooin4");
             echo html_writer::start_tag('div', ['id' => 'changenumsections', 'class' => 'mdl-right']);
             $straddsection = get_string('increasesections', 'moodle');
             $url = new moodle_url('/course/changenumsections.php', ['courseid' => $course->id,

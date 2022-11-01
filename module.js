@@ -26,12 +26,12 @@ M.format_mooin4 = M.format_mooin4 || {
     ourYUI: null,
     numsections: 0,
     instance: function() {
-      console.log("Arguments", arguments)
-      this.init( arguments );
-      if (! arguments[3]) {
-          Chapters.init(arguments[2]);
+      console.log("Arguments", arguments);
+      this.init(arguments);
+      if (!arguments[3]) {
+          // Chapters.init(arguments[2]);
       }
-      Y.all('.showHideCont a').each( function(node) {
+      Y.all('.showHideCont a').each(function(node) {
           var _parent = node.ancestor('.showHideCont');
           node.on('click', function() {
               var target = Y.one('#t_' + this.get('rel'));
@@ -47,23 +47,22 @@ M.format_mooin4 = M.format_mooin4 || {
               }
           });
       });
-      
   },
-  //global settings
+  // Global settings
   global: function() {
-      this.init( arguments );
-      Util.show_hide(Y.one('#expandableTreeContainer a'));
+      this.init(arguments);
+      // Util.show_hide(Y.one('#expandableTreeContainer a'));
   },
 
 };
 
-M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
+M.format_mooin4.init = function(Y, numsections, currentsection, courseid) {
 
     this.ourYUI = Y;
     this.numsections = parseInt(numsections);
     console.log('currentSection', currentsection);
     console.log('Numsection', this.numsections);
-    /* document.getElementById('mooin4ectioncontainer').style.display = 'table'; */
+    /* Document.getElementById('mooin4ectioncontainer').style.display = 'table'; */
    /*  U.img = args[0].img;
       U.str = args[0].str;
       config = args[1];
@@ -80,48 +79,47 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
           });
     } */
     window.onload = function main() {
-        var slider = new Slider(document.querySelector('#slider'),{
+        var slider = new Slider(document.querySelector('#slider'), {
             items: this.numsections,
             responsive: true,
-            mobile : {
-                items : 1
+            mobile: {
+                items: 1
             },
-            tablet : {
-                width : 768,
-                items : 3,
+            tablet: {
+                width: 768,
+                items: 3,
             },
-            desktop : {
-                width : 1040,
-                items : 5,
+            desktop: {
+                width: 1040,
+                items: 5,
             },
-            deviceChanged : function (e) {
+            deviceChanged: function(e) {
                 console.log(e);
             },
-            navChanged : function (e) {
+            navChanged: function(e) {
                 console.log(e);
             },
-            /* update_nav: function(e) {
+            /* Update_nav: function(e) {
               console.log(e);
             },
             update_mooin4: function(e) {
               console.log(e);
             } */
-        })
-        // slider.update_nav();
-        document.addEventListener('DOMContentLoaded', main)
-    }
-    var extend = function (source, target) {
-        if(typeof source == 'object'){
-            for (var property in source){
-                if(!target[property]) {
-                    target[property] = source[property];
+        });
+        // Slider.update_nav();
+        document.addEventListener('DOMContentLoaded', main);
+    };
+    var extend = function(source, target) {
+        if (typeof source == 'object') {
+            for (var property in source) {
+                if (!target[property]) {
+                  target[property] = source[property];
                 }
             }
         }
         return target;
-    }
-    
-    
+    };
+
     function Slider(el, options) {
         var self = this,
             carousel_container,
@@ -375,9 +373,9 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
             if (options.navChanged) {
               addListener('navchanged', options.navChanged);
             }
-        
+
             current_step = 0;
-        
+
             if (options.responsive) {
               if (window.innerWidth < options.tablet.width) {
                 setItems(options.mobile.items);
@@ -389,7 +387,7 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
             } else {
               setItems(options.items);
             }
-        
+
             if (options.createNav) {
               create_nav();
             }
@@ -399,19 +397,19 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               update_nav();
               update_mooin4()
             }
-        
+
             // events
             window.addEventListener('resize', function() {
               onResize();
             });
-        
+
             if (prev_button) {
               prev_button.addEventListener('click', function(e) {
                 e.preventDefault();
                 moveBack();
               });
             }
-        
+
             if (next_button) {
               next_button.addEventListener('click', function(e) {
                   console.log('E in forward', e);
@@ -419,7 +417,7 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
                 moveForward();
               });
             }
-        
+
             //
             //onResize();
             update_mooin4();
@@ -436,7 +434,7 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
         // Move back function
         function moveBack() {
             if (current_step <= 0) return false;
-            
+
             moveTo(current_step - 1);
 
            /*  if (currentsection <= slides.length) {
@@ -479,13 +477,13 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
                 }
               }
             }
-        
+
             // repositionne les slides sans animation
             var percentage = 100 / item_per_step,
               x = item_per_step > 1 ?
               percentage * get_current_left_slides() :
               current_step * percentage;
-        
+
             carousel_container.style.transition = 'none';
             carousel_container.style.transform = 'translateX(-' + x + '%)';
             setTimeout(function() {
@@ -524,36 +522,34 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
               next_button.classList.remove('hidden');
             }
           }
-      
-          // navs
+          // Navs
           if (options.createNav) {
             console.log('current_step in update_mooin4', current_step);
             current_nav = carousel_nav.querySelectorAll('a')[current_step];
-            var active = carousel_nav.querySelector('a.active'); //active
+            var active = carousel_nav.querySelector('a.active'); //Active
             if (active) {
-              active.classList.remove('active');//active
+              active.classList.remove('active');//Active
             }
-            current_nav.classList.add('active');//active
+            current_nav.classList.add('active');//Active
           }
         }
-
-        
-
-        init();
-
+       init();
         return {
             addEventListener: addEventListener,
             moveBack: moveBack,
             moveForward: moveForward,
             moveTo: moveTo,
-            /* pause: pause,
+            /* Pause: pause,
             play: play, */
             setItems: setItems
-          }
+        };
     }
     // Bottom button variable
     var nextBottom = document.querySelector('.bottom_next');
     var prevBottom = document.querySelector('.bottom_previous');
+    var slidesContainer = document.querySelector('.carousel-inner');
+    console.log('SlidesContainer : ', slidesContainer);
+    var slide = document.querySelector('.mooin4ection');
     // First come into the course page when section egal to 1
     // NextBottom code come here...
     nextBottom.addEventListener('click', function(event) {
@@ -563,7 +559,9 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
       console.log(event);
       var sectionInUrl = parseInt(url.substring(url.lastIndexOf('=') + 1)) + 1;
       var numSections = event.view.M.format_mooin4.numsections;
+      var slideWidth = slide.clientWidth;
       if (sectionInUrl >= numSections) {
+        slidesContainer.scrollLeft += slideWidth;
         M.format_mooin4.show(parseInt(currentsection) + 1, courseid);
         currentsection++;
         nextBottom.classList.add('remove_pointer');
@@ -575,24 +573,30 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
           currentsection++;
       }
       if (currentsection > 1) {
-          prevBottom.classList.remove('remove_pointer');
-          prevBottom.classList.remove('disable_button');
+        // Var slideWidth = slide.clientWidth;
+        slidesContainer.scrollLeft += slideWidth;
+        M.format_mooin4.sectionName(parseInt(currentsection), courseid);
+        prevBottom.classList.remove('remove_pointer');
+        prevBottom.classList.remove('disable_button');
       }
-      // nextBottom.classList.add('hidden');
+      // NextBottom.classList.add('hidden');
       console.log('Type of current section', typeof currentsection);
       console.log("Current Section next", currentsection);
-      // currentsection++;
+      // Currentsection++;
     });
     // Previous_bottom code here ...
     prevBottom.addEventListener('click', function(event) {
       var url = event.view.window.location.href;
       var sectionInUrl = parseInt(url.substring(url.lastIndexOf('=') + 1));
+
+      var slideWidth = slide.clientWidth;
       if (sectionInUrl - 1 > 1) {
         prevBottom.classList.remove('remove_pointer');
         prevBottom.classList.remove('disable_button');
         M.format_mooin4.show(parseInt(currentsection) - 1, courseid);
         currentsection--;
       } else {
+        slidesContainer.scrollLeft -= slideWidth;
         M.format_mooin4.show(parseInt(currentsection) - 1, courseid);
         currentsection--;
         prevBottom.classList.add('remove_pointer');
@@ -600,8 +604,9 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
       }
       var numSections = event.view.M.format_mooin4.numsections;
       if (currentsection < numSections) {
-          nextBottom.classList.remove('remove_pointer');
-          nextBottom.classList.remove('disable_button');
+        slidesContainer.scrollLeft -= slideWidth;
+        nextBottom.classList.remove('remove_pointer');
+        nextBottom.classList.remove('disable_button');
       }
       // Currentsection--;
     });
@@ -631,6 +636,46 @@ M.format_mooin4.init = function( Y, numsections, currentsection, courseid) {
     }, '[data-region="drawer"]', '[data-type="30"]');
 };
 
+// Return the rigt Kapitel an section to the UI
+M.format_mooin4.sectionName = function(id, courseid) {
+  console.log('Course :', courseid);
+  console.log('Section Id :', id);
+  var string1 = '/ Kap.';
+  var string2 = '/ Lekt.';
+  console.log(string1.concat(string2, courseid, '.', id));
+};
+// Valide the section as been already read
+M.format_mooin4.valide = function(id, courseid, userid) {
+  var $checkSection;
+  var sectionvisible = document.getElementsByClassName('sectionvisible');
+  // Var clickedSection = document.getElementById('id_bottom_complete-' + id);
+  var clickedSection = document.querySelector('input');
+  Object.values(sectionvisible).forEach(function(element) {
+      $checkSection = element.attributes.id.value.split("-");
+  });
+  console.log('CheckSection', $checkSection[1], 'Id', id);
+  var q = userid + ' ' + courseid + ' ' + id;
+  var url = "view.php?id=" + courseid + '#section=' + id;
+  clickedSection.addEventListener('click', sectionCheck(url, q));
+  /**
+   * Ajax request to post data in section_progress.php file
+   */
+  function sectionCheck(url, value) {
+    var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          clickedSection.classList.add('complete_section');
+          clickedSection.classList.remove('bottom_complete');
+          this.responseText = value;
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.send();
+  }
+  // Window.location.reload(false);
+  return false; // ParseInt($checkSection);
+};
+
 M.format_mooin4.hide = function() {
     for (var i = 1; i <= this.numsections; i++) {
         if (document.getElementById('mooin4ection-' + i) != undefined) {
@@ -640,32 +685,39 @@ M.format_mooin4.hide = function() {
         }
     }
 };
+M.format_mooin4.current = function(id) {
+  return parseInt(id);
+};
 
 M.format_mooin4.show = function(id, courseid) {
     this.hide();
+    var currentsection = document.getElementById('section-' + id);
+    var secCheck = currentsection.attributes.id.value.split("-");
     if (id > 0) {
-        document.location.hash = '#section=' + id ;
+        document.location.hash = '#section=' + id;
         var mooin4ection = document.getElementById('mooin4ection-' + id);
-        var currentsection = document.getElementById('section-' + id);
+
         var sectionvisible = document.getElementsByClassName('sectionvisible');
         var parentDOM = document.getElementById("slider_inner");
-        console.log('Mooin4section', mooin4ection);
+        console.log('parentDOM ', parentDOM);
         console.log('sectionvisible', sectionvisible);
         if (mooin4ection && currentsection) {
             mooin4ection.setAttribute('class', mooin4ection.getAttribute('class') + ' sectionvisible');
             currentsection.style.display = 'block';
-            document.cookie = 'sectionvisible_' + courseid + '=' + id + '; path=/';
             M.format_mooin4.h5p();
         }
         var testTarget = parentDOM.getElementsByClassName("sectionvisible")[0];
         console.log('Show sectionvisible', testTarget);
-        var section_check = currentsection.attributes.id.value.split("-");
+
+
         var nextBottom = document.querySelector('.bottom_next');
         var prevBottom = document.querySelector('.bottom_previous');
         // First come into the course page when section egal to 1
-        console.log('CCurrentsection', currentsection);
+        // Console.log('CCurrentsection', parseInt(secCheck[1]));
+        // Update the new Section visible in cookies
+        document.cookie = 'sectionvisible_' + courseid + '=' + parseInt(secCheck[1]); // + '; path=/';
         // Check if the visible section is the first one
-        if (section_check[1] == 1) {
+        if (secCheck[1] == 1) {
           prevBottom.classList.add('remove_pointer');
           prevBottom.classList.add('disable_button');
         } else {
@@ -673,14 +725,17 @@ M.format_mooin4.show = function(id, courseid) {
           prevBottom.classList.remove('disable_button');
         }
         // Check if the visible section is the last one
-        if (section_check[1] == this.numsections) {
+        if (secCheck[1] == this.numsections) {
           nextBottom.classList.add('remove_pointer');
           nextBottom.classList.add('disable_button');
         } else {
           nextBottom.classList.remove('remove_pointer');
           nextBottom.classList.remove('disable_button');
         }
+
     }
+    console.log('Id : ' , secCheck[1]);
+    return parseInt(secCheck[1]);
 };
 
 M.format_mooin4.h5p = function() {
